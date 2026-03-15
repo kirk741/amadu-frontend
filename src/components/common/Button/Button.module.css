@@ -1,0 +1,24 @@
+.button {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: var(--xs-gap);
+  min-height: 48px;
+  width: 100%;
+  padding: var(--m-gap);
+  background-color: var(--el-col);
+  border: none;
+  border-radius: var(--round-radius);
+}
+
+.buttonNoBg {
+  background: none;
+}
+
+.buttonHasShadow {
+  box-shadow: var(--shadow);
+}
+
+.buttonJustifyBetween {
+  justify-content: space-between;
+}
