@@ -1,0 +1,11 @@
+.layout {
+  min-height: 100vh;
+  padding: var(--m-gap);
+  display: flex;
+  flex-direction: column;
+}
+
+.wrapper {
+  padding: var(--xxxl-gap) 0;
+  flex-grow: 1;
+}

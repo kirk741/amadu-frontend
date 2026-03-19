@@ -1,0 +1,31 @@
+import {ReactComponent as AmaduStar} from './amadu-star.svg';
+import {ReactComponent as Angry} from './angry.svg';
+import {ReactComponent as Appointment} from './appointment.svg';
+import {ReactComponent as ArrowBack} from './arrow-back.svg';
+import {ReactComponent as ArrowForward} from './arrow-forward.svg';
+import {ReactComponent as Bad} from './bad.svg';
+import {ReactComponent as Chats} from './chats.svg';
+import {ReactComponent as Diary} from './diary.svg';
+import {ReactComponent as Events} from './events.svg';
+import {ReactComponent as Fine} from './fine.svg';
+import {ReactComponent as Happy} from './happy.svg';
+import {ReactComponent as Heart} from './heart.svg';
+import {ReactComponent as Home} from './home.svg';
+import {ReactComponent as Moon} from './moon.svg';
+import {ReactComponent as More} from './more.svg';
+import {ReactComponent as Ok} from './ok.svg';
+import {ReactComponent as Phone} from './phone.svg';
+import {ReactComponent as Plus} from './plus.svg';
+import {ReactComponent as Profile} from './profile.svg';
+import {ReactComponent as Psychologist} from './psychologists.svg';
+import {ReactComponent as Search} from './search.svg';
+import {ReactComponent as Settings} from './settings.svg';
+import {ReactComponent as Sun} from './sun.svg';
+import {ReactComponent as Tick} from './tick.svg';
+import {ReactComponent as Trash} from './trash.svg';
+import {ReactComponent as X} from './x.svg';
+import {ReactComponent as Exsercises} from './exsercises.svg';
+import {ReactComponent as Music} from './music.svg';
+import {ReactComponent as Touch} from './touch.svg';
+
+export {AmaduStar, Angry, Appointment, ArrowBack, ArrowForward, Bad, Chats, Diary, Events, Exsercises, Fine, Happy, Heart, Home, Moon, More, Ok, Phone, Plus, Profile, Psychologist, Search, Settings, Sun, Tick, Trash, X, Music, Touch}

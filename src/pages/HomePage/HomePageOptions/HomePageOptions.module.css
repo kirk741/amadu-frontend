@@ -1,0 +1,26 @@
+.buttonContainer {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: var(--xs-gap);
+  position: relative;
+  z-index: 2;
+}
+
+.button:first-child {
+  grid-column: span 2;
+}
+
+.button {
+  display: flex;
+  gap: 8px;
+}
+
+.button span {
+  white-space: pre-line;
+}
+
+.icon {
+  height: var(--xl-gap) !important;
+  width: var(--xl-gap) !important;
+  flex-shrink: 0;
+}

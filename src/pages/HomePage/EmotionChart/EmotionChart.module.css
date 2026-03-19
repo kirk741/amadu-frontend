@@ -1,0 +1,95 @@
+.container {
+  padding: var(--xxl-gap) var(--m-gap);
+  background-color: var(--el-color);
+  box-shadow: var(--xl-shadow);
+  border-radius: var(--round-radius);
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  align-items: center;
+  width: 100%;
+  position: relative;
+}
+
+.button {
+  width: 48px;
+  height: 48px;
+  position: absolute;
+  top: 16px;
+  right: 16px;
+}
+
+.button svg {
+  width: 24px;
+  height: 24px;
+  display: block;
+}
+
+.childrenContainer {
+  height: 100%;
+}
+
+.emotionsContainer {
+  padding: 0 var(--m-gap);
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  width: 100%;
+}
+
+.circleContainer {
+  padding: 0 var(--m-gap);
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.loadCircle {
+  display: block;
+  height: 48px;
+  width: 48px;
+  border-radius: 50%;
+  background-color: var(--unactive-color);
+  opacity: 50%;
+  animation: flickering infinite linear 1s;
+}
+
+.loadPill {
+  display: block;
+  height: 100%;
+  width: 24px;
+  background-color: var(--unactive-color);
+  border-radius: var(--round-radius);
+  opacity: 50%;
+  animation: flickering infinite linear 1s;
+}
+
+.pill {
+  display: block;
+  height: 100%;
+  width: 24px;
+  background-color: var(--unactive-color);
+  border-radius: var(--round-radius);
+}
+
+.pillsContainer {
+  height: calc(200px - 48px);
+  width: 100%;
+  display: flex;
+  padding: var(--m-gap) 28px;
+  justify-content: space-between;
+}
+
+@keyframes flickering {
+  0% {
+    opacity: 50%;
+  }
+
+  50% {
+    opacity: 20%;
+  }
+
+  100% {
+    opacity: 50%;
+  }
+}

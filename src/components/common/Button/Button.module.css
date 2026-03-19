@@ -5,20 +5,37 @@
   gap: var(--xs-gap);
   min-height: 48px;
   width: 100%;
-  padding: var(--m-gap);
-  background-color: var(--el-col);
+  padding: var(--m-gap) var(--s-gap) var(--m-gap) var(--l-gap);
+  background-color: var(--el-color);
   border: none;
   border-radius: var(--round-radius);
 }
 
-.buttonNoBg {
-  background: none;
+.button span {
+  text-align: left;
 }
 
-.buttonHasShadow {
-  box-shadow: var(--shadow);
+.buttonNoBg {
+  background: none;
+  padding: 0;
+}
+
+.buttonHasSShadow {
+  box-shadow: var(--s-shadow);
+}
+
+.buttonHasMShadow {
+  box-shadow: var(--m-shadow);
+}
+
+.buttonHasXLShadow {
+  box-shadow: var(--xl-shadow);
 }
 
 .buttonJustifyBetween {
   justify-content: space-between;
+}
+
+.buttonUnactive {
+  background-color: var(--bg-color);
 }

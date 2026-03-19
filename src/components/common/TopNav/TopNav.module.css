@@ -1,0 +1,21 @@
+.topNav {
+  position: fixed;
+  z-index: 10;
+  top: 0;
+  left: 0;
+  display: flex;
+  width: 100%;
+  justify-content: space-between;
+  align-items: center;
+  padding: var(--m-gap) var(--m-gap) 0 var(--m-gap);
+}
+
+.topNavBtn {
+  padding: 0!important;
+  height: 48px!important;
+  width: 48px!important;
+}
+
+.topNavTitle {
+  color: var(--title-color);
+}

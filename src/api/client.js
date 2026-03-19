@@ -1,6 +1,7 @@
-BASE_URL = 'https://ababkova.xn--80ahdri7a.site/';
+const BASE_URL = 'https://ababkova.xn--80ahdri7a.site'; // БЕЗ слэша в конце
 
-export const client = async (endpoint, { customHeaders, method, body, ...customConfig }) => {
+
+const client = async (endpoint, { customHeaders, method, body, ...customConfig } = {}) => {
   const token = localStorage.getItem('token');
   const isFormData = body && (body instanceof FormData);
 
@@ -8,38 +9,48 @@ export const client = async (endpoint, { customHeaders, method, body, ...customC
     'Accept': 'application/json',
     ...(isFormData ? {} : { 'Content-Type': 'application/json' }),
     ...(token ? { 'Authorization': `Bearer ${token}` } : {}),
-    ...customHeaders,
-  }
+    ...customHeaders
+  };
 
   const config = {
-    method: (body ? 'POST' : 'GET'),
-    ...customConfig,
     headers,
-    ...(body ? (isFormData ? { body: body } : { body: JSON.stringify(body) }) : {}),
-  }
+    method: method || (body ? 'POST' : 'GET'),
+    body: (body && !isFormData) ? JSON.stringify(body) : body,
+    ...customConfig
+  };
 
   const url = `${BASE_URL}${endpoint}`;
 
   try {
     const response = await window.fetch(url, config);
-    
-    if (response.status === 403 || response.status === 401) {
-      localStorage.removeItem('token');
-      localStorage.removeItem('user');
-      window.location.assign('/login');
+
+    const data = await response.json();
+
+    if (response.status === 403 && localStorage.getItem('role') !== 'guest') {
+      window.location.assign('/forbidden');
       return;
+    }
+
+    if (response.status === 401) {
+      if (token) {
+        localStorage.removeItem('role');
+        localStorage.removeItem('user');
+        localStorage.removeItem('token');
+        window.location.assign('/login');
+      }
+      return Promise.reject(data);
     }
 
     if (response.status === 204) return true;
 
-    const data = await response.json();
-
-    if (!response.ok) {
+    if (response.ok) {
+      return data;
+    } else {
       throw data;
     }
-
-    return data;
   } catch (error) {
     return Promise.reject(error);
   }
 }
+
+export default client;

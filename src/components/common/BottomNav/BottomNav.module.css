@@ -1,0 +1,37 @@
+.bottomNav {
+  position: fixed;
+  bottom: 0;
+  left: 0;
+  width: 100%;
+  background-color: var(--el-color);
+  box-shadow: var(--s-shadow);
+  padding: var(--s-gap);
+  z-index: 10;
+}
+
+.navList {
+  display: flex;
+  width: 100%;
+  justify-content: space-evenly;
+  position: relative;
+}
+
+.navItem a {
+  padding: var(--m-gap);
+}
+
+.indicator {
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  z-index: -1;
+  height: 64px;
+  width: 80px;
+  background-color: var(--el-color);
+  box-shadow: var(--m-shadow);
+  border-radius: var(--round-radius) var(--round-radius) 0 0;
+}
+
+.active {
+
+}
