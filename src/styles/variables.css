@@ -5,8 +5,8 @@
   --m-gap: 16px;
   --l-gap: 24px;
   --xl-gap: 32px;
-  --xxl-gap: 48px; 
-  --xxxl-gap: 64px; 
+  --xxl-gap: 48px;
+  --xxxl-gap: 64px;
   --round-radius: 40px;
 
   --happy-color: #EDB86D;
@@ -18,7 +18,7 @@
   --emotion-logs-container: 270px;
 }
 
-body.light-theme {
+body.light-theme, :root {
   --bg-gradient: linear-gradient(145deg, #F0F0F0 0%, #F0F0F0 100%);
   --el-color: #FBFBFB;
   --title-color: #151E30;
@@ -26,18 +26,7 @@ body.light-theme {
   --unactive-color: #7E8188;
   --shadow-color: #DFDFDF;
 
-  --s-shadow: var(--shadow-color) 0px 0px 16px;
-  --m-shadow: var(--shadow-color) 0px 4px 24px;
-  --xl-shadow: var(--shadow-color) 8px 8px 60px;
-}
-
-body.moon-theme {
-  --bg-gradient: linear-gradient(145deg, #101218 0%, #0f1016 100%);
-  --el-color: #11141c;
-  --title-color: #FBFBFB;
-  --text-color: #C0C3C9;
-  --unactive-color: #A4A7AF;
-  --shadow-color: #0a0b11;
+  --invalid-color: #ff7474;
 
   --s-shadow: var(--shadow-color) 0px 0px 16px;
   --m-shadow: var(--shadow-color) 0px 4px 24px;
@@ -45,12 +34,14 @@ body.moon-theme {
 }
 
 body.dark-theme {
-  --bg-gradient: linear-gradient(145deg, #121212 0%, #111111 100%);
-  --el-color: #181818;
+  --bg-gradient: linear-gradient(145deg, #151415 0%, #111111 100%);
+  --el-color: #151517;
   --title-color: #FBFBFB;
   --text-color: #C6C6C6;
   --unactive-color: #A4A7AF;
   --shadow-color: #101010;
+
+  --invalid-color: #a63737;
 
   --s-shadow: var(--shadow-color) 0px 0px 16px;
   --m-shadow: var(--shadow-color) 0px 4px 24px;

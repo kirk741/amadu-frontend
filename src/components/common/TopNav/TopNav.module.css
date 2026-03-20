@@ -8,14 +8,20 @@
   justify-content: space-between;
   align-items: center;
   padding: var(--m-gap) var(--m-gap) 0 var(--m-gap);
+  transition: transform .2s;
 }
 
 .topNavBtn {
-  padding: 0!important;
-  height: 48px!important;
-  width: 48px!important;
+  padding: 0 !important;
+  height: 48px !important;
+  width: 48px !important;
 }
 
 .topNavTitle {
   color: var(--title-color);
+  transition: transform .2s;
+}
+
+.hidden {
+  transform: translateY(-100px);
 }

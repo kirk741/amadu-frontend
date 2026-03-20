@@ -1,9 +1,7 @@
-import React from "react";
 import styles from './Layout.module.css';
 import TopNav from '../TopNav/TopNav';
 import BottomNav from '../BottomNav/BottomNav';
-import Container from '../Container/Container';
-import { useLoaderData, useLocation, useNavigate } from "react-router-dom";
+import { useLocation } from "react-router-dom";
 
 const Layout = ({ children }) => {
   let withBottomNav = true;
@@ -11,11 +9,22 @@ const Layout = ({ children }) => {
   const location = useLocation();
 
   const withoutBottomNav = [
-    '/profile'
+    '/profile',
+    '/login',
+    '/register'
+  ];
+
+  const withoutTopNav = [
+    '/register',
+    '/login'
   ];
 
   if (withoutBottomNav.includes(location.pathname)) {
     withBottomNav = false;
+  }
+
+  if (withoutTopNav.includes(location.pathname)) {
+    withTopNav = false;
   }
 
   return (

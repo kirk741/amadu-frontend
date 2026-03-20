@@ -27,5 +27,6 @@ import {ReactComponent as X} from './x.svg';
 import {ReactComponent as Exsercises} from './exsercises.svg';
 import {ReactComponent as Music} from './music.svg';
 import {ReactComponent as Touch} from './touch.svg';
+import {ReactComponent as Expand} from './expand.svg';
 
-export {AmaduStar, Angry, Appointment, ArrowBack, ArrowForward, Bad, Chats, Diary, Events, Exsercises, Fine, Happy, Heart, Home, Moon, More, Ok, Phone, Plus, Profile, Psychologist, Search, Settings, Sun, Tick, Trash, X, Music, Touch}
+export {AmaduStar, Angry, Appointment, ArrowBack, ArrowForward, Bad, Chats, Diary, Events, Exsercises, Fine, Happy, Heart, Home, Moon, More, Ok, Phone, Plus, Profile, Psychologist, Search, Settings, Sun, Tick, Trash, X, Music, Touch, Expand}

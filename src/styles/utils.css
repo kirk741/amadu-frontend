@@ -36,3 +36,8 @@ ul,
 li {
   list-style: none;
 }
+
+a {
+  color: var(--unactive-color);
+  text-decoration: underline;
+}

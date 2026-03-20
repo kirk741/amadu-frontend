@@ -1,0 +1,55 @@
+.textarea {
+  background-color: var(--el-color);
+  width: 100%;
+  position: relative;
+  border: none;
+  outline: none;
+  transition: box-shadow .3s;
+  resize: vertical;
+}
+
+.textareaWrapper {
+  padding: var(--m-gap) var(--m-gap) var(--m-gap) var(--l-gap);
+  background-color: var(--el-color);
+  box-shadow: var(--s-shadow);
+  border-radius: 16px;
+  border: 1px solid transparent;
+  overflow: hidden;
+  display: flex;
+  width: 100%;
+  transition: all .3s;
+  position: relative; 
+}
+
+.textarea::-webkit-scrollbar {
+  width: 6px;
+}
+
+.textarea::-webkit-scrollbar-track {
+  background: var(--bg-gradient);
+}
+
+.textarea::-webkit-scrollbar-thumb {
+  background-color: var(--text-color);
+  border-radius: 10px;
+}
+
+.textarea::placeholder {
+  color: var(--unactive-color);
+}
+
+.textarea:focus .textareaWrapper {
+  box-shadow: var(--xl-shadow);
+  outline: var(--unactive-color) 1px solid;
+}
+
+.textarea:invalid .textareaWrapper {
+  outline: var(--invalid-color) 1px solid;
+}
+
+.textarea::-webkit-resizer {
+  background-image: url(../../../assets/icons/expand.svg);
+  background-size: 20px 20px;
+  background-repeat: no-repeat;
+  background-position: center center;
+}

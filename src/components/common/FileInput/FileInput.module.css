@@ -1,0 +1,52 @@
+.container {
+  display: flex;
+  align-items: start;
+  justify-content: space-between;
+  gap: var(--l-gap);
+  width: 100%;
+}
+
+.title {
+  color: var(--unactive-color);
+  font-size: 14px;
+  max-width: 120px;
+}
+
+.uploadCard {
+  width: 130px;
+  height: 130px;
+  background-color: var(--el-color);
+  box-shadow: var(--s-shadow);
+  border-radius: var(--round-radius);
+  outline: transparent 1px solid;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  position: relative;
+  overflow: hidden;
+}
+
+.uploadCard:hover {
+  box-shadow: var(--xl-shadow);
+  outline: var(--unactive-color) 1px solid;
+}
+
+.plusIcon {
+  font-size: 32px;
+  font-weight: 300;
+  color: var(--text-color);
+  line-height: 1;
+}
+
+.hiddenInput {
+  display: none;
+}
+
+.previewImage {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  border-radius: inherit;
+}
