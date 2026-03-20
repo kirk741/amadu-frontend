@@ -19,9 +19,20 @@ select {
   color: inherit;
 }
 
+button {
+  cursor: pointer;
+}
+
+span {
+  cursor: default;
+}
+
 html,
 body {
   height: 100vh;
+  -webkit-user-select: none;
+  -ms-user-select: none;
+  user-select: none;
 }
 
 body {
@@ -40,4 +51,8 @@ li {
 a {
   color: var(--unactive-color);
   text-decoration: underline;
+}
+
+img {
+  pointer-events: none;
 }

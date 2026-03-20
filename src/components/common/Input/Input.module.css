@@ -13,6 +13,12 @@
   transition: box-shadow .3s;
 }
 
+.input::-webkit-inner-spin-button,
+.input::-webkit-calendar-picker-indicator {
+  display: none;
+  -webkit-appearance: none;
+}
+
 .input::placeholder {
   color: var(--unactive-color);
 }
@@ -24,4 +30,22 @@
 
 .input:invalid:not(:placeholder-shown) {
   outline: var(--invalid-color) 1px solid;
+}
+
+.inputContainer {
+  display: flex;
+  flex-direction: column;
+  width: 100%;
+  gap: 4px;
+}
+
+.inputInvalid {
+  outline: var(--invalid-color) 1px solid !important;
+  box-shadow: none !important;
+}
+
+.errorText {
+  color: var(--invalid-color);
+  font-size: 12px;
+  padding-left: var(--l-gap); 
 }

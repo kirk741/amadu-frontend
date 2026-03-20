@@ -9,10 +9,12 @@ const EmotionChart = () => {
   const [emotionsLoaded, setEmotionsLoaded] = useState(false);
   const [logs, setLogs] = useState([]);
   const [logsLoaded, setLogsLoaded] = useState(false);
+  console.log("ТЕКУЩИЕ ЭМОЦИИ В СТЕЙТЕ:", emotions);
 
   const getEmotions = async () => {
     try {
       const data = await client('/emotions');
+       console.log("ЧТО ПРИШЛО С СЕРВЕРА:", data);
       setEmotions(data);
       setEmotionsLoaded(true);
     } catch (error) {
@@ -73,9 +75,10 @@ const EmotionChart = () => {
           }
           {
             emotionsLoaded &&
-            emotions.data.map((item, index) =>
-              <img key={index} src={`${process.env.REACT_APP_API_URL}/${item.media[0].file_path}`} alt={item.name} />
-            )
+            emotions.data.map((item, index) => {
+              console.log(item)
+              return <button className={styles.buttonContainer}><img key={index} src={`/${item.media[0].file_path}`} alt={item.name} /></button>
+})
           }
         </div>
         {<Button className={styles.button} noBg={true} shadowType={null}><Icons.More /></Button>}

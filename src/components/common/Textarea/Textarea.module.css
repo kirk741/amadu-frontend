@@ -1,24 +1,36 @@
-.textarea {
-  background-color: var(--el-color);
-  width: 100%;
-  position: relative;
-  border: none;
-  outline: none;
-  transition: box-shadow .3s;
-  resize: vertical;
-}
-
 .textareaWrapper {
-  padding: var(--m-gap) var(--m-gap) var(--m-gap) var(--l-gap);
   background-color: var(--el-color);
   box-shadow: var(--s-shadow);
-  border-radius: 16px;
-  border: 1px solid transparent;
+  border-radius: var(--round-radius);
   overflow: hidden;
   display: flex;
   width: 100%;
   transition: all .3s;
-  position: relative; 
+  padding: var(--m-gap);
+}
+
+.textarea {
+  width: 100%;
+  min-height: 64px;
+  padding: var(--m-gap);
+  padding-bottom: 24px;
+  background: transparent;
+  border: none;
+  outline: none;
+  resize: vertical;
+  color: var(--text-color);
+}
+
+.textarea::-webkit-resizer {
+  background-image: var(--resizer-icon);
+  background-size: 20px 20px;
+  background-repeat: no-repeat;
+  background-position: center center;
+}
+
+.textareaWrapper:focus-within {
+  box-shadow: var(--xl-shadow);
+  outline: var(--unactive-color) 1px solid;
 }
 
 .textarea::-webkit-scrollbar {
@@ -30,26 +42,10 @@
 }
 
 .textarea::-webkit-scrollbar-thumb {
-  background-color: var(--text-color);
+  background-color: var(--unactive-color);
   border-radius: 10px;
 }
 
 .textarea::placeholder {
   color: var(--unactive-color);
-}
-
-.textarea:focus .textareaWrapper {
-  box-shadow: var(--xl-shadow);
-  outline: var(--unactive-color) 1px solid;
-}
-
-.textarea:invalid .textareaWrapper {
-  outline: var(--invalid-color) 1px solid;
-}
-
-.textarea::-webkit-resizer {
-  background-image: url(../../../assets/icons/expand.svg);
-  background-size: 20px 20px;
-  background-repeat: no-repeat;
-  background-position: center center;
 }

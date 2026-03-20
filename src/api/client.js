@@ -1,4 +1,4 @@
-const BASE_URL = 'https://ababkova.xn--80ahdri7a.site';
+const BASE_URL = 'http://ababkova.xn--80ahdri7a.site';
 
 
 const client = async (endpoint, { customHeaders, method, body, ...customConfig } = {}) => {
@@ -19,7 +19,8 @@ const client = async (endpoint, { customHeaders, method, body, ...customConfig }
     ...customConfig
   };
 
-  const url = `${BASE_URL}${endpoint}`;
+  //const url = `${BASE_URL}${endpoint}`;
+  const url = `${endpoint}`;
 
   try {
     const response = await window.fetch(url, config);

@@ -31,6 +31,8 @@ body.light-theme, :root {
   --s-shadow: var(--shadow-color) 0px 0px 16px;
   --m-shadow: var(--shadow-color) 0px 4px 24px;
   --xl-shadow: var(--shadow-color) 8px 8px 60px;
+
+  --resizer-icon: url("../assets/icons/expand.svg");
 }
 
 body.dark-theme {
@@ -46,4 +48,5 @@ body.dark-theme {
   --s-shadow: var(--shadow-color) 0px 0px 16px;
   --m-shadow: var(--shadow-color) 0px 4px 24px;
   --xl-shadow: var(--shadow-color) 8px 8px 60px;
+  --resizer-icon: url("../assets/icons/expand-dark-theme.svg");
 }
