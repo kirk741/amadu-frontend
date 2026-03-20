@@ -1,4 +1,4 @@
-const BASE_URL = 'http://ababkova.xn--80ahdri7a.site';
+const BASE_URL = 'https://ababkova.xn--80ahdri7a.site';
 
 
 const client = async (endpoint, { customHeaders, method, body, ...customConfig } = {}) => {
