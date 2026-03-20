@@ -19,8 +19,8 @@ const client = async (endpoint, { customHeaders, method, body, ...customConfig }
     ...customConfig
   };
 
-  //const url = `${BASE_URL}${endpoint}`;
-  const url = `${endpoint}`;
+  const url = `${BASE_URL}${endpoint}`;
+  //const url = `${endpoint}`;
 
   try {
     const response = await window.fetch(url, config);
