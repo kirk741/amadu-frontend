@@ -37,7 +37,7 @@ body.light-theme, :root {
 
 body.dark-theme {
   --bg-gradient: linear-gradient(145deg, #151415 0%, #111111 100%);
-  --el-color: #151517;
+  --el-color: #18181c;
   --title-color: #FBFBFB;
   --text-color: #C6C6C6;
   --unactive-color: #A4A7AF;
