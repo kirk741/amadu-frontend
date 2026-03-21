@@ -11,7 +11,8 @@ const Layout = ({ children }) => {
   const withoutBottomNav = [
     '/profile',
     '/login',
-    '/register'
+    '/register',
+    '/emotion-logs',
   ];
 
   const withoutTopNav = [
