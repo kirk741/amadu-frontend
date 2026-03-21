@@ -58,27 +58,42 @@
   padding-bottom: var(--xxxl-gap);
 }
 
-/* Модалка */
 .modalBody {
   display: flex;
   flex-direction: column;
-  align-items: center;
+  /* Заменяем align-items: center на stretch, чтобы дети тянулись */
+  align-items: stretch;
   gap: var(--xl-gap);
   padding: var(--s-gap) 0;
   width: 100%;
-  /* Убедись, что тело модалки тянется */
 }
 
 .customInput {
+  /* Принудительно отключаем системный вид */
+  -webkit-appearance: none !important;
+  -moz-appearance: none !important;
+  appearance: none !important;
+
   width: 100% !important;
-  /* Растягиваем на всю ширину */
-  max-width: 100% !important;
-  text-align: left;
-  /* Можно оставить по левому краю или center */
+  /* Убираем жирность и хардкод */
+  font-weight: 400 !important;
+  color: var(--text-color) !important;
+  background-color: var(--el-color) !important;
+
+  /* Гарантируем отсутствие отступов справа */
+  padding-right: var(--m-gap) !important;
 }
 
-.customInput::-webkit-calendar-picker-indicator {
-  margin-right: var(--m-gap);
+/* Скрываем все возможные иконки и кнопки внутри инпута */
+.customInput::-webkit-calendar-picker-indicator,
+.customInput::-webkit-inner-spin-button,
+.customInput::-webkit-clear-button {
+  display: none !important;
+  -webkit-appearance: none !important;
+  width: 0 !important;
+  height: 0 !important;
+  opacity: 0 !important;
+  pointer-events: none !important;
 }
 
 .emotionGrid {
