@@ -95,15 +95,6 @@ const RegisterPage = () => {
         placeholder='Подтвердите пароль*'
         required
       />
-
-      <Input
-        name="birth_date"
-        type="date"
-        value={formData.birth_date}
-        onChange={handleChange}
-        placeholder='Введите дату рождения'
-        error={errors.birth_date?.[0]}
-      />
       <div className={styles.inputContainer}>
         <span className={styles.title}>Загрузите фото профиля</span>
         <FileInput onChange={(file) => setFormData(prev => ({ ...prev, avatar: file }))} />
