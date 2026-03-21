@@ -29,7 +29,6 @@ const FileInput = ({ onChange }) => {
   };
 
   return (
-    <div className={styles.container}>
       <label className={styles.uploadCard}>
         <input
           type="file"
@@ -43,7 +42,6 @@ const FileInput = ({ onChange }) => {
           <div className={styles.plusIcon}><Icons.Plus /></div>
         )}
       </label>
-    </div>
   );
 };
 
