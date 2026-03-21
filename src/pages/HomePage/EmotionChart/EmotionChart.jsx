@@ -4,6 +4,7 @@ import * as Icons from '../../../assets/icons';
 import client from '../../../api/client.js';
 import styles from './EmotionChart.module.css';
 import Button from '../../../components/common/Button/Button.jsx';
+import { getOfflineLogs, saveOfflineLog } from '../../../utils/offlineStorage';
 
 const fetchAllPages = async (url) => {
   const response = await client(url);
