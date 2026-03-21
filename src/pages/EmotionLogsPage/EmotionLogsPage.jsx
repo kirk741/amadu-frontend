@@ -7,7 +7,7 @@ import Modal from '../../components/common/Modal/Modal';
 import client from '../../api/client';
 import styles from './EmotionLogsPage.module.css';
 import Input from '../../components/common/Input/Input';
-import { getOfflineLogs } from '../../../utils/offlineStorage';
+import { getOfflineLogs } from '../../utils/offlineStorage';
 
 const emotionTranslations = {
   'Happy': 'Счастье',
