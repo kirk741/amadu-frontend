@@ -24,7 +24,6 @@ const FileInput = ({ onChange, initialPreview = null }) => {
 
   return (
     <div className={styles.container}>
-      <span className={styles.title}>Загрузите фото профиля</span>
       <label className={styles.uploadCard}>
         <input
           type="file"
