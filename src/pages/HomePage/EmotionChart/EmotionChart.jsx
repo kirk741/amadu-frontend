@@ -26,6 +26,8 @@ const EmotionChart = () => {
   const [logs, setLogs] = useState([]);
   const [logsLoaded, setLogsLoaded] = useState(false);
 
+  const isAuthenticated = () => !!localStorage.getItem('token');
+
   const getEmotionCounts = () => {
     if (!logs.length) return {};
     const counts = {};
@@ -43,16 +45,22 @@ const EmotionChart = () => {
 
   const createEmotionLog = async (emotionId) => {
     try {
-      await client('/emotion-logs', {
-        method: 'POST',
-        body: {
-          emotion_id: emotionId,
-          created_at: new Date().toISOString()
-        }
-      });
-
-      const allLogs = await fetchAllPages('/emotion-logs?per_page=100');
-      setLogs(allLogs);
+      const newLog = {
+        id: Date.now(),
+        emotion_id: emotionId,
+        created_at: new Date().toISOString(),
+      };
+      if (isAuthenticated()) {
+        await client('/emotion-logs', {
+          method: 'POST',
+          body: { emotion_id: emotionId, created_at: newLog.created_at },
+        });
+        const allLogs = await fetchAllPages('/emotion-logs?per_page=100');
+        setLogs(allLogs);
+      } else {
+        saveOfflineLog(newLog);
+        setLogs(prev => [...prev, newLog]);
+      }
       setLogsLoaded(true);
     } catch (error) {
       console.error('Ошибка при добавлении записи:', error);
@@ -75,16 +83,20 @@ const EmotionChart = () => {
       }
 
       try {
-        const allLogs = await fetchAllPages('/emotion-logs?per_page=100');
+        let allLogs = [];
+        if (isAuthenticated()) {
+          allLogs = await fetchAllPages('/emotion-logs?per_page=100');
+        } else {
+          allLogs = getOfflineLogs();
+        }
         setLogs(allLogs);
         setLogsLoaded(true);
       } catch (error) {
         console.error('Ошибка загрузки логов:', error);
       }
     };
-
     fetchData();
-  }, []); 
+  }, []);
 
   const emotionCounts = getEmotionCounts();
   const maxCount = getMaxCount(emotionCounts);

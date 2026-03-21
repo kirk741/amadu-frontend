@@ -27,6 +27,8 @@ const EmotionLogsPage = () => {
   const [editModal, setEditModal] = useState({ open: false, log: null, newEmotionId: '', newDate: '' });
   const popupRef = useRef();
 
+  const isAuthenticated = () => !!localStorage.getItem('token');
+
   const fetchEmotions = async () => {
     try {
       const res = await client('/emotions');
@@ -35,6 +37,13 @@ const EmotionLogsPage = () => {
   };
 
   const fetchLogs = async (url = '/emotion-logs?per_page=10') => {
+    if (!isAuthenticated()) {
+      // For offline, we just show all offline logs (no pagination)
+      setLogs(getOfflineLogs());
+      setLoading(false);
+      setHasMore(false);
+      return;
+    }
     if (url.includes('per_page')) setLoading(true);
     else setLoadingMore(true);
     try {
@@ -50,15 +59,41 @@ const EmotionLogsPage = () => {
 
   const handleEditSave = async () => {
     const { log, newEmotionId, newDate } = editModal;
+    if (!isAuthenticated()) {
+      // Update offline log locally
+      const updatedLogs = logs.map(l =>
+        l.id === log.id ? { ...l, emotion_id: newEmotionId, created_at: newDate } : l
+      );
+      setLogs(updatedLogs);
+      localStorage.setItem('offline_emotion_logs', JSON.stringify(updatedLogs));
+      setEditModal({ open: false });
+      return;
+    }
     const data = new FormData();
     data.append('emotion_id', newEmotionId);
     data.append('created_at', newDate);
-    data.append('_method', 'PATCH'); // ФИКС CORS
-
+    data.append('_method', 'PATCH');
     try {
       await client(`/emotion-logs/${log.id}`, { method: 'POST', body: data });
       setLogs(prev => prev.map(l => l.id === log.id ? { ...l, emotion_id: newEmotionId, created_at: newDate } : l));
       setEditModal({ open: false });
+    } catch (e) { console.error(e); }
+  };
+
+  const handleDelete = async (logId) => {
+    if (!isAuthenticated()) {
+      const updatedLogs = logs.filter(l => l.id !== logId);
+      setLogs(updatedLogs);
+      localStorage.setItem('offline_emotion_logs', JSON.stringify(updatedLogs));
+      setPopup({ open: false });
+      return;
+    }
+    const data = new FormData();
+    data.append('_method', 'DELETE');
+    try {
+      await client(`/emotion-logs/${logId}`, { method: 'POST', body: data });
+      setLogs(prev => prev.filter(l => l.id !== logId));
+      setPopup({ open: false });
     } catch (e) { console.error(e); }
   };
 
@@ -98,7 +133,7 @@ const EmotionLogsPage = () => {
         })}
       </div>
 
-      {hasMore && (
+      {hasMore && isAuthenticated() && (
         <div className={styles.loadMoreContainer}>
           <Button onClick={() => fetchLogs(nextPageUrl)}>{loadingMore ? 'Загрузка...' : 'Загрузить ещё'}</Button>
         </div>
@@ -137,12 +172,7 @@ const EmotionLogsPage = () => {
             setEditModal({ open: true, log, newEmotionId: log.emotion_id, newDate: date.toISOString().slice(0, 16) });
             setPopup({ open: false });
           }}>Редактировать</button>
-          <button className={styles.delete} onClick={async () => {
-            const d = new FormData(); d.append('_method', 'DELETE');
-            await client(`/emotion-logs/${popup.logId}`, { method: 'POST', body: d });
-            setLogs(prev => prev.filter(l => l.id !== popup.logId));
-            setPopup({ open: false });
-          }}>Удалить</button>
+          <button className={styles.delete} onClick={() => handleDelete(popup.logId)}>Удалить</button>
         </div>
       )}
     </div>

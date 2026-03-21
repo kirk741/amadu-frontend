@@ -7,6 +7,7 @@ import FileInput from "../../components/common/FileInput/FileInput";
 import Form from "../../components/common/Form/Form";
 import client from '../../api/client';
 import { useState } from "react";
+import { syncOfflineLogs } from '../../utils/offlineStorage';
 
 const RegisterPage = () => {
   const [formData, setFormData] = useState({
@@ -43,6 +44,7 @@ const RegisterPage = () => {
       if (response?.data?.token) {
         localStorage.setItem('token', response.data.token);
         localStorage.setItem('role', response.data.user?.role || 'user');
+        await syncOfflineLogs(client);
         window.location.assign('/');
       }
     } catch (error) {
