@@ -28,3 +28,11 @@
   position: relative;
   margin: 0 auto;
 }
+
+.inputContainer {
+  display: flex;
+  align-items: start;
+  justify-content: space-between;
+  width: 100%;
+  padding-left: var(--l-gap);
+}

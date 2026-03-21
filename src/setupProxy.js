@@ -21,7 +21,7 @@ module.exports = function (app) {
       '/avatars'
     ],
     createProxyMiddleware({
-      target: 'https://ababkova.xn--80ahdri7a.site',
+      target: process.env.REACT_APP_API_URL,
       changeOrigin: true,
       secure: false
     })

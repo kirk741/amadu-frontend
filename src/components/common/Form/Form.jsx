@@ -1,9 +1,14 @@
-import { useRef } from 'react';
 import styles from './Form.module.css';
 
 const Form = ({ children, onSubmit }) => {
-  const formRef = useRef(null);
-  return <form className={styles.form} onSubmit={onSubmit} ref={formRef} noValidate >
+  const handleSubmit = (e) => {
+    e.preventDefault();
+    if (onSubmit) {
+      onSubmit(e);
+    }
+  };
+  
+  return <form className={styles.form} onSubmit={handleSubmit} noValidate>
     {children}
   </form>
 }

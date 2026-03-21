@@ -15,7 +15,8 @@ const RegisterPage = () => {
     password: '',
     password_confirmation: '',
     birth_date: '',
-    bio: ''
+    bio: '',
+    avatar: null
   });
   const [errors, setErrors] = useState({});
 
@@ -26,14 +27,22 @@ const RegisterPage = () => {
   };
 
   const handleSubmit = async (e) => {
-    e.preventDefault()
-    try {
-      setErrors({});
-      const response = await client('/auth/register', { method: 'POST', body: formData });
+    e.preventDefault();
+    setErrors({});
 
-      if (response?.token) {
-        localStorage.setItem('token', response.token);
-        localStorage.setItem('role', response.role || 'user');
+    try {
+      const data = new FormData();
+      Object.keys(formData).forEach(key => {
+        if (formData[key] !== null && formData[key] !== '') {
+          data.append(key, formData[key]);
+        }
+      });
+
+      const response = await client('/auth/register', { method: 'POST', body: data });
+
+      if (response?.data?.token) {
+        localStorage.setItem('token', response.data.token);
+        localStorage.setItem('role', response.data.user?.role || 'user');
         window.location.assign('/');
       }
     } catch (error) {
@@ -95,8 +104,10 @@ const RegisterPage = () => {
         placeholder='Введите дату рождения'
         error={errors.birth_date?.[0]}
       />
-
-      <FileInput onChange={(file) => setFormData(prev => ({ ...prev, avatar: file }))} />
+      <div className={styles.inputContainer}>
+        <span>Загрузите фото профиля</span>
+        <FileInput onChange={(file) => setFormData(prev => ({ ...prev, avatar: file }))} />
+      </div>
 
       <Textarea
         name="bio"

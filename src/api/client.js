@@ -1,6 +1,3 @@
-const BASE_URL = 'https://ababkova.xn--80ahdri7a.site';
-
-
 const client = async (endpoint, { customHeaders, method, body, ...customConfig } = {}) => {
   const token = localStorage.getItem('token');
   const isFormData = body && (body instanceof FormData);
@@ -19,13 +16,13 @@ const client = async (endpoint, { customHeaders, method, body, ...customConfig }
     ...customConfig
   };
 
-  const url = `${BASE_URL}${endpoint}`;
-  //const url = `${endpoint}`;
+  const url = `${process.env.REACT_APP_API_URL}${endpoint}`;
 
   try {
     const response = await window.fetch(url, config);
 
-    const data = await response.json();
+    const text = await response.text();
+    const data = text ? JSON.parse(text) : {};
 
     if (response.status === 403 && localStorage.getItem('role') !== 'guest') {
       window.location.assign('/forbidden');
@@ -41,8 +38,6 @@ const client = async (endpoint, { customHeaders, method, body, ...customConfig }
       }
       return Promise.reject(data);
     }
-
-    if (response.status === 204) return true;
 
     if (response.ok) {
       return data;
