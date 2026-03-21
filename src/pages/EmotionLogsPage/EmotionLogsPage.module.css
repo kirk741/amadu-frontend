@@ -61,8 +61,7 @@
 .modalBody {
   display: flex;
   flex-direction: column;
-  /* Заменяем align-items: center на stretch, чтобы дети тянулись */
-  align-items: stretch;
+  align-items: stretch; 
   gap: var(--xl-gap);
   padding: var(--s-gap) 0;
   width: 100%;
