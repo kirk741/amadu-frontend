@@ -21,12 +21,11 @@ const Modal = ({
       setShouldRender(true);
       setIsClosing(false);
     } else if (shouldRender) {
-      // Когда isOpen становится false, включаем анимацию закрытия
       setIsClosing(true);
       const timer = setTimeout(() => {
         setShouldRender(false);
         setIsClosing(false);
-      }, 300); // 300ms — время анимации в CSS
+      }, 300);
       return () => clearTimeout(timer);
     }
   }, [isOpen, shouldRender]);

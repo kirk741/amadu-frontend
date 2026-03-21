@@ -68,22 +68,18 @@
 }
 
 .customInput {
-  /* Принудительно отключаем системный вид */
   -webkit-appearance: none !important;
   -moz-appearance: none !important;
   appearance: none !important;
 
   width: 100% !important;
-  /* Убираем жирность и хардкод */
   font-weight: 400 !important;
   color: var(--text-color) !important;
   background-color: var(--el-color) !important;
 
-  /* Гарантируем отсутствие отступов справа */
   padding-right: var(--m-gap) !important;
 }
 
-/* Скрываем все возможные иконки и кнопки внутри инпута */
 .customInput::-webkit-calendar-picker-indicator,
 .customInput::-webkit-inner-spin-button,
 .customInput::-webkit-clear-button {
@@ -128,7 +124,6 @@
   width: 100% !important;
 }
 
-/* Попап */
 .popup {
   position: fixed;
   background: var(--el-color);

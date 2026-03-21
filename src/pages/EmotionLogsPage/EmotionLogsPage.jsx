@@ -61,7 +61,6 @@ const EmotionLogsPage = () => {
     fetchLogs();
   }, []);
 
-  // Закрытие попапа при клике вне
   useEffect(() => {
     const handleClickOutside = (event) => {
       if (popup.open && popupRef.current && !popupRef.current.contains(event.target)) {

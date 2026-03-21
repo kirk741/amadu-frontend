@@ -16,7 +16,7 @@ const ProfilePage = () => {
     bio: ''
   });
   const [avatarFile, setAvatarFile] = useState(null);
-  const [avatarUrl, setAvatarUrl] = useState(null); // URL аватара с сервера
+  const [avatarUrl, setAvatarUrl] = useState(null);
   const [loading, setLoading] = useState(true);
   const [errors, setErrors] = useState({});
   const [modalConfig, setModalConfig] = useState({
@@ -29,7 +29,7 @@ const ProfilePage = () => {
   const loadUserData = async () => {
     try {
       const response = await client('/user/me');
-      console.log('Ответ сервера /user/me:', response); // для отладки
+      console.log('Ответ сервера /user/me:', response);
       const userData = response.data || response.user || response;
 
       if (userData && userData.id) {
@@ -53,10 +53,8 @@ const ProfilePage = () => {
           bio: userData.bio || ''
         }));
 
-        // Загрузка аватара — ищем в разных возможных местах
         let avatarPath = null;
         if (userData.media) {
-          // Если media — объект (hasOne) или массив (hasMany)
           if (Array.isArray(userData.media) && userData.media.length) {
             avatarPath = userData.media[0].file_path;
           } else if (userData.media.file_path) {
@@ -69,7 +67,6 @@ const ProfilePage = () => {
         }
 
         if (avatarPath) {
-          // Полный URL к файлу
           const fullUrl = avatarPath.startsWith('http')
             ? avatarPath
             : `${process.env.REACT_APP_API_URL}/storage/${avatarPath}`;
@@ -158,7 +155,6 @@ const ProfilePage = () => {
         body: data
       });
 
-      // Обновляем данные профиля, чтобы получить новый аватар
       await loadUserData();
 
       showModal("Данные успешно сохранены!", () => {

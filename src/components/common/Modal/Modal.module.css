@@ -9,10 +9,9 @@
   justify-content: center;
   align-items: flex-end;
   z-index: 1000;
-  animation: fadeIn 0.3s ease-out; /* Плавное появление фона */
+  animation: fadeIn 0.3s ease-out; 
 }
 
-/* Класс для анимации закрытия оверлея */
 .overlayExit {
   animation: fadeOut 0.3s forwards;
 }
@@ -31,12 +30,10 @@
   will-change: transform;
 }
 
-/* Класс для анимации уезда модалки вниз */
 .modalExit {
   animation: slideDown 0.3s cubic-bezier(0.4, 0, 0.2, 1) forwards;
 }
 
-/* Анимации */
 @keyframes slideUp {
   from { transform: translateY(100%); }
   to { transform: translateY(0); }
@@ -57,7 +54,6 @@
   to { opacity: 0; }
 }
 
-/* Остальные стили те же */
 .closeBtn {
   position: absolute;
   top: var(--m-gap);
