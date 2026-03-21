@@ -2,15 +2,12 @@ import { useState, useEffect } from 'react';
 import styles from './FileInput.module.css';
 import * as Icons from '../../../assets/icons';
 
-const FileInput = ({ onChange }) => {
-  const [preview, setPreview] = useState(null);
+const FileInput = ({ onChange, initialPreview = null }) => {
+  const [preview, setPreview] = useState(initialPreview);
 
   useEffect(() => {
-    const savedImage = localStorage.getItem('userAvatar');
-    if (savedImage) {
-      setPreview(savedImage);
-    }
-  }, []);
+    setPreview(initialPreview);
+  }, [initialPreview]);
 
   const handleFileChange = (e) => {
     const file = e.target.files[0];
@@ -20,15 +17,14 @@ const FileInput = ({ onChange }) => {
     reader.onloadend = () => {
       const base64String = reader.result;
       setPreview(base64String);
-      localStorage.setItem('userAvatar', base64String);
-      if (onChange) {
-        onChange(file);
-      }
+      if (onChange) onChange(file);
     };
     reader.readAsDataURL(file);
   };
 
   return (
+    <div className={styles.container}>
+      <span className={styles.title}>Загрузите фото профиля</span>
       <label className={styles.uploadCard}>
         <input
           type="file"
@@ -42,6 +38,7 @@ const FileInput = ({ onChange }) => {
           <div className={styles.plusIcon}><Icons.Plus /></div>
         )}
       </label>
+    </div>
   );
 };
 

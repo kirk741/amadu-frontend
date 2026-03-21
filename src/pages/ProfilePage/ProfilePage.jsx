@@ -16,6 +16,7 @@ const ProfilePage = () => {
     bio: ''
   });
   const [avatarFile, setAvatarFile] = useState(null);
+  const [avatarPreview, setAvatarPreview] = useState(null); // URL аватара с сервера
   const [loading, setLoading] = useState(true);
   const [errors, setErrors] = useState({});
   const [modalConfig, setModalConfig] = useState({
@@ -24,6 +25,60 @@ const ProfilePage = () => {
     onConfirm: null,
     hideCancel: false
   });
+
+  // Функция загрузки данных пользователя
+  const loadUserData = async () => {
+    try {
+      const response = await client('/user/me');
+      const userData = response.data || response.user || response;
+
+      if (userData && userData.id) {
+        let formattedDate = '';
+        if (userData.birth_date) {
+          try {
+            const dateObj = new Date(userData.birth_date);
+            if (!isNaN(dateObj.getTime())) {
+              formattedDate = dateObj.toISOString().split('T')[0];
+            }
+          } catch (e) {
+            console.warn('Не удалось преобразовать дату', userData.birth_date);
+          }
+        }
+
+        setFormData(prev => ({
+          ...prev,
+          name: userData.name || '',
+          email: userData.email || '',
+          birth_date: formattedDate,
+          bio: userData.bio || ''
+        }));
+
+        // Устанавливаем URL аватара, если есть
+        if (userData.avatar_url) {
+          setAvatarPreview(userData.avatar_url);
+        } else if (userData.avatar) {
+          // Если API возвращает путь к файлу
+          setAvatarPreview(`${process.env.REACT_APP_API_URL}/${userData.avatar}`);
+        }
+      } else {
+        console.error('Нет данных пользователя');
+        localStorage.clear();
+        window.location.assign('/login');
+      }
+    } catch (error) {
+      console.error("Ошибка при загрузке профиля:", error);
+      if (error.status === 401 || error.status === 404 || error.message === 'Не авторизован') {
+        localStorage.clear();
+        window.location.assign('/login');
+      }
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  useEffect(() => {
+    loadUserData();
+  }, []);
 
   const handleChange = (e) => {
     const { name, value } = e.target;
@@ -88,6 +143,9 @@ const ProfilePage = () => {
         body: data
       });
 
+      // После сохранения обновляем данные профиля, чтобы отобразить новый аватар
+      await loadUserData();
+
       showModal("Данные успешно сохранены!", () => {
         setFormData(prev => ({ ...prev, password: '', confirmPassword: '' }));
         setAvatarFile(null);
@@ -128,52 +186,6 @@ const ProfilePage = () => {
     }
   };
 
-  useEffect(() => {
-    const fetchUserData = async () => {
-      try {
-        const response = await client('/user/me');
-
-        const userData = response.data || response.user || response;
-
-        if (userData && userData.id) {
-          let formattedDate = '';
-          if (userData.birth_date) {
-            try {
-              const dateObj = new Date(userData.birth_date);
-              if (!isNaN(dateObj.getTime())) {
-                formattedDate = dateObj.toISOString().split('T')[0];
-              }
-            } catch (e) {
-              console.warn('Не удалось преобразовать дату', userData.birth_date);
-            }
-          }
-
-          setFormData(prev => ({
-            ...prev,
-            name: userData.name || '',
-            email: userData.email || '',
-            birth_date: formattedDate,
-            bio: userData.bio || ''
-          }));
-        } else {
-          console.error('Нет данных пользователя');
-          localStorage.clear();
-          window.location.assign('/login');
-        }
-      } catch (error) {
-        console.error("Ошибка при загрузке профиля:", error);
-        if (error.status === 401 || error.status === 404 || error.message === 'Не авторизован') {
-          localStorage.clear();
-          window.location.assign('/login');
-        }
-      } finally {
-        setLoading(false);
-      }
-    };
-
-    fetchUserData();
-  }, []);
-
   if (loading) {
     return <div className={styles.loading}>Загрузка...</div>;
   }
@@ -182,7 +194,7 @@ const ProfilePage = () => {
     <div className={styles.container}>
       <div className={styles.profileCard}>
         <div className={styles.avatarSection}>
-          <FileInput onChange={handleAvatarChange} />
+          <FileInput onChange={handleAvatarChange} initialPreview={avatarPreview} />
           <span className={styles.changePhotoLabel}>Сменить фото</span>
         </div>
 
@@ -220,6 +232,14 @@ const ProfilePage = () => {
               error={errors.confirmPassword?.[0]}
             />
           )}
+          <Input
+            name="birth_date"
+            type="date"
+            value={formData.birth_date}
+            onChange={handleChange}
+            placeholder="Дата рождения"
+            error={errors.birth_date?.[0]}
+          />
           <Input
             name="bio"
             value={formData.bio}
