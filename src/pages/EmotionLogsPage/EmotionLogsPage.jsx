@@ -121,12 +121,11 @@ const EmotionLogsPage = () => {
     }).replace(',', ' г. в');
   };
 
-  // Формирование URL аватара (добавляем /storage/ если путь относительный)
   const getImageUrl = (filePath) => {
     if (!filePath) return '';
     if (filePath.startsWith('http')) return filePath;
     if (filePath.startsWith('storage/')) return `${process.env.REACT_APP_API_URL}/${filePath}`;
-    return `${process.env.REACT_APP_API_URL}/storage/${filePath}`;
+    return `${process.env.REACT_APP_API_URL}/${filePath}`;
   };
 
   if (loading && !logs.length) return <div className={styles.loading}>Загрузка...</div>;
