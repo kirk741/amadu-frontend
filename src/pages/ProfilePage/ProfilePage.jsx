@@ -16,7 +16,7 @@ const ProfilePage = () => {
     bio: ''
   });
   const [avatarFile, setAvatarFile] = useState(null);
-  const [avatarPreview, setAvatarPreview] = useState(null); // URL аватара с сервера
+  const [avatarUrl, setAvatarUrl] = useState(null); // URL аватара с сервера
   const [loading, setLoading] = useState(true);
   const [errors, setErrors] = useState({});
   const [modalConfig, setModalConfig] = useState({
@@ -26,10 +26,10 @@ const ProfilePage = () => {
     hideCancel: false
   });
 
-  // Функция загрузки данных пользователя
   const loadUserData = async () => {
     try {
       const response = await client('/user/me');
+      console.log('Ответ сервера /user/me:', response); // для отладки
       const userData = response.data || response.user || response;
 
       if (userData && userData.id) {
@@ -53,12 +53,27 @@ const ProfilePage = () => {
           bio: userData.bio || ''
         }));
 
-        // Устанавливаем URL аватара, если есть
-        if (userData.avatar_url) {
-          setAvatarPreview(userData.avatar_url);
+        // Загрузка аватара — ищем в разных возможных местах
+        let avatarPath = null;
+        if (userData.media) {
+          // Если media — объект (hasOne) или массив (hasMany)
+          if (Array.isArray(userData.media) && userData.media.length) {
+            avatarPath = userData.media[0].file_path;
+          } else if (userData.media.file_path) {
+            avatarPath = userData.media.file_path;
+          }
         } else if (userData.avatar) {
-          // Если API возвращает путь к файлу
-          setAvatarPreview(`${process.env.REACT_APP_API_URL}/${userData.avatar}`);
+          avatarPath = userData.avatar;
+        } else if (userData.avatar_url) {
+          avatarPath = userData.avatar_url;
+        }
+
+        if (avatarPath) {
+          // Полный URL к файлу
+          const fullUrl = avatarPath.startsWith('http')
+            ? avatarPath
+            : `${process.env.REACT_APP_API_URL}/${avatarPath}`;
+          setAvatarUrl(fullUrl);
         }
       } else {
         console.error('Нет данных пользователя');
@@ -143,7 +158,7 @@ const ProfilePage = () => {
         body: data
       });
 
-      // После сохранения обновляем данные профиля, чтобы отобразить новый аватар
+      // Обновляем данные профиля, чтобы получить новый аватар
       await loadUserData();
 
       showModal("Данные успешно сохранены!", () => {
@@ -194,7 +209,7 @@ const ProfilePage = () => {
     <div className={styles.container}>
       <div className={styles.profileCard}>
         <div className={styles.avatarSection}>
-          <FileInput onChange={handleAvatarChange} initialPreview={avatarPreview} />
+          <FileInput onChange={handleAvatarChange} initialPreview={avatarUrl} />
           <span className={styles.changePhotoLabel}>Сменить фото</span>
         </div>
 
