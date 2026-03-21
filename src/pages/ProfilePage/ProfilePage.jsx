@@ -221,14 +221,6 @@ const ProfilePage = () => {
             />
           )}
           <Input
-            name="birth_date"
-            type="date"
-            value={formData.birth_date}
-            onChange={handleChange}
-            placeholder="Дата рождения"
-            error={errors.birth_date?.[0]}
-          />
-          <Input
             name="bio"
             value={formData.bio}
             onChange={handleChange}
