@@ -72,7 +72,7 @@ const ProfilePage = () => {
           // Полный URL к файлу
           const fullUrl = avatarPath.startsWith('http')
             ? avatarPath
-            : `${process.env.REACT_APP_API_URL}/${avatarPath}`;
+            : `${process.env.REACT_APP_API_URL}/storage/${avatarPath}`;
           setAvatarUrl(fullUrl);
         }
       } else {
