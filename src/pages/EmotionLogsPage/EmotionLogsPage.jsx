@@ -18,6 +18,7 @@ const emotionTranslations = {
 };
 
 const EmotionLogsPage = () => {
+  const navigate = useNavigate();
   const [logs, setLogs] = useState([]);
   const [loading, setLoading] = useState(true);
   const [loadingMore, setLoadingMore] = useState(false);
@@ -39,7 +40,6 @@ const EmotionLogsPage = () => {
 
   const fetchLogs = async (url = '/emotion-logs?per_page=10') => {
     if (!isAuthenticated()) {
-      // For offline, we just show all offline logs (no pagination)
       setLogs(getOfflineLogs());
       setLoading(false);
       setHasMore(false);
@@ -56,12 +56,25 @@ const EmotionLogsPage = () => {
     } catch (e) { console.error(e); } finally { setLoading(false); setLoadingMore(false); }
   };
 
-  useEffect(() => { fetchEmotions(); fetchLogs(); }, []);
+  useEffect(() => {
+    fetchEmotions();
+    fetchLogs();
+  }, []);
+
+  // Закрытие попапа при клике вне
+  useEffect(() => {
+    const handleClickOutside = (event) => {
+      if (popup.open && popupRef.current && !popupRef.current.contains(event.target)) {
+        setPopup({ open: false, logId: null, left: 0, top: 0 });
+      }
+    };
+    document.addEventListener('mousedown', handleClickOutside);
+    return () => document.removeEventListener('mousedown', handleClickOutside);
+  }, [popup.open]);
 
   const handleEditSave = async () => {
     const { log, newEmotionId, newDate } = editModal;
     if (!isAuthenticated()) {
-      // Update offline log locally
       const updatedLogs = logs.map(l =>
         l.id === log.id ? { ...l, emotion_id: newEmotionId, created_at: newDate } : l
       );
@@ -99,18 +112,35 @@ const EmotionLogsPage = () => {
   };
 
   const formatDisplayDate = (iso) => {
-    return new Date(iso).toLocaleString('ru-RU', { day: 'numeric', month: 'long', year: 'numeric', hour: '2-digit', minute: '2-digit' }).replace(',', ' г. в');
+    return new Date(iso).toLocaleString('ru-RU', {
+      day: 'numeric',
+      month: 'long',
+      year: 'numeric',
+      hour: '2-digit',
+      minute: '2-digit'
+    }).replace(',', ' г. в');
   };
+
+  // Формирование URL аватара (добавляем /storage/ если путь относительный)
+  const getImageUrl = (filePath) => {
+    if (!filePath) return '';
+    if (filePath.startsWith('http')) return filePath;
+    if (filePath.startsWith('storage/')) return `${process.env.REACT_APP_API_URL}/${filePath}`;
+    return `${process.env.REACT_APP_API_URL}/storage/${filePath}`;
+  };
+
+  if (loading && !logs.length) return <div className={styles.loading}>Загрузка...</div>;
 
   return (
     <div className={styles.page}>
       <div className={styles.list}>
         {logs.map(log => {
           const emotion = emotions.find(e => e.id === log.emotion_id);
+          const imgSrc = getImageUrl(emotion?.media?.[0]?.file_path);
           return (
             <div key={log.id} className={styles.logItem}>
               <div className={styles.logContent}>
-                <img src={`${process.env.REACT_APP_API_URL}/${emotion?.media?.[0]?.file_path}`} className={styles.icon} alt="" />
+                {imgSrc && <img src={imgSrc} className={styles.icon} alt="" />}
                 <div className={styles.info}>
                   <span className={styles.name}>
                     {emotionTranslations[emotion?.name] || emotion?.name || '---'}
@@ -123,8 +153,14 @@ const EmotionLogsPage = () => {
                 shadowType={null}
                 className={styles.moreButton}
                 onClick={(e) => {
-                  const r = e.currentTarget.getBoundingClientRect();
-                  setPopup({ open: true, logId: log.id, left: r.left - 150, top: r.top });
+                  e.stopPropagation();
+                  const rect = e.currentTarget.getBoundingClientRect();
+                  setPopup({
+                    open: true,
+                    logId: log.id,
+                    left: rect.left - 150,
+                    top: rect.top,
+                  });
                 }}
               >
                 <Icons.More />
@@ -136,7 +172,9 @@ const EmotionLogsPage = () => {
 
       {hasMore && isAuthenticated() && (
         <div className={styles.loadMoreContainer}>
-          <Button onClick={() => fetchLogs(nextPageUrl)}>{loadingMore ? 'Загрузка...' : 'Загрузить ещё'}</Button>
+          <Button onClick={() => fetchLogs(nextPageUrl)}>
+            {loadingMore ? 'Загрузка...' : 'Загрузить ещё'}
+          </Button>
         </div>
       )}
 
@@ -149,9 +187,13 @@ const EmotionLogsPage = () => {
         <div className={styles.modalBody}>
           <div className={styles.emotionGrid}>
             {emotions.map(em => (
-              <button key={em.id} type="button" className={`${styles.emotionBtn} ${editModal.newEmotionId === em.id ? styles.active : ''}`}
-                onClick={() => setEditModal(p => ({ ...p, newEmotionId: em.id }))}>
-                <img src={`${process.env.REACT_APP_API_URL}/${em.media?.[0]?.file_path}`} alt="" />
+              <button
+                key={em.id}
+                type="button"
+                className={`${styles.emotionBtn} ${editModal.newEmotionId === em.id ? styles.active : ''}`}
+                onClick={() => setEditModal(p => ({ ...p, newEmotionId: em.id }))}
+              >
+                <img src={getImageUrl(em.media?.[0]?.file_path)} alt={em.name} />
               </button>
             ))}
           </div>
@@ -165,15 +207,33 @@ const EmotionLogsPage = () => {
       </Modal>
 
       {popup.open && (
-        <div className={styles.popup} style={{ left: popup.left, top: popup.top }} ref={popupRef}>
-          <button onClick={() => {
-            const log = logs.find(l => l.id === popup.logId);
-            const date = new Date(log.created_at);
-            date.setMinutes(date.getMinutes() - date.getTimezoneOffset());
-            setEditModal({ open: true, log, newEmotionId: log.emotion_id, newDate: date.toISOString().slice(0, 16) });
-            setPopup({ open: false });
-          }}>Редактировать</button>
-          <button className={styles.delete} onClick={() => handleDelete(popup.logId)}>Удалить</button>
+        <div
+          ref={popupRef}
+          className={styles.popup}
+          style={{ left: popup.left, top: popup.top }}
+          onClick={(e) => e.stopPropagation()}
+        >
+          <button
+            onClick={() => {
+              const log = logs.find(l => l.id === popup.logId);
+              if (log) {
+                const date = new Date(log.created_at);
+                date.setMinutes(date.getMinutes() - date.getTimezoneOffset());
+                setEditModal({
+                  open: true,
+                  log,
+                  newEmotionId: log.emotion_id,
+                  newDate: date.toISOString().slice(0, 16)
+                });
+                setPopup({ open: false });
+              }
+            }}
+          >
+            Редактировать
+          </button>
+          <button className={styles.delete} onClick={() => handleDelete(popup.logId)}>
+            Удалить
+          </button>
         </div>
       )}
     </div>
