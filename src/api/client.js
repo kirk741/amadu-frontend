@@ -1,3 +1,5 @@
+const BASE_URL = process.env.REACT_APP_API_URL || 'https://ababkova.xn--80ahdri7a.site';
+
 const client = async (endpoint, { customHeaders, method, body, ...customConfig } = {}) => {
   const token = localStorage.getItem('token');
   const isFormData = body && (body instanceof FormData);
@@ -16,10 +18,12 @@ const client = async (endpoint, { customHeaders, method, body, ...customConfig }
     ...customConfig
   };
 
-  const url = `${process.env.REACT_APP_API_URL}${endpoint}`;
+  const url = `${BASE_URL}${endpoint}`;
 
   try {
     const response = await window.fetch(url, config);
+
+    if (response.status === 204) return true;
 
     const text = await response.text();
     const data = text ? JSON.parse(text) : {};
@@ -36,17 +40,22 @@ const client = async (endpoint, { customHeaders, method, body, ...customConfig }
         localStorage.removeItem('token');
         window.location.assign('/login');
       }
-      return Promise.reject(data);
+      const errorData = { ...data, status: response.status };
+      return Promise.reject(errorData);
     }
 
     if (response.ok) {
       return data;
     } else {
-      throw data;
+      const errorData = { ...data, status: response.status };
+      throw errorData;
     }
   } catch (error) {
+    if (error && !error.status) {
+      error.status = 0;
+    }
     return Promise.reject(error);
   }
-}
+};
 
 export default client;

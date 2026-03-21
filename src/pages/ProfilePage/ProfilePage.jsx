@@ -93,7 +93,6 @@ const ProfilePage = () => {
         setFormData(prev => ({ ...prev, password: '', confirmPassword: '' }));
         setAvatarFile(null);
       }, true);
-
     } catch (error) {
       console.error("Ошибка сохранения:", error);
       if (error.errors) {
@@ -166,7 +165,7 @@ const ProfilePage = () => {
         }
       } catch (error) {
         console.error("Ошибка при загрузке профиля:", error);
-        if (error.status === 401 || error.status === 404) {
+        if (error.status === 401 || error.status === 404 || error.message === 'Не авторизован') {
           localStorage.clear();
           window.location.assign('/login');
         }
