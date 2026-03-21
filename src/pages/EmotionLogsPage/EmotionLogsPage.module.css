@@ -77,10 +77,8 @@
   /* Можно оставить по левому краю или center */
 }
 
-/* Убираем ту самую стрелочку/календарик в правой части */
 .customInput::-webkit-calendar-picker-indicator {
-  display: none !important;
-  -webkit-appearance: none;
+  margin-right: var(--m-gap);
 }
 
 .emotionGrid {
