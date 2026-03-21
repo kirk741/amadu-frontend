@@ -1,6 +1,5 @@
 .page {
   padding: var(--m-gap);
-  max-width: 600px;
   margin: 0 auto;
 }
 
