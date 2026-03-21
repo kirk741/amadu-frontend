@@ -64,12 +64,13 @@
   animation: flickering infinite linear 1s;
 }
 
-.pill {
+.pillBar {
   display: block;
   height: 100%;
   width: 24px;
   background-color: var(--unactive-color);
   border-radius: var(--round-radius);
+  transition: height .3s;
 }
 
 .pillsContainer {
@@ -78,6 +79,7 @@
   display: flex;
   padding: var(--m-gap) 28px;
   justify-content: space-between;
+  align-items: flex-end;
 }
 
 .buttonContainer {

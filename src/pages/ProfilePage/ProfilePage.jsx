@@ -83,12 +83,11 @@ const ProfilePage = () => {
     data.append('_method', 'PATCH');
 
     try {
-      const response = await client('/user/me', {
+      await client('/user/me', {
         method: 'POST',
         body: data
       });
 
-      console.log('Ответ сервера при сохранении:', response);
       showModal("Данные успешно сохранены!", () => {
         setFormData(prev => ({ ...prev, password: '', confirmPassword: '' }));
         setAvatarFile(null);
@@ -132,9 +131,7 @@ const ProfilePage = () => {
   useEffect(() => {
     const fetchUserData = async () => {
       try {
-        console.log('Загрузка данных профиля...');
         const response = await client('/user/me');
-        console.log('Ответ сервера:', response);
 
         const userData = response.data || response.user || response;
 

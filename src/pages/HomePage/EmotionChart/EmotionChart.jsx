@@ -1,88 +1,164 @@
 import { useEffect, useState } from 'react';
+import { useNavigate } from 'react-router-dom';
 import * as Icons from '../../../assets/icons';
 import client from '../../../api/client.js';
 import styles from './EmotionChart.module.css';
 import Button from '../../../components/common/Button/Button.jsx';
 
+const fetchAllPages = async (url) => {
+  const response = await client(url);
+  const pagination = response.data;
+  const items = pagination.data || pagination || [];
+  const nextUrl = pagination.next_page_url;
+  if (nextUrl) {
+    const urlObj = new URL(nextUrl);
+    const relativePath = urlObj.pathname + urlObj.search;
+    const nextItems = await fetchAllPages(relativePath);
+    return [...items, ...nextItems];
+  }
+  return items;
+};
+
 const EmotionChart = () => {
+  const navigate = useNavigate();
   const [emotions, setEmotions] = useState([]);
   const [emotionsLoaded, setEmotionsLoaded] = useState(false);
   const [logs, setLogs] = useState([]);
   const [logsLoaded, setLogsLoaded] = useState(false);
 
-  const getEmotions = async () => {
-    try {
-      const data = await client('/emotions');
-      setEmotions(data);
-      setEmotionsLoaded(true);
-    } catch (error) {
-      console.error(error);
-    }
-  }
+  const getEmotionCounts = () => {
+    if (!logs.length) return {};
+    const counts = {};
+    logs.forEach(log => {
+      const emotionId = log.emotion_id;
+      counts[emotionId] = (counts[emotionId] || 0) + 1;
+    });
+    return counts;
+  };
 
-  const getEmotionLogs = async () => {
+  const getMaxCount = (counts) => {
+    const values = Object.values(counts);
+    return values.length ? Math.max(...values) : 0;
+  };
+
+  const createEmotionLog = async (emotionId) => {
     try {
-      const data = await client('/emotion-logs');
-      setLogs(data);
+      await client('/emotion-logs', {
+        method: 'POST',
+        body: {
+          emotion_id: emotionId,
+          created_at: new Date().toISOString()
+        }
+      });
+
+      const allLogs = await fetchAllPages('/emotion-logs?per_page=100');
+      setLogs(allLogs);
       setLogsLoaded(true);
     } catch (error) {
-      console.error(error);
+      console.error('Ошибка при добавлении записи:', error);
     }
-  }
+  };
+
+  const goToLogsList = () => {
+    navigate('/emotion-logs');
+  };
 
   useEffect(() => {
-    getEmotions();
-    getEmotionLogs();
-  }, []);
+    const fetchData = async () => {
+      try {
+        const emotionsResponse = await client('/emotions');
+        const emotionsData = emotionsResponse.data?.data || emotionsResponse.data || emotionsResponse;
+        setEmotions(emotionsData);
+        setEmotionsLoaded(true);
+      } catch (error) {
+        console.error('Ошибка загрузки эмоций:', error);
+      }
+
+      try {
+        const allLogs = await fetchAllPages('/emotion-logs?per_page=100');
+        setLogs(allLogs);
+        setLogsLoaded(true);
+      } catch (error) {
+        console.error('Ошибка загрузки логов:', error);
+      }
+    };
+
+    fetchData();
+  }, []); 
+
+  const emotionCounts = getEmotionCounts();
+  const maxCount = getMaxCount(emotionCounts);
+  const emotionColors = [
+    'var(--happy-color)',
+    'var(--fine-color)',
+    'var(--normal-color)',
+    'var(--sad-color)',
+    'var(--angry-color)'
+  ];
 
   return (
-    <>
-      <div className={styles.container}>
-        <div className={styles.pillsContainer}>
-          {
-            !logsLoaded &&
-            <>
-              <span className={styles.loadPill}></span>
-              <span className={styles.loadPill}></span>
-              <span className={styles.loadPill}></span>
-              <span className={styles.loadPill}></span>
-              <span className={styles.loadPill}></span>
-            </>
-          }
-          {
-            logsLoaded &&
-            <>
-              <span className={styles.pill} style={{ backgroundColor: 'var(--happy-color)' }}></span>
-              <span className={styles.pill} style={{ backgroundColor: 'var(--fine-color)' }}></span>
-              <span className={styles.pill} style={{ backgroundColor: 'var(--normal-color)' }}></span>
-              <span className={styles.pill} style={{ backgroundColor: 'var(--sad-color)' }}></span>
-              <span className={styles.pill} style={{ backgroundColor: 'var(--angry-color)' }}></span>
-            </>
-          }
-        </div>
-        <div className={styles.emotionsContainer}>
-          {
-            !emotionsLoaded &&
-            <>
-              <span className={styles.loadCircle}></span>
-              <span className={styles.loadCircle}></span>
-              <span className={styles.loadCircle}></span>
-              <span className={styles.loadCircle}></span>
-              <span className={styles.loadCircle}></span>
-            </>
-          }
-          {
-            emotionsLoaded &&
-            emotions.data.map((item, index) => {
-              console.log(item)
-              return <button className={styles.buttonContainer}><img key={index} src={`${process.env.REACT_APP_API_URL}/${item.media[0].file_path}`} alt={item.name} /></button>
-            })
-          }
-        </div>
-        {<Button className={styles.button} noBg={true} shadowType={null}><Icons.More /></Button>}
+    <div className={styles.container}>
+      <div className={styles.pillsContainer}>
+        {!logsLoaded && (
+          <>
+            <span className={styles.loadPill}></span>
+            <span className={styles.loadPill}></span>
+            <span className={styles.loadPill}></span>
+            <span className={styles.loadPill}></span>
+            <span className={styles.loadPill}></span>
+          </>
+        )}
+        {logsLoaded &&
+          emotions.map((emotion, idx) => {
+            const count = emotionCounts[emotion.id] || 0;
+            const percent = maxCount > 0 ? (count / maxCount) * 100 : 0;
+            const isMax = count === maxCount && maxCount > 0;
+
+            return (
+              <div
+                key={emotion.id}
+                className={styles.pillBar}
+                style={{
+                  height: `${percent}%`,
+                  backgroundColor: isMax ? emotionColors[idx % emotionColors.length] : 'transparent',
+                  border: !isMax ? `2px solid ${emotionColors[idx % emotionColors.length]}` : 'none'
+                }}
+                title={`${emotion.name}: ${count} записей`}
+              />
+            );
+          })}
       </div>
-    </>
-  )
-}
+
+      <div className={styles.emotionsContainer}>
+        {!emotionsLoaded && (
+          <>
+            <span className={styles.loadCircle}></span>
+            <span className={styles.loadCircle}></span>
+            <span className={styles.loadCircle}></span>
+            <span className={styles.loadCircle}></span>
+            <span className={styles.loadCircle}></span>
+          </>
+        )}
+        {emotionsLoaded &&
+          emotions.map((item, index) => (
+            <button
+              key={index}
+              className={styles.buttonContainer}
+              onClick={() => createEmotionLog(item.id)}
+            >
+              <img
+                src={`${process.env.REACT_APP_API_URL}/${item.media[0].file_path}`}
+                alt={item.name}
+              />
+            </button>
+          ))}
+      </div>
+
+      <Button className={styles.button} noBg={true} shadowType={null} onClick={goToLogsList}>
+        <Icons.More />
+      </Button>
+    </div>
+  );
+};
 
 export default EmotionChart;

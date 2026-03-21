@@ -25,6 +25,7 @@ const TopNav = () => {
     { path: '/chats', content: 'Чаты' },
     { path: '/diary', content: 'Дневники' },
     { path: '/profile', content: 'Профиль' },
+    { path: '/emotion-logs', content: 'Эмоции' },
   ];
 
   const currentPath = paths.find(item => item.path === location.pathname);

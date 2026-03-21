@@ -5,6 +5,7 @@ import HomePage from './pages/HomePage/HomePage';
 import ProfilePage from './pages/ProfilePage/ProfilePage';
 import RegisterPage from './pages/RegisterPage/RegisterPage';
 import LoginPage from './pages/LoginPage/LoginPage';
+import EmotionLogsPage from './pages/EmotionLogsPage/EmotionLogsPage';
 
 function App() {
   return (
@@ -15,6 +16,7 @@ function App() {
           <Route path='/login' element={<LoginPage />}></Route>
           <Route path='/' element={<HomePage />}></Route>
           <Route path='/profile' element={<ProfilePage />}></Route>
+          <Route path='/emotion-logs' element={<EmotionLogsPage />}></Route>
         </Routes>
       </Layout>
     </BrowserRouter>
