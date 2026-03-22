@@ -2,7 +2,7 @@ import { useState, useEffect } from 'react';
 import styles from './FileInput.module.css';
 import * as Icons from '../../../assets/icons';
 
-const FileInput = ({ onChange, initialPreview = null }) => {
+const FileInput = ({ onChange, initialPreview = null, error }) => {
   const [preview, setPreview] = useState(initialPreview);
 
   useEffect(() => {
@@ -37,6 +37,7 @@ const FileInput = ({ onChange, initialPreview = null }) => {
           <div className={styles.plusIcon}><Icons.Plus /></div>
         )}
       </label>
+      {error && <span className={styles.errorText}>{error}</span>}
     </div>
   );
 };
