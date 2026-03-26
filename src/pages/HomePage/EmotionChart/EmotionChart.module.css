@@ -54,17 +54,7 @@
   animation: flickering infinite linear 1s;
 }
 
-.loadPill {
-  display: block;
-  height: 100%;
-  width: 24px;
-  background-color: var(--unactive-color);
-  border-radius: var(--round-radius);
-  opacity: 50%;
-  animation: flickering infinite linear 1s;
-}
-
-.pillBar {
+.pill {
   display: block;
   height: 100%;
   width: 24px;

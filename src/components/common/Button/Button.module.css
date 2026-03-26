@@ -9,6 +9,7 @@
   background-color: var(--el-color);
   border: none;
   border-radius: var(--round-radius);
+  position: relative;
 }
 
 .button span {

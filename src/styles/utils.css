@@ -7,6 +7,7 @@
   margin: 0;
   padding: 0;
   font-size: var(--font-size);
+  -webkit-tap-highlight-color: transparent;
 }
 
 path {
@@ -21,6 +22,12 @@ select {
 }
 
 button {
+  background: none;
+  border: none;
+  cursor: pointer;
+}
+
+button span {
   cursor: pointer;
 }
 

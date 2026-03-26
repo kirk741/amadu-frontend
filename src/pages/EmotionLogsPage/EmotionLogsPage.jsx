@@ -9,7 +9,7 @@ const emotionTranslations = {
 };
 
 const EmotionLogsPage = () => {
-  
+  return <>sefwfwe</>
 };
 
 export default EmotionLogsPage;

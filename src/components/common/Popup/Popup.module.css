@@ -1,0 +1,14 @@
+.popupContainer {
+  position: absolute;
+  top: 24px;
+  right: 56px;
+  height: fit-content;
+  width: fit-content;
+  padding: var(--xs-gap);
+  background: var(--bg-gradient);
+  border-radius: var(--xs-gap);
+}
+
+.popupButton {
+  white-space: nowrap;
+}

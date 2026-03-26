@@ -1,0 +1,48 @@
+.modalBg {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  z-index: 99;
+  background-color: color-mix(in srgb, #000, transparent 80%);
+  backdrop-filter: blur(20px);
+  -webkit-backdrop-filter: blur(20px);
+  transition: backdrop-filter .6s, background-color .6s;
+}
+
+.modalContainer {
+  position: fixed;
+  z-index: 100;
+  bottom: 0;
+  left: 0;
+  height: fit-content;
+  width: 100%;
+  background-color: var(--el-color);
+  padding: var(--xxl-gap) 0 var(--l-gap) 0;
+  border-radius: var(--round-radius) var(--round-radius) 0 0;
+  transition: height .6s;
+  transform: translateY(100%);
+  transition: transform .4s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+.modalBg.activeBg {
+  background-color: color-mix(in srgb, #000, transparent 80%);
+  backdrop-filter: blur(20px);
+  -webkit-backdrop-filter: blur(20px);
+}
+
+.active {
+  transform: translateY(0) !important;
+}
+
+.modalButton:hover {
+  background: var(--bg-gradient);
+}
+
+.closeBtn {
+  position: absolute;
+  top: var(--xs-gap);
+  right: var(--m-gap);
+  width: 24px;
+}
