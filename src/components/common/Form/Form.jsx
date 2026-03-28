@@ -1,14 +1,7 @@
 import styles from './Form.module.css';
 
 const Form = ({ children, onSubmit }) => {
-  const handleSubmit = (e) => {
-    e.preventDefault();
-    if (onSubmit) {
-      onSubmit(e);
-    }
-  };
-  
-  return <form className={styles.form} onSubmit={handleSubmit} noValidate>
+  return <form className={styles.form} onSubmit={onSubmit} noValidate>
     {children}
   </form>
 }

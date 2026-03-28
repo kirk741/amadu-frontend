@@ -45,7 +45,6 @@ body {
 
 body {
   font-family: var(--font);
-  font-size: 14px;
   line-height: 1.15;
   color: var(--text-color);
   background: var(--bg-gradient);
@@ -63,4 +62,8 @@ a {
 
 img {
   pointer-events: none;
+}
+
+h1,h2,h3 {
+  font-weight: inherit;
 }

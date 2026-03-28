@@ -47,5 +47,12 @@
 .errorText {
   color: var(--invalid-color);
   font-size: 12px;
-  padding-left: var(--l-gap); 
+  padding-left: var(--l-gap);
+}
+
+.inputIcon {
+  position: absolute;
+  right: var(--m-gap);
+  transform: translateX(-100%);
+  width: fit-content;
 }

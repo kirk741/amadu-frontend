@@ -2,7 +2,14 @@ import { test, expect } from '@playwright/test';
 
 test.describe('EmotionChart Component', () => {
   test.beforeEach(async ({ page }) => {
-    await page.route('**/emotions', async (route) => {
+    await page.addInitScript(() => {
+      localStorage.setItem('authToken', 'fake-jwt-token-for-test');
+    });
+
+    await page.route('**/emotions', async (route, request) => {
+      if (request.headers()['authorization'] !== 'Bearer fake-jwt-token-for-test') {
+        return route.fulfill({ status: 401, json: { success: false, message: 'Unauthorized' } });
+      }
       await route.fulfill({
         json: [
           { id: 17, name: 'Happy', media: [{ file_path: 'happy.svg' }] },
@@ -37,13 +44,13 @@ test.describe('EmotionChart Component', () => {
     await expect(page.locator('[data-testid="21"]')).toBeVisible();
   });
 
-  test('creates emotion log on click', async ({page}) => {
+  test('creates emotion log on click', async ({ page }) => {
     let created = false;
 
     await page.route('**/emotion-logs', async (route) => {
       if (route.request().method() === 'POST') {
         created = true;
-        await route.fulfill({status: 201, json: {success: true}});
+        await route.fulfill({ status: 201, json: { success: true } });
       }
     });
 
@@ -51,13 +58,13 @@ test.describe('EmotionChart Component', () => {
     expect(created).toBeTruthy();
   });
 
-  test('opens modal and filters logs', async ({page}) => {
+  test('opens modal and filters logs', async ({ page }) => {
     await page.click('[data-testid="open-modal"]');
     await page.click('text=За последние 7 дней');
     await expect(page.locator('[data-testid="pill"]').first()).toBeVisible();
   });
 
-  test('navigates to all emotion logs page', async ({page}) => {
+  test('navigates to all emotion logs page', async ({ page }) => {
     await page.click('[data-testid="open-modal"]');
     await page.click('text=Открыть все записи');
     await expect(page).toHaveURL(/emotion-logs/);

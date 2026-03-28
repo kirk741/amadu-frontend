@@ -7,6 +7,6 @@ module.exports = defineConfig({
   use: {
     headless: true,
     viewport: { width: 1280, height: 720 },
-    baseURL: 'http://localhost:3000',
+    baseURL: 'https://amadu-frontend.vercel.app/',
   },
 });

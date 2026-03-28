@@ -21,12 +21,11 @@ const client = async (endpoint, { customHeaders, method, body, ...customConfig }
   const url = `${BASE_URL}${endpoint}`;
 
   try {
-    const response = await window.fetch(url, config);
+    const response = await fetch(url, config);
+
+    const data = await response.json();
 
     if (response.status === 204) return true;
-
-    const text = await response.text();
-    const data = text ? JSON.parse(text) : {};
 
     if (response.status === 403 && localStorage.getItem('role') !== 'guest') {
       window.location.assign('/forbidden');

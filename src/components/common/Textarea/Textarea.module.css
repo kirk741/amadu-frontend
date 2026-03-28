@@ -1,18 +1,17 @@
 .textareaWrapper {
   background-color: var(--el-color);
   box-shadow: var(--s-shadow);
-  border-radius: var(--round-radius);
+  border-radius: 32px;
   overflow: hidden;
   display: flex;
   width: 100%;
-  transition: all .3s;
   padding: var(--m-gap);
 }
 
 .textarea {
   width: 100%;
   min-height: 64px;
-  padding: var(--m-gap);
+  padding: 0 var(--m-gap) var(--m-gap);
   padding-bottom: 24px;
   background: transparent;
   border: none;

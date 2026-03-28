@@ -1,0 +1,163 @@
+.page {}
+
+.list {
+  display: flex;
+  flex-direction: column;
+  gap: var(--s-gap);
+}
+
+.logItem {
+  display: flex;
+  align-items: center;
+  background: var(--el-color);
+  padding: var(--s-gap) var(--m-gap);
+  border-radius: var(--round-radius);
+  box-shadow: var(--s-shadow);
+}
+
+.logContent {
+  display: flex;
+  align-items: center;
+  gap: var(--m-gap);
+  flex: 1;
+}
+
+.icon {
+  width: 48px;
+  height: 48px;
+  object-fit: contain;
+}
+
+.info {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+}
+
+.name {
+  font-size: 16px;
+  color: var(--title-color);
+}
+
+.date {
+  font-size: 12px;
+  color: var(--unactive-color);
+}
+
+.moreButton {
+  width: auto !important;
+  min-width: unset !important;
+  padding: 8px !important;
+  color: var(--unactive-color);
+}
+
+.loadMoreContainer {
+  display: flex;
+  justify-content: center;
+  margin-top: var(--xl-gap);
+  padding-bottom: var(--xxxl-gap);
+}
+
+.modalBody {
+  display: flex;
+  flex-direction: column;
+  align-items: stretch;
+  gap: var(--xl-gap);
+  padding: var(--s-gap) 0;
+  width: 100%;
+}
+
+.customInput {
+  -webkit-appearance: none !important;
+  -moz-appearance: none !important;
+  appearance: none !important;
+
+  width: 100% !important;
+  font-weight: 400 !important;
+  color: var(--text-color) !important;
+  background-color: var(--el-color) !important;
+
+  padding-right: var(--m-gap) !important;
+}
+
+.customInput::-webkit-calendar-picker-indicator,
+.customInput::-webkit-inner-spin-button,
+.customInput::-webkit-clear-button {
+  display: none !important;
+  -webkit-appearance: none !important;
+  width: 0 !important;
+  height: 0 !important;
+  opacity: 0 !important;
+  pointer-events: none !important;
+}
+
+.emotionGrid {
+  display: flex;
+  gap: var(--s-gap);
+  justify-content: center;
+  width: 100%;
+}
+
+.emotionBtn {
+  background: none;
+  border: none;
+  padding: 0;
+  cursor: pointer;
+  transition: 0.2s;
+  flex: 1;
+  max-width: 52px;
+  filter: grayscale(0.6) opacity(0.5);
+}
+
+.emotionBtn.active {
+  transform: scale(1.2);
+  filter: grayscale(0) opacity(1) drop-shadow(0 0 8px var(--happy-color));
+}
+
+.emotionBtn img {
+  width: 100%;
+  height: auto;
+}
+
+.customInput {
+  text-align: center;
+  width: 100% !important;
+}
+
+.popup {
+  position: fixed;
+  background: var(--el-color);
+  border-radius: var(--s-gap);
+  padding: var(--xs-gap) 0;
+  min-width: 160px;
+  z-index: 1100;
+  box-shadow: var(--m-shadow);
+  border: 1px solid var(--shadow-color);
+}
+
+.popup button {
+  width: 100%;
+  padding: var(--s-gap) var(--m-gap);
+  background: none;
+  border: none;
+  color: var(--text-color);
+  text-align: left;
+  cursor: pointer;
+  font-family: var(--font);
+}
+
+.popup button:hover {
+  background: var(--shadow-color);
+}
+
+.popup .delete {
+  color: var(--invalid-color) !important;
+}
+
+.modalActions {
+  display: flex;
+  flex-direction: column;
+  gap: var(--xs-gap);
+  justify-content: flex-end;
+  margin-top: var(--m-gap);
+}

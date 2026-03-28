@@ -1,5 +1,6 @@
 .container {
-  padding: var(--m-gap) var(--m-gap) var(--m-gap) var(--l-gap);
+  /* padding: var(--m-gap) var(--m-gap) var(--m-gap) var(--l-gap); */
+  padding: var(--l-gap);
   background-color: var(--el-color);
   box-shadow: var(--xl-shadow);
   border-radius: var(--round-radius);

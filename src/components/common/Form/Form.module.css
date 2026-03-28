@@ -3,6 +3,6 @@
   flex-direction: column;
   align-items: center;
   justify-content: center;
-  gap: var(--m-gap);
+  gap: var(--xs-gap);
   width: 100%;
 }
