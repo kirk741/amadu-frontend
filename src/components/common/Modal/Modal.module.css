@@ -11,6 +11,10 @@
   transition: backdrop-filter .4s, background-color .4s;
 }
 
+:global(body.dark-theme) .modalBg {
+  background-color: #0706089b;
+}
+
 .modalBg.activeBg {
   backdrop-filter: blur(20px);
   -webkit-backdrop-filter: blur(20px);

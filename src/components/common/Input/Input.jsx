@@ -19,6 +19,10 @@ const Input = ({
     setIsVisible(!isVisible);
   }
 
+  if (type === 'datetime-local' && typeof value === 'string' && value.includes('Z')) {
+    value = value.slice(0, 16);
+  }
+
   return (
     <div className={styles.inputContainer}>
       <input

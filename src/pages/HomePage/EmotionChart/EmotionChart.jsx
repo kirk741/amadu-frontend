@@ -5,6 +5,7 @@ import client from '../../../api/client.js';
 import styles from './EmotionChart.module.css';
 import Button from '../../../components/common/Button/Button.jsx';
 import Modal from '../../../components/common/Modal/Modal.jsx';
+import { formatToDB } from '../../../utils/formatDate.js';
 
 const emotionData = {
   'Happy': 'var(--happy-color)',
@@ -94,7 +95,7 @@ const EmotionChart = () => {
       await client('/emotion-logs', {
         body: {
           emotion_id: id,
-          created_at: new Date().toISOString()
+          created_at: formatToDB(new Date())
         }
       });
       await getEmotionLogs();
@@ -122,7 +123,7 @@ const EmotionChart = () => {
   }
 
   return (
-    <div className={styles.container}>
+    <div className={styles.container} onClick={() => setIsModalOpen(true)}>
       <div className={styles.pillsContainer}>
         {
           renderEmotionStatistics()
@@ -144,7 +145,7 @@ const EmotionChart = () => {
             <button
               key={index}
               className={styles.buttonContainer}
-              onClick={() => createEmotionLog(item.id)}
+              onClick={(e) => { e.stopPropagation(); createEmotionLog(item.id)}}
               data-testid={`emotion-${item.id}`}
             >
               <img

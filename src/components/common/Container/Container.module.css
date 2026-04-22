@@ -1,6 +1,5 @@
 .container {
-  /* padding: var(--m-gap) var(--m-gap) var(--m-gap) var(--l-gap); */
-  padding: var(--l-gap);
+  padding: var(--m-gap);
   background-color: var(--el-color);
   box-shadow: var(--xl-shadow);
   border-radius: var(--round-radius);
@@ -18,5 +17,5 @@
 
 .childrenContainer {
   height: 100%;
-  width: 100%;
+  width: calc(100% - 48px);
 }

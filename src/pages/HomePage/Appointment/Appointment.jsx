@@ -4,8 +4,8 @@ import Container from '../../../components/common/Container/Container';
 
 const Appointment = () => {
   return (
-    <Container className={styles.container} buttonIcons={[Icons.More]}>
-      Нет предстоящих записей
+    <Container buttonIcons={[Icons.More]}>
+      <span className={styles.text}>Нет предстоящих записей</span>
     </Container>
   )
 }

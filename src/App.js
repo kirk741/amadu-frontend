@@ -6,6 +6,7 @@ import ProfilePage from './pages/ProfilePage/ProfilePage';
 import RegisterPage from './pages/RegisterPage/RegisterPage';
 import LoginPage from './pages/LoginPage/LoginPage';
 import EmotionLogsPage from './pages/EmotionLogsPage/EmotionLogsPage';
+import PsychologistsPage from './pages/PsychologistsPage/PsychologistsPage';
 
 function App() {
   return (
@@ -17,6 +18,7 @@ function App() {
           <Route path='/' element={<HomePage />}></Route>
           <Route path='/profile' element={<ProfilePage />}></Route>
           <Route path='/emotion-logs' element={<EmotionLogsPage />}></Route>
+          <Route path='/psychologists' element={<PsychologistsPage />}></Route>
         </Routes>
       </Layout>
     </BrowserRouter>

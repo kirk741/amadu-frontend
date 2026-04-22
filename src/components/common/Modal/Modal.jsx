@@ -20,8 +20,6 @@ const Modal = ({ children, childrenData = [], onClose }) => {
     }, 400);
   };
 
-  const stopPropagation = (e) => e.stopPropagation();
-
   if (!shouldRender) return null;
 
   return (
@@ -31,7 +29,6 @@ const Modal = ({ children, childrenData = [], onClose }) => {
     >
       <ul
         className={`${styles.modalContainer} ${isActive ? styles.active : ''}`}
-        onClick={stopPropagation}
       >
         <Button
           noBg={true}

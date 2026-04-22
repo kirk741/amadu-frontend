@@ -78,13 +78,12 @@ const ProfilePage = () => {
 
     try {
       await client('/user/me', { method: 'DELETE' });
-
       setModal({ type: 'deleted' });
-
     } catch (e) {
       console.error(e);
     } finally {
       setLoading(prev => ({ ...prev, delete: false }));
+      navigate('/login');
     }
   };
 
@@ -159,9 +158,11 @@ const ProfilePage = () => {
             <Input autoComplete="new-password" name='password_confirmation' type="password" placeholder="Подтвердите пароль*" value={formData.password_confirmation} onChange={handleChange} error={errors.password_confirmation} />
           )}
           <Textarea name='bio' placeholder='Введите описание профиля' value={formData.bio} onChange={handleChange} error={errors.bio} />
-          <Button type="submit">{loading.save ? <Loader /> : 'Сохранить изменения'}</Button>
-          <Button onClick={handleLogout}>{loading.logout ? <Loader /> : 'Выйти'}</Button>
-          <Button onClick={() => setModal({ type: 'confirmDelete' })} className={styles.deleteBtn}>{loading.delete ? <Loader /> : 'Удалить аккаунт'}</Button>
+          <div className={styles.buttonContainer}>
+            <Button type="submit">{loading.save ? <Loader /> : 'Сохранить изменения'}</Button>
+            <Button onClick={handleLogout}>{loading.logout ? <Loader /> : 'Выйти'}</Button>
+            <Button onClick={() => setModal({ type: 'confirmDelete' })} className={styles.deleteBtn}>{loading.delete ? <Loader /> : 'Удалить аккаунт'}</Button>
+          </div>
         </Form>
       )}
     </div>

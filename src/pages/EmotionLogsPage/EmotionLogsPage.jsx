@@ -1,12 +1,13 @@
-import { useEffect, useState, useRef } from 'react';
-import { useNavigate } from 'react-router-dom';
-import * as Icons from '../../assets/icons';
-import Button from '../../components/common/Button/Button';
-import Modal from '../../components/common/Modal/Modal';
+import { useEffect, useState } from "react";
 import client from '../../api/client';
+import Container from '../../components/common/Container/Container';
 import styles from './EmotionLogsPage.module.css';
+import * as Icons from '../../assets/icons';
+import Modal from "../../components/common/Modal/Modal";
 import Input from '../../components/common/Input/Input';
-import { getOfflineLogs } from '../../utils/offlineStorage';
+import Button from "../../components/common/Button/Button";
+import { formatToDB, formatToInput } from "../../utils/formatDate";
+import EmptyCard from "../../components/common/EmptyCard/EmptyCard";
 
 const emotionTranslations = {
   'Happy': 'Счастье',
@@ -17,287 +18,123 @@ const emotionTranslations = {
 };
 
 const EmotionLogsPage = () => {
-  const navigate = useNavigate();
   const [logs, setLogs] = useState([]);
-  const [loading, setLoading] = useState(true);
-  const [loadingMore, setLoadingMore] = useState(false);
   const [emotions, setEmotions] = useState([]);
-  const [nextPageUrl, setNextPageUrl] = useState(null);
-  const [hasMore, setHasMore] = useState(false);
-  const [popup, setPopup] = useState({ open: false, logId: null, left: 0, top: 0 });
-  const [editModal, setEditModal] = useState({ open: false, log: null, newEmotionId: '', newDate: '' });
-  const popupRef = useRef();
+  const [selectedLog, setSelectedLog] = useState(null);
+  const [activeEmotion, setActiveEmotion] = useState(null);
+  const [activeDate, setActiveDate] = useState('');
+  const [isModalOpen, setIsModalOpen] = useState(false);
+  const [isChangeModalOpen, setIsChangeModalOpen] = useState(false);
+  const [isLoading, setIsLoading] = useState(false);
 
-  const token = localStorage.getItem('token');
-  const isAuthenticated = () => !!token;
-
-  // ---------------- FETCH EMOTIONS ----------------
-  const fetchEmotions = async () => {
-    if (!isAuthenticated()) {
-      setEmotions([]);
-      return;
-    }
-
+  const getLogs = async () => {
+    setIsLoading(true);
     try {
-      const res = await client('/emotions'); // Весь запрос через client.js
-      setEmotions(res.data?.data || res.data || res);
-    } catch (e) {
-      console.error(e);
-      // Если токен устарел → удалить и отправить на логин
-      if (e.status === 401) {
-        localStorage.removeItem('token');
-        navigate('/login');
-      }
-    }
-  };
-
-  // ---------------- FETCH LOGS ----------------
-  const fetchLogs = async (url = '/emotion-logs?per_page=10') => {
-    if (!isAuthenticated()) {
-      setLogs(getOfflineLogs());
-      setLoading(false);
-      setHasMore(false);
-      return;
-    }
-
-    if (url.includes('per_page')) setLoading(true);
-    else setLoadingMore(true);
-
-    try {
-      const res = await client(url); // Через client.js
-      const data = res.data;
-      setLogs(prev => url.includes('per_page') ? data.data : [...prev, ...data.data]);
-      setNextPageUrl(
-        data.next_page_url
-          ? new URL(data.next_page_url).pathname + new URL(data.next_page_url).search
-          : null
-      );
-      setHasMore(!!data.next_page_url);
-    } catch (e) {
-      console.error(e);
-      if (e.status === 401) {
-        localStorage.removeItem('token');
-        navigate('/login');
-      }
+      const data = await client('/emotion-logs');
+      setLogs(data.data?.data);
+    } catch (error) {
+      console.error(error);
     } finally {
-      setLoading(false);
-      setLoadingMore(false);
+      setIsLoading(false);
     }
-  };
+  }
+
+  const getEmotions = async () => {
+    const data = await client('/emotions');
+    setEmotions(data.data);
+  }
+
+  const deleteLog = async (id) => {
+    await client(`/emotion-logs/${id}`, { method: 'DELETE' });
+    getLogs();
+  }
 
   useEffect(() => {
-    fetchEmotions();
-    fetchLogs();
+    getLogs();
+    getEmotions();
   }, []);
 
-  // ---------------- POPUP OUTSIDE CLICK ----------------
-  useEffect(() => {
-    const handleClickOutside = (event) => {
-      if (popup.open && popupRef.current && !popupRef.current.contains(event.target)) {
-        setPopup({ open: false, logId: null, left: 0, top: 0 });
-      }
-    };
-    document.addEventListener('mousedown', handleClickOutside);
-    return () => document.removeEventListener('mousedown', handleClickOutside);
-  }, [popup.open]);
+  const changeLog = async () => {
+    const dateForDb = formatToDB(activeDate);
 
-  // ---------------- EDIT LOG ----------------
-  const handleEditSave = async () => {
-    const { log, newEmotionId, newDate } = editModal;
-    if (!log) return;
-
-    if (!isAuthenticated()) {
-      const updatedLogs = logs.map(l =>
-        l.id === log.id ? { ...l, emotion_id: newEmotionId, created_at: newDate } : l
-      );
-      setLogs(updatedLogs);
-      localStorage.setItem('offline_emotion_logs', JSON.stringify(updatedLogs));
-      setEditModal({ open: false, log: null, newEmotionId: '', newDate: '' });
-      return;
-    }
-
-    const data = new FormData();
-    data.append('emotion_id', newEmotionId);
-    data.append('created_at', newDate);
-    data.append('_method', 'PATCH');
+    const formData = new FormData();
+    formData.append('emotion_id', activeEmotion);
+    formData.append('created_at', dateForDb);
+    formData.append('_method', 'PATCH');
 
     try {
-      await client(`/emotion-logs/${log.id}`, { method: 'POST', body: data });
-      setLogs(prev => prev.map(l => l.id === log.id ? { ...l, emotion_id: newEmotionId, created_at: newDate } : l));
-      setEditModal({ open: false, log: null, newEmotionId: '', newDate: '' });
-    } catch (e) {
-      console.error(e);
-      if (e.status === 401) {
-        localStorage.removeItem('token');
-        navigate('/login');
-      }
+      await client(`/emotion-logs/${selectedLog.id}`, { method: 'POST', body: formData });
+      setIsChangeModalOpen(false);
+      getLogs();
+    } catch (error) {
+      console.error(error);
     }
-  };
+  }
 
-  // ---------------- DELETE LOG ----------------
-  const handleDelete = async (logId) => {
-    if (!isAuthenticated()) {
-      const updatedLogs = logs.filter(l => l.id !== logId);
-      setLogs(updatedLogs);
-      localStorage.setItem('offline_emotion_logs', JSON.stringify(updatedLogs));
-      setPopup({ open: false });
-      return;
-    }
-
-    const data = new FormData();
-    data.append('_method', 'DELETE');
-
-    try {
-      await client(`/emotion-logs/${logId}`, { method: 'POST', body: data });
-      setLogs(prev => prev.filter(l => l.id !== logId));
-      setPopup({ open: false });
-    } catch (e) {
-      console.error(e);
-      if (e.status === 401) {
-        localStorage.removeItem('token');
-        navigate('/login');
-      }
-    }
-  };
-
-  // ---------------- HELPERS ----------------
-  const formatDisplayDate = (iso) => {
-    return new Date(iso).toLocaleString('ru-RU', {
-      day: 'numeric',
-      month: 'long',
-      year: 'numeric',
-      hour: '2-digit',
-      minute: '2-digit'
-    }).replace(',', ' г. в');
-  };
-
-  const getImageUrl = (filePath) => {
-    if (!filePath) return '';
-    if (filePath.startsWith('http')) return filePath;
-    return `${process.env.REACT_APP_API_URL}/${filePath}`;
-  };
-
-  // ---------------- RENDER ----------------
-  if (loading && !logs.length) return <div className={styles.loading}>Загрузка...</div>;
-
-  return (
-    <div className={styles.page}>
-      <div className={styles.list}>
-        {logs.map(log => {
-          const emotion = emotions.find(e => e.id === log.emotion_id);
-          const imgSrc = getImageUrl(emotion?.media?.[0]?.file_path);
-          return (
-            <div key={log.id} className={styles.logItem}>
-              <div className={styles.logContent}>
-                {imgSrc && <img src={imgSrc} className={styles.icon} alt="" />}
-                <div className={styles.info}>
-                  <span className={styles.name}>
-                    {emotionTranslations[emotion?.name] || emotion?.name || '---'}
-                  </span>
-                  <span className={styles.date}>{formatDisplayDate(log.created_at)}</span>
+  return (<div className={styles.container}>
+    {
+      isLoading && logs.length === 0 && (
+        <>
+          {[1, 2, 3].map((n) => (
+            <Container key={n}>
+              <div className={styles.logContainer}>
+                <div className={styles.skeletonCircle}></div>
+                <div className={styles.logDataContainer}>
+                  <div className={styles.skeletonLine}></div>
+                  <div className={styles.skeletonLineSmall}></div>
                 </div>
               </div>
-              <Button
-                noBg
-                shadowType={null}
-                className={styles.moreButton}
-                onClick={(e) => {
-                  e.stopPropagation();
-                  const rect = e.currentTarget.getBoundingClientRect();
-                  setPopup({
-                    open: true,
-                    logId: log.id,
-                    left: rect.left - 150,
-                    top: rect.top,
-                  });
-                }}
-              >
-                <Icons.More />
-              </Button>
+            </Container>
+          ))}
+        </>
+      )
+    }
+    {
+      logs.length === 0 && !isLoading && <EmptyCard link={'/'} />
+    }
+    {
+      logs.map((log, index) => {
+        return <Container key={log.id} buttonIcons={[Icons.More]} onClick={() => { setActiveEmotion(log.emotion?.id); setSelectedLog(log); setIsModalOpen(true) }}>
+          <div className={styles.logContainer}>
+            <img src={`${process.env.REACT_APP_API_URL}/${log.emotion.media[0].file_path}`} alt={log.emotion.name} />
+            <div className={styles.logDataContainer}>
+              <h3>{emotionTranslations[log.emotion.name]}</h3>
+              <small>{new Date(log.created_at).toLocaleDateString()}</small>
             </div>
-          );
-        })}
-      </div>
-
-      {hasMore && isAuthenticated() && (
-        <div className={styles.loadMoreContainer}>
-          <Button onClick={() => fetchLogs(nextPageUrl)}>
-            {loadingMore ? 'Загрузка...' : 'Загрузить ещё'}
-          </Button>
-        </div>
-      )}
-
-      {/* Редактирование */}
-      {editModal.open && (
-        <Modal
-          onClose={() => setEditModal({ open: false, log: null, newEmotionId: '', newDate: '' })}
-        >
-          <h2>Редактирование записи</h2>
-          <div className={styles.modalBody}>
-            <div className={styles.emotionGrid}>
-              {emotions.map(em => (
-                <button
-                  key={em.id}
-                  type="button"
-                  className={`${styles.emotionBtn} ${editModal.newEmotionId === em.id ? styles.active : ''}`}
-                  onClick={() => setEditModal(p => ({ ...p, newEmotionId: em.id }))}
-                  style={{ marginRight: 'var(--xs-gap)', marginBottom: 'var(--xs-gap)' }}
-                >
-                  <img src={getImageUrl(em.media?.[0]?.file_path)} alt={em.name} />
-                </button>
-              ))}
-            </div>
-            <Input
-              type="datetime-local"
-              value={editModal.newDate}
-              onChange={e => setEditModal(p => ({ ...p, newDate: e.target.value }))}
-              className={styles.customInput}
-            />
           </div>
-
-          <div className={styles.modalActions}>
-            <Button onClick={handleEditSave} className={styles.saveBtn}>
-              Сохранить
-            </Button>
-            <Button onClick={() => setEditModal({ open: false, log: null, newEmotionId: '', newDate: '' })} className={styles.cancelBtn}>
-              Отмена
-            </Button>
+        </Container>
+      })
+    }
+    {
+      isModalOpen &&
+      <Modal
+        onClose={() => setIsModalOpen(false)}
+        childrenData={[
+          { 'name': 'Изменить запись', 'onClick': () => { setIsChangeModalOpen(selectedLog); setActiveDate(formatToInput(selectedLog.created_at)) } },
+          { 'name': 'Удалить запись', 'onClick': () => deleteLog(selectedLog.id) },
+        ]}>
+      </Modal>
+    }
+    {
+      isChangeModalOpen &&
+      <Modal
+        onClose={() => setIsChangeModalOpen(false)}>
+        <div className={styles.changeModalContent} onClick={(e) => e.stopPropagation()}>
+          <div className={styles.emotionContainer}>
+            {
+              emotions.map(emotion => {
+                return <div key={emotion.id} onClick={() => setActiveEmotion(emotion.id)}>
+                  <img src={`${process.env.REACT_APP_API_URL}/${emotion.media[0].file_path}`} alt={emotion.name} className={`${styles.emotionImg} ${emotion.id === activeEmotion ? styles.emotionActiveImg : ''}`} />
+                </div>
+              })
+            }
           </div>
-        </Modal>
-      )}
-
-      {/* Попап */}
-      {popup.open && (
-        <div
-          ref={popupRef}
-          className={styles.popup}
-          style={{ left: popup.left, top: popup.top }}
-          onClick={(e) => e.stopPropagation()}
-        >
-          <button
-            onClick={() => {
-              const log = logs.find(l => l.id === popup.logId);
-              if (!log) return;
-              const date = new Date(log.created_at);
-              date.setMinutes(date.getMinutes() - date.getTimezoneOffset());
-              setEditModal({
-                open: true,
-                log,
-                newEmotionId: log.emotion_id,
-                newDate: date.toISOString().slice(0, 16)
-              });
-              setPopup({ open: false });
-            }}
-          >
-            Редактировать
-          </button>
-          <button className={styles.delete} onClick={() => handleDelete(popup.logId)}>
-            Удалить
-          </button>
+          <Input className={styles.input} type="datetime-local" value={activeDate || selectedLog.created_at} onChange={(e) => setActiveDate(e.target.value)} />
+          <Button onClick={() => changeLog()}>Сохранить</Button>
         </div>
-      )}
-    </div>
-  );
+      </Modal>
+    }
+  </div>);
 };
 
 export default EmotionLogsPage;

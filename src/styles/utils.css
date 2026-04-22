@@ -67,3 +67,11 @@ img {
 h1,h2,h3 {
   font-weight: inherit;
 }
+
+small {
+  color: var(--unactive-color);
+  display: block;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
