@@ -15,6 +15,8 @@ import BreathingPage from './pages/BreathingPage/BreathingPage';
 import GroundingPage from './pages/GroundingPage/GroundingPage';
 import KalimbaPage from './pages/KalimbaPage/KalimbaPage';
 import { useEffect } from 'react';
+import EditDiaryPage from './pages/EditDiaryPage/EditDiaryPage';
+import PhonesPage from './pages/PhonesPage/PhonesPage';
 
 function App() {
   useEffect(() => {
@@ -40,6 +42,8 @@ function App() {
           <Route path='/breathing' element={<BreathingPage />}></Route>
           <Route path='/grounding' element={<GroundingPage />}></Route>
           <Route path='/kalimba' element={<KalimbaPage />}></Route>
+          <Route path='/phones' element={<PhonesPage />}></Route>
+          <Route path="/diary/:type/edit/:id" element={<EditDiaryPage />} />
         </Routes>
       </Layout>
     </BrowserRouter>

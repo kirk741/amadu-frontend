@@ -12,7 +12,7 @@
   justify-content: space-between;
   align-items: center;
   cursor: pointer;
-  transition: .3s;
+  transition: border .3s;
   outline: none;
   border: transparent 1px solid;
 }

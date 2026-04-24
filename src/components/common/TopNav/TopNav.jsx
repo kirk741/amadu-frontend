@@ -3,7 +3,6 @@ import Button from '../Button/Button'
 import { useLocation, useNavigate } from 'react-router-dom';
 import * as Icons from '../../../assets/icons';
 import { useEffect, useState } from 'react';
-import Modal from '../Modal/Modal';
 import SettingsModal from '../SettingsModal/SettingsModal';
 
 const TopNav = () => {
@@ -34,9 +33,9 @@ const TopNav = () => {
     { path: '/breathing', content: 'Дыхание' },
     { path: '/grounding', content: 'Заземление' },
     { path: '/kalimba', content: 'Калимба' },
+    { path: '/phones', content: 'Поддержка' },
+    { path: '/diary/create', content: 'Дневник' },
   ];
-
-  const currentPath = paths.find(item => item.path === location.pathname);
 
   function getGreetingText(time = new Date().getHours()) {
     if (time < 6 || time >= 22) return 'Доброй ночи';
@@ -46,6 +45,19 @@ const TopNav = () => {
     return 'Привет!';
   }
 
+  const getHeaderTitle = () => {
+    const path = location.pathname;
+    
+    if (path.includes('/edit')) {
+      return 'Редактирование';
+    }
+    
+    const current = paths.find(item => item.path === path);
+    if (current) return current.content;
+
+    return '';
+  };
+
   const handleBackClick = () => {
     if (isHome) {
       navigate('/profile');
@@ -53,6 +65,8 @@ const TopNav = () => {
       navigate(-1);
     }
   };
+
+  const title = getHeaderTitle();
 
   return (
     <>
@@ -66,7 +80,7 @@ const TopNav = () => {
         </Button>
 
         <span className={`${styles.topNavTitle} ${isScrolled && !isHome ? styles.hidden : ''}`}>
-          {currentPath ? currentPath.content : ''}
+          {title}
         </span>
 
         <Button

@@ -57,7 +57,6 @@ body {
   line-height: 1.15;
   color: var(--text-color);
   background: var(--bg-gradient);
-  /* overflow-x: hidden; */
 }
 
 ul,

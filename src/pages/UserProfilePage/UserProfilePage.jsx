@@ -31,7 +31,6 @@ const UserProfilePage = () => {
     <Container>
       {loading ? (
         <>
-          {/* Скелетон шапки: аватар + инфо */}
           <div className={styles.userContainer}>
             <div className={styles.skeletonAvatar} />
             <div className={styles.userInfoContainer}>
@@ -43,7 +42,6 @@ const UserProfilePage = () => {
               </div>
             </div>
           </div>
-          {/* Скелетон БИО */}
           <div className={styles.skeletonBio} />
         </>
       ) : (

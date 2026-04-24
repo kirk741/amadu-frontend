@@ -23,6 +23,7 @@ const Layout = ({ children }) => {
     '/breathing',
     '/grounding',
     '/kalimba',
+    '/phones',
   ];
 
   const withoutTopNav = [

@@ -1,0 +1,62 @@
+.list {
+  display: flex;
+  flex-direction: column;
+  gap: var(--s-gap);
+  padding: var(--m-gap) 0;
+  min-height: calc(100vh - 96px);
+}
+
+.phoneContainer {
+  padding: var(--m-gap) var(--l-gap);
+  width: 100%;
+  cursor: pointer;
+}
+
+.phoneContainer>div:first-child {
+  flex: 1 !important;
+  min-width: 0 !important;
+  display: flex !important;
+  align-items: center !important;
+  width: 100% !important;
+}
+
+.textData {
+  flex: 1;
+  min-width: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+}
+
+.textData h3,
+.textData p,
+.textData small {
+  width: 100%;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  margin: 0;
+  display: block;
+}
+
+.textData h3 {
+  color: var(--text-color);
+}
+
+.textData p {
+  color: var(--title-color);
+  margin: 2px 0;
+}
+
+.textData small {
+  opacity: 0.6;
+  color: var(--text-color);
+}
+
+.emptyContainer {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  padding: var(--xl-gap) 0;
+  width: 100%;
+}

@@ -1,4 +1,3 @@
-/* --- Твои дефолтные стили --- */
 .profile_image {
   height: 128px;
   width: 128px;
@@ -40,10 +39,8 @@
   margin: 0 !important;
 }
 
-/* --- Исправленные стили скелетона под твои размеры --- */
 .skeletonAvatar {
   width: 128px;
-  /* совпадает с .profile_image */
   height: 128px;
   border-radius: var(--round-radius);
   background-color: #ddd;
@@ -70,7 +67,6 @@
 
 .skeletonCircleBtn {
   width: 48px;
-  /* совпадает с твоим .buttonContainer button */
   height: 48px;
   border-radius: var(--round-radius);
   background-color: #ddd;
@@ -79,7 +75,6 @@
 
 .skeletonBio {
   margin-top: var(--s-gap);
-  /* совпадает с .bio */
   height: 80px;
   width: 100%;
   border-radius: 32px;

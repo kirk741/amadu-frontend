@@ -28,13 +28,10 @@ const TrashDiaryPage = () => {
   const getTrash = async (search = '') => {
     try {
       setIsLoading(true);
-      setDiaries([]);
-
-      const url = search
-        ? `/feelings-diaries/trash?search=${search}`
-        : `/feelings-diaries/trash`;
-
+      // Используем общий эндпоинт для всей корзины
+      const url = `/all-diaries/trash?search=${search}`;
       const response = await client(url);
+      // Учитываем структуру ответа (response.data.data)
       setDiaries(response.data.data);
     } catch (error) {
       console.error("Ошибка загрузки корзины:", error);
@@ -43,24 +40,38 @@ const TrashDiaryPage = () => {
     }
   };
 
-  const handleRestore = async (id) => {
-    try {
-      await client(`/feelings-diaries/${id}/restore`, { method: 'POST' });
-      setIsModalOpen(false);
-      getTrash(searchQuery);
-    } catch (error) {
-      alert("Ошибка при восстановлении");
+  const getEndpoint = (type) => {
+    switch (type) {
+      case 'feelings': return 'feelings-diaries';
+      case 'personal': return 'personal-diaries';
+      case 'food': return 'food-diaries';
+      default: return 'feelings-diaries';
     }
   };
 
-  const handleForceDelete = async (id) => {
+  const handleRestore = async (diary) => {
     try {
-      await client(`/feelings-diaries/${id}/force`, { method: 'DELETE' });
+      await client(`/${getEndpoint(diary.type)}/${diary.id}/restore`, { method: 'POST' });
       setIsModalOpen(false);
       getTrash(searchQuery);
     } catch (error) {
-      alert("Ошибка при удалении");
+      console.error(error);
     }
+  };
+
+  const handleForceDelete = async (diary) => {
+    try {
+      await client(`/${getEndpoint(diary.type)}/${diary.id}/force`, { method: 'DELETE' });
+      setIsModalOpen(false);
+      getTrash(searchQuery);
+    } catch (error) {
+      console.error(error);
+    }
+  };
+
+  const openOptions = (diary) => {
+    setActiveLog(diary);
+    setIsModalOpen(true);
   };
 
   return (
@@ -68,18 +79,12 @@ const TrashDiaryPage = () => {
       <Input
         className={styles.search}
         type="search"
-        placeholder='Поиск в корзине'
+        placeholder='Поиск в корзине...'
         value={searchQuery}
         onChange={(e) => setSearchQuery(e.target.value)}
       />
 
-      {isLoading && (
-        <>
-          {[1, 2, 3].map((n) => (
-            <Skeleton key={n} n={n} />
-          ))}
-        </>
-      )}
+      {isLoading && [1, 2, 3].map((n) => <Skeleton key={n} />)}
 
       {!isLoading && diaries.length === 0 && (
         <div className={styles.noResults}>
@@ -90,13 +95,22 @@ const TrashDiaryPage = () => {
       {!isLoading && diaries.map((diary) => (
         <Container
           className={styles.container}
-          key={diary.id}
+          key={`${diary.type}-${diary.id}`}
           buttonIcons={[Icons.More]}
-          onClick={() => { setActiveLog(diary); setIsModalOpen(true); }}
+          onClick={() => openOptions(diary)}
         >
-          <div>
-            <h3>{diary.situation}</h3>
-            <small>Удалено: {new Date(diary.deleted_at).toLocaleDateString()}</small>
+          <div className={styles.diaryContent}>
+            <div className={styles.textData}>
+              <div className={styles.headerRow}>
+                <h3>{diary.display_title || 'Без названия'}</h3>
+                <span className={`${styles.typeBadge} ${styles[diary.type]}`}>
+                  {diary.type === 'feelings' && 'Дневник чувств'}
+                  {diary.type === 'personal' && 'Личный дневник'}
+                  {diary.type === 'food' && 'Дневник питания'}
+                </span>
+              </div>
+              <small>Удалено: {new Date(diary.deleted_at).toLocaleDateString()}</small>
+            </div>
           </div>
         </Container>
       ))}
@@ -105,12 +119,23 @@ const TrashDiaryPage = () => {
         <Modal
           onClose={() => setIsModalOpen(false)}
           childrenData={[
-            { name: 'Восстановить', onClick: () => handleRestore(activeLog.id) },
-            { name: 'Удалить навсегда', onClick: () => handleForceDelete(activeLog.id) },
-            { name: 'Отмена', onClick: () => setIsModalOpen(false) },
+            { 
+              name: 'Восстановить', 
+              onClick: () => handleRestore(activeLog) 
+            },
+            { 
+              name: 'Удалить навсегда', 
+              onClick: () => handleForceDelete(activeLog) 
+            },
+            { 
+              name: 'Отмена', 
+              onClick: () => setIsModalOpen(false) 
+            },
           ]}
         >
-          {activeLog?.situation}
+          <div className={styles.modalHeader}>
+            {activeLog?.display_title}
+          </div>
         </Modal>
       )}
     </div>

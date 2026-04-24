@@ -10,7 +10,7 @@ const HomePageOptions = () => {
     { name: 'Коробочное дыхание', Icon: Icons.Exsercises, link: '/breathing' },
     { name: 'Калимба (антистресс)', Icon: Icons.Music, link: '/kalimba' },
     { name: 'Заземление (5\u20114\u20113\u20112\u20111)', Icon: Icons.Touch, link: '/grounding' },
-    { name: 'Номера поддержки', Icon: Icons.Phone }
+    { name: 'Номера поддержки', Icon: Icons.Phone, link: '/phones' }
   ]
   return <div className={styles.buttonContainer}>
     {

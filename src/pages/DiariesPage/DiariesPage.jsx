@@ -28,7 +28,6 @@ const DiariesPage = () => {
     const delayDebounceFn = setTimeout(() => {
       getDiaries(1, searchQuery);
     }, 500);
-
     return () => clearTimeout(delayDebounceFn);
   }, [searchQuery]);
 
@@ -36,9 +35,7 @@ const DiariesPage = () => {
     window.scrollTo(0, 0);
     try {
       setIsLoading(true);
-      setDiaries([]);
-
-      const url = `/feelings-diaries?page=${page}&search=${search}`;
+      const url = `/all-diaries?page=${page}&search=${search}`;
       const data = await client(url);
       const result = data.data;
 
@@ -52,7 +49,44 @@ const DiariesPage = () => {
     } finally {
       setIsLoading(false);
     }
-  }
+  };
+
+  const getImageUrl = (diary) => {
+    if (diary.type === 'food' && diary.media && diary.media.length > 0) {
+      const token = localStorage.getItem('token');
+      return `${process.env.REACT_APP_API_URL}/food-diaries/${diary.id}/file?token=${token}`;
+    }
+    return null;
+  };
+
+  const getEndpoint = (type) => {
+    switch (type) {
+      case 'feelings': return 'feelings-diaries';
+      case 'personal': return 'personal-diaries';
+      case 'food': return 'food-diaries';
+      default: return 'feelings-diaries';
+    }
+  };
+
+  const handleSoftDelete = async (diary) => {
+    try {
+      await client(`/${getEndpoint(diary.type)}/${diary.id}`, { method: 'DELETE' });
+      setIsModalOpen(false);
+      getDiaries(pagination.current, searchQuery);
+    } catch (error) {
+      console.error(error);
+    }
+  };
+
+  const handleForceDelete = async (diary) => {
+    try {
+      await client(`/${getEndpoint(diary.type)}/${diary.id}/force`, { method: 'DELETE' });
+      setIsModalOpen(false);
+      getDiaries(pagination.current, searchQuery);
+    } catch (error) {
+      console.error(error);
+    }
+  };
 
   const renderPagination = () => {
     if (pagination.last <= 1) return null;
@@ -71,29 +105,20 @@ const DiariesPage = () => {
       <span key={1} className={current === 1 ? styles.activePage : ''} onClick={() => getDiaries(1)}>1</span>
     );
 
-    if (current > 3) {
-      pages.push(<span key="dots1" className={styles.dots}>...</span>);
-    }
+    if (current > 3) pages.push(<span key="dots1" className={styles.dots}>...</span>);
 
     for (let i = Math.max(2, current - 1); i <= Math.min(last - 1, current + 1); i++) {
       if (i === 1 || i === last) continue;
-
       pages.push(
-        <span key={i} className={current === i ? styles.activePage : ''} onClick={() => getDiaries(i)}>
-          {i}
-        </span>
+        <span key={i} className={current === i ? styles.activePage : ''} onClick={() => getDiaries(i)}>{i}</span>
       );
     }
 
-    if (current < last - 2) {
-      pages.push(<span key="dots2" className={styles.dots}>...</span>);
-    }
+    if (current < last - 2) pages.push(<span key="dots2" className={styles.dots}>...</span>);
 
     if (last > 1) {
       pages.push(
-        <span key={last} className={current === last ? styles.activePage : ''} onClick={() => getDiaries(last)}>
-          {last}
-        </span>
+        <span key={last} className={current === last ? styles.activePage : ''} onClick={() => getDiaries(last)}>{last}</span>
       );
     }
 
@@ -108,72 +133,54 @@ const DiariesPage = () => {
     return <div className={styles.pagination}>{pages}</div>;
   };
 
-  const handleSoftDelete = async (id) => {
-    try {
-      await client(`/feelings-diaries/${id}/soft`, { method: 'DELETE' });
-      setIsModalOpen(false);
-      getDiaries(pagination.current, searchQuery);
-    } catch (error) {
-      console.error(error);
-    }
-  };
-
-  const handleForceDelete = async (id) => {
-    try {
-      await client(`/feelings-diaries/${id}/force`, { method: 'DELETE' });
-      setIsModalOpen(false);
-      getDiaries(pagination.current, searchQuery);
-    } catch (error) {
-      console.error(error);
-    }
-  };
-
-  const openOptions = (diary) => {
-    setActiveLog(diary);
-    setModalType('options');
-    setIsModalOpen(true);
-  };
-
   return (
     <div className={styles.list}>
       <Input
         className={styles.search}
         type="search"
-        placeholder='Поиск'
+        placeholder='Поиск по записям...'
         value={searchQuery}
         onChange={(e) => setSearchQuery(e.target.value)}
       />
 
-      {isLoading && (
-        <>
-          {[1, 2, 3].map((n) => (
-            <Skeleton key={n} n={n} />
-          ))}
-        </>
-      )}
+      {isLoading && [1, 2, 3].map((n) => <Skeleton key={n} />)}
 
       {!isLoading && diaries.length === 0 && !searchQuery && (
         <EmptyCard link={'/diary/create'} />
       )}
 
-      {!isLoading && searchQuery && diaries.length === 0 && (
-        <div className={styles.noResults}>Ничего не найдено по запросу "{searchQuery}"</div>
+      {!isLoading && diaries.length === 0 && searchQuery && (
+        <div className={styles.noResults}>Ничего не найдено</div>
       )}
 
-      {!isLoading && diaries.map((diary) => (
-        <Container
-          className={styles.container}
-          key={diary.id}
-          buttonIcons={[Icons.More]}
-          onClick={() => openOptions(diary)}
-        >
-          <div>
-            <h3>{diary.situation}</h3>
-            <p>{diary.conclusion}</p>
-            <small>{new Date(diary.created_at).toLocaleDateString()}</small>
-          </div>
-        </Container>
-      ))}
+      {!isLoading && diaries.map((diary) => {
+        const imageUrl = getImageUrl(diary);
+        return (
+          <Container
+            key={`${diary.type}-${diary.id}`}
+            buttonIcons={[Icons.More]}
+            className={styles.container}
+            onClick={() => { setActiveLog(diary); setModalType('options'); setIsModalOpen(true); }}
+          >
+            <div className={styles.avatarWrapper}>
+              {imageUrl ? (
+                <img src={imageUrl} alt="" className={styles.typeImage} />
+              ) : (
+                <div className={`${styles.typeIcon} ${styles[diary.type]}`}>
+                  {diary.type === 'feelings' && <Icons.Heart />}
+                  {diary.type === 'personal' && <Icons.Diary />}
+                </div>
+              )}
+            </div>
+
+            <div className={styles.textData}>
+              <h3>{diary.display_title || 'Без названия'}</h3>
+              <p>{diary.content || diary.conclusion || diary.thoughts || 'Нет описания'}</p>
+              <small>{new Date(diary.created_at).toLocaleDateString()}</small>
+            </div>
+          </Container>
+        );
+      })}
 
       {!isLoading && diaries.length > 0 && renderPagination()}
 
@@ -188,43 +195,21 @@ const DiariesPage = () => {
 
       {isModalOpen && (
         <Modal
-          onClose={() => {
-            setIsModalOpen(false);
-            setModalType('options');
-          }}
+          onClose={() => setIsModalOpen(false)}
           childrenData={
             modalType === 'options'
               ? [
-                {
-                  name: 'Изменить запись',
-                  onClick: () => navigate(`/diary/edit/${activeLog.id}`)
-                },
-                {
-                  name: 'Удалить запись',
-                  preventClose: true,
-                  onClick: () => setModalType('delete')
-                },
+                { name: 'Изменить', onClick: () => navigate(`/diary/${activeLog.type}/edit/${activeLog.id}`) },
+                { name: 'Удалить', preventClose: true, onClick: () => setModalType('delete') }
               ]
               : [
-                {
-                  name: 'Удалить навсегда',
-                  onClick: () => handleForceDelete(activeLog.id)
-                },
-                {
-                  name: 'Переместить в корзину',
-                  onClick: () => handleSoftDelete(activeLog.id)
-                },
-                {
-                  name: 'Отмена',
-                  preventClose: true,
-                  onClick: () => setModalType('options')
-                },
+                { name: 'Удалить навсегда', onClick: () => handleForceDelete(activeLog) },
+                { name: 'В корзину', onClick: () => handleSoftDelete(activeLog) },
+                { name: 'Отмена', preventClose: true, onClick: () => setModalType('options') }
               ]
           }
         >
-          <div className={styles.modalHeader}>
-            {modalType === 'options' ? activeLog?.situation : "Как вы хотите удалить запись?"}
-          </div>
+          {modalType === 'options' ? activeLog?.display_title : "Удалить запись?"}
         </Modal>
       )}
     </div>

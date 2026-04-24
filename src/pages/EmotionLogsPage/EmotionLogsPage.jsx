@@ -74,7 +74,6 @@ const EmotionLogsPage = () => {
 
   return (
     <div className={styles.container}>
-      {/* 1. Состояние загрузки (Скелетоны) */}
       {isLoading && (
         <>
           {[1, 2, 3, 4, 5].map((n) => (
@@ -83,12 +82,10 @@ const EmotionLogsPage = () => {
         </>
       )}
 
-      {/* 2. Состояние "Пусто" (только после загрузки) */}
       {!isLoading && logs.length === 0 && (
         <EmptyCard link={'/'} />
       )}
 
-      {/* 3. Список логов (только после загрузки) */}
       {!isLoading && logs.length > 0 &&
         logs.map((log) => (
           <Container
@@ -114,7 +111,6 @@ const EmotionLogsPage = () => {
         ))
       }
 
-      {/* Модалки */}
       {isModalOpen && (
         <Modal
           onClose={() => setIsModalOpen(false)}
