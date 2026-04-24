@@ -1,4 +1,5 @@
 import { useEffect, useState, useRef } from "react";
+import { useNavigate } from "react-router-dom";
 import styles from './BreathingPage.module.css';
 import Button from "../../components/common/Button/Button";
 
@@ -7,6 +8,7 @@ const BreathingPage = () => {
   const [isActive, setIsActive] = useState(false);
   const [isFirstCycle, setIsFirstCycle] = useState(true);
   const canvasRef = useRef(null);
+  const navigate = useNavigate();
 
   const phases = ['Вдох', 'Держим', 'Выдох', 'Держим'];
 
@@ -32,11 +34,20 @@ const BreathingPage = () => {
       const canvas = canvasRef.current;
       if (!canvas) return;
       const ctx = canvas.getContext('2d');
-      const { width, height } = canvas;
 
-      ctx.clearRect(0, 0, width, height);
+      const dpr = window.devicePixelRatio || 1;
+      const displayWidth = 300;
+      const displayHeight = 300;
 
-      const midY = height / 2;
+      if (canvas.width !== displayWidth * dpr) {
+        canvas.width = displayWidth * dpr;
+        canvas.height = displayHeight * dpr;
+        ctx.scale(dpr, dpr);
+      }
+
+      ctx.clearRect(0, 0, displayWidth, displayHeight);
+
+      const midY = displayHeight / 2;
       const maxBending = 120;
       let currentBending = 0;
 
@@ -55,13 +66,13 @@ const BreathingPage = () => {
       }
 
       const colorValue = getComputedStyle(document.body).getPropertyValue('--title-color').trim();
-      
+
       ctx.beginPath();
       ctx.strokeStyle = colorValue || (document.body.classList.contains('dark') ? '#ffffff' : '#000000');
       ctx.lineWidth = 3;
       ctx.lineCap = 'round';
       ctx.moveTo(0, midY);
-      ctx.quadraticCurveTo(width / 2, midY + currentBending, width, midY);
+      ctx.quadraticCurveTo(displayWidth / 2, midY + currentBending, displayWidth, midY);
       ctx.stroke();
 
       if (progress < 1) {
@@ -97,11 +108,10 @@ const BreathingPage = () => {
         {!isActive ? (
           <div className={styles.idleLine} />
         ) : (
-          <canvas 
-            ref={canvasRef} 
-            width={300} 
-            height={300} 
-            className={styles.canvas} 
+          <canvas
+            ref={canvasRef}
+            style={{ width: '300px', height: '300px' }}
+            className={styles.canvas}
           />
         )}
       </div>
