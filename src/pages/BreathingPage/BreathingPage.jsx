@@ -1,5 +1,4 @@
 import { useEffect, useState, useRef } from "react";
-import { useNavigate } from "react-router-dom";
 import styles from './BreathingPage.module.css';
 import Button from "../../components/common/Button/Button";
 
@@ -8,15 +7,12 @@ const BreathingPage = () => {
   const [isActive, setIsActive] = useState(false);
   const [isFirstCycle, setIsFirstCycle] = useState(true);
   const canvasRef = useRef(null);
-  const navigate = useNavigate();
 
   const phases = ['Вдох', 'Держим', 'Выдох', 'Держим'];
 
   useEffect(() => {
     document.body.style.overflow = 'hidden';
-    return () => {
-      document.body.style.overflow = 'unset';
-    };
+    return () => { document.body.style.overflow = 'unset'; };
   }, []);
 
   useEffect(() => {
@@ -36,27 +32,25 @@ const BreathingPage = () => {
       const ctx = canvas.getContext('2d');
 
       const dpr = window.devicePixelRatio || 1;
-      const displayWidth = 300;
-      const displayHeight = 300;
+      const rect = canvas.getBoundingClientRect();
 
-      if (canvas.width !== displayWidth * dpr) {
-        canvas.width = displayWidth * dpr;
-        canvas.height = displayHeight * dpr;
+      if (canvas.width !== rect.width * dpr || canvas.height !== rect.height * dpr) {
+        canvas.width = rect.width * dpr;
+        canvas.height = rect.height * dpr;
         ctx.scale(dpr, dpr);
       }
 
-      ctx.clearRect(0, 0, displayWidth, displayHeight);
+      const width = rect.width;
+      const height = rect.height;
 
-      const midY = displayHeight / 2;
+      ctx.clearRect(0, 0, width, height);
+
+      const midY = height / 2;
       const maxBending = 120;
       let currentBending = 0;
 
       if (phase === 0) {
-        if (isFirstCycle) {
-          currentBending = -(progress * maxBending);
-        } else {
-          currentBending = maxBending - (progress * maxBending * 2);
-        }
+        currentBending = isFirstCycle ? -(progress * maxBending) : maxBending - (progress * maxBending * 2);
       } else if (phase === 1) {
         currentBending = -maxBending;
       } else if (phase === 2) {
@@ -66,13 +60,15 @@ const BreathingPage = () => {
       }
 
       const colorValue = getComputedStyle(document.body).getPropertyValue('--title-color').trim();
-
+      
       ctx.beginPath();
       ctx.strokeStyle = colorValue || (document.body.classList.contains('dark') ? '#ffffff' : '#000000');
-      ctx.lineWidth = 3;
+      ctx.lineWidth = 4;
       ctx.lineCap = 'round';
+      ctx.lineJoin = 'round';
+      
       ctx.moveTo(0, midY);
-      ctx.quadraticCurveTo(displayWidth / 2, midY + currentBending, displayWidth, midY);
+      ctx.quadraticCurveTo(width / 2, midY + currentBending, width, midY);
       ctx.stroke();
 
       if (progress < 1) {
@@ -108,10 +104,10 @@ const BreathingPage = () => {
         {!isActive ? (
           <div className={styles.idleLine} />
         ) : (
-          <canvas
-            ref={canvasRef}
-            style={{ width: '300px', height: '300px' }}
-            className={styles.canvas}
+          <canvas 
+            ref={canvasRef} 
+            className={styles.canvas} 
+            style={{ width: '100%', height: '100%', display: 'block' }}
           />
         )}
       </div>
