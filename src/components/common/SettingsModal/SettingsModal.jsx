@@ -61,7 +61,6 @@ const SettingsModal = ({ onClose }) => {
         <h3 className={styles.title}>Настройки</h3>
         <div className={styles.mainLayout}>
           <div className={styles.themeSwitcher}>
-            {/* Бегущая плашка */}
             <div
               className={styles.activeIndicator}
               style={{
