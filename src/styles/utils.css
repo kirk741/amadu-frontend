@@ -14,6 +14,15 @@ path {
   color: var(--text-color);
 }
 
+::-webkit-scrollbar {
+  display: none;
+}
+
+* {
+  -ms-overflow-style: none;
+  scrollbar-width: none;
+}
+
 button,
 input,
 textarea,
@@ -48,6 +57,7 @@ body {
   line-height: 1.15;
   color: var(--text-color);
   background: var(--bg-gradient);
+  /* overflow-x: hidden; */
 }
 
 ul,
@@ -66,6 +76,8 @@ img {
 
 h1,h2,h3 {
   font-weight: inherit;
+  color: var(--title-color);
+  font-size: 15px;
 }
 
 small {

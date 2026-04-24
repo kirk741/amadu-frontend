@@ -21,6 +21,7 @@ const EmotionChart = () => {
   const [logs, setLogs] = useState([]);
   const [allLogs, setAllLogs] = useState([]);
   const [isModalOpen, setIsModalOpen] = useState(false);
+  const [isSubmitting, setIsSubmitting] = useState(false);
   const navigate = useNavigate();
 
   const getEmotions = async () => {
@@ -58,7 +59,7 @@ const EmotionChart = () => {
       acc[emo.id] = emo.name;
       return acc;
     }, {});
-    
+
     const counts = logs.reduce((acc, log) => {
       const name = emotionsMap[log.emotion_id];
       acc[name] = (acc[name] || 0) + 1;
@@ -91,7 +92,10 @@ const EmotionChart = () => {
   }, []);
 
   const createEmotionLog = async (id) => {
+    if (isSubmitting) return;
     try {
+      setIsSubmitting(true);
+
       await client('/emotion-logs', {
         body: {
           emotion_id: id,
@@ -101,6 +105,10 @@ const EmotionChart = () => {
       await getEmotionLogs();
     } catch (error) {
       console.error(error);
+    } finally {
+      setTimeout(() => {
+        setIsSubmitting(false);
+      }, 2000);
     }
   }
 
@@ -145,7 +153,7 @@ const EmotionChart = () => {
             <button
               key={index}
               className={styles.buttonContainer}
-              onClick={(e) => { e.stopPropagation(); createEmotionLog(item.id)}}
+              onClick={(e) => { e.stopPropagation(); createEmotionLog(item.id) }}
               data-testid={`emotion-${item.id}`}
             >
               <img

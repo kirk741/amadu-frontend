@@ -7,7 +7,7 @@
   justify-content: space-between;
   align-items: center;
   width: 100%;
-  position: relative;
+  
 }
 
 .button {
@@ -17,5 +17,6 @@
 
 .childrenContainer {
   height: 100%;
-  width: calc(100% - 48px);
+  width: 100%;
+  position: relative;
 }

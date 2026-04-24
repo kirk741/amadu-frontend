@@ -29,6 +29,7 @@ const Modal = ({ children, childrenData = [], onClose }) => {
     >
       <ul
         className={`${styles.modalContainer} ${isActive ? styles.active : ''}`}
+        onClick={(e) => e.stopPropagation()}
       >
         <Button
           noBg={true}
@@ -46,9 +47,12 @@ const Modal = ({ children, childrenData = [], onClose }) => {
             <Button
               noBg={true}
               shadowType={null}
-              onClick={() => {
-                if (item.onClick) item.onClick();
-                if (item.closeAfterClick) closeModal();
+              onClick={(e) => {
+                item.onClick(e);
+                
+                if (!item.preventClose) {
+                  closeModal();
+                }
               }}
             >
               {item.name}

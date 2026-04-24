@@ -1,7 +1,7 @@
 import styles from './Layout.module.css';
 import TopNav from '../TopNav/TopNav';
 import BottomNav from '../BottomNav/BottomNav';
-import { useLocation } from "react-router-dom";
+import { matchPath, useLocation } from "react-router-dom";
 import { useEffect } from 'react';
 
 const Layout = ({ children }) => {
@@ -18,6 +18,11 @@ const Layout = ({ children }) => {
     '/login',
     '/register',
     '/emotion-logs',
+    '/user/:id',
+    '/diary/create',
+    '/breathing',
+    '/grounding',
+    '/kalimba',
   ];
 
   const withoutTopNav = [
@@ -25,19 +30,19 @@ const Layout = ({ children }) => {
     '/login'
   ];
 
-  if (withoutBottomNav.includes(location.pathname)) {
-    withBottomNav = false;
-  }
+  const isBottomNavHidden = withoutBottomNav.some(path =>
+    matchPath({ path, exact: true }, location.pathname)
+  );
 
-  if (withoutTopNav.includes(location.pathname)) {
-    withTopNav = false;
-  }
+  const isTopNavHidden = withoutTopNav.some(path =>
+    matchPath({ path, exact: true }, location.pathname)
+  );
 
   return (
     <div className={styles.layout}>
-      {withTopNav && <TopNav />}
-      <div className={styles.wrapper} >{children}</div>
-      {withBottomNav && <BottomNav />}
+      {!isTopNavHidden && <TopNav />}
+      <div className={styles.wrapper}>{children}</div>
+      {!isBottomNavHidden && <BottomNav />}
     </div>
   )
 }

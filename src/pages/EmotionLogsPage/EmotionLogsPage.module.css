@@ -49,33 +49,3 @@
   scale: 1.2;
   box-shadow: 0 0 var(--s-gap) var(--happy-color);
 }
-
-.skeletonCircle {
-  width: 48px;
-  height: 48px;
-  border-radius: 50%;
-  background-color: var(--unactive-color);
-  animation: flickering 1s infinite linear;
-}
-
-.skeletonLine {
-  width: 120px;
-  height: 18px;
-  border-radius: var(--round-radius);
-  background-color: var(--unactive-color);
-  animation: flickering 1s infinite linear;
-}
-
-.skeletonLineSmall {
-  width: 80px;
-  height: 12px;
-  border-radius: var(--round-radius);
-  background-color: var(--unactive-color);
-  animation: flickering 1s infinite linear;
-}
-
-@keyframes flickering {
-  0% { opacity: 0.5; }
-  50% { opacity: 0.2; }
-  100% { opacity: 0.5; }
-}

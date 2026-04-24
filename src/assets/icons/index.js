@@ -30,5 +30,8 @@ import {ReactComponent as Touch} from './touch.svg';
 import {ReactComponent as Expand} from './expand.svg';
 import {ReactComponent as Hide} from './eye_hide.svg';
 import {ReactComponent as Open} from './eye_open.svg';
+import {ReactComponent as Ear} from './ear.svg';
+import {ReactComponent as Smell} from './smell.svg';
+import {ReactComponent as Taste} from './taste.svg';
 
-export {AmaduStar, Angry, Appointment, ArrowBack, ArrowForward, Bad, Chats, Diary, Events, Exsercises, Fine, Happy, Heart, Home, Moon, More, Ok, Phone, Plus, Profile, Psychologist, Search, Settings, Sun, Tick, Trash, X, Music, Touch, Expand, Hide, Open}
+export {AmaduStar, Angry, Appointment, ArrowBack, ArrowForward, Bad, Chats, Diary, Events, Exsercises, Fine, Happy, Heart, Home, Moon, More, Ok, Phone, Plus, Profile, Psychologist, Search, Settings, Sun, Tick, Trash, X, Music, Touch, Expand, Hide, Open, Ear, Smell, Taste}

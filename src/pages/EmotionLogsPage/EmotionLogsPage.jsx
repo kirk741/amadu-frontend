@@ -8,6 +8,7 @@ import Input from '../../components/common/Input/Input';
 import Button from "../../components/common/Button/Button";
 import { formatToDB, formatToInput } from "../../utils/formatDate";
 import EmptyCard from "../../components/common/EmptyCard/EmptyCard";
+import Skeleton from "../../components/common/Skeleton/Skeleton";
 
 const emotionTranslations = {
   'Happy': 'Счастье',
@@ -71,70 +72,91 @@ const EmotionLogsPage = () => {
     }
   }
 
-  return (<div className={styles.container}>
-    {
-      isLoading && logs.length === 0 && (
+  return (
+    <div className={styles.container}>
+      {/* 1. Состояние загрузки (Скелетоны) */}
+      {isLoading && (
         <>
-          {[1, 2, 3].map((n) => (
-            <Container key={n}>
-              <div className={styles.logContainer}>
-                <div className={styles.skeletonCircle}></div>
-                <div className={styles.logDataContainer}>
-                  <div className={styles.skeletonLine}></div>
-                  <div className={styles.skeletonLineSmall}></div>
-                </div>
-              </div>
-            </Container>
+          {[1, 2, 3, 4, 5].map((n) => (
+            <Skeleton key={n} n={n} />
           ))}
         </>
-      )
-    }
-    {
-      logs.length === 0 && !isLoading && <EmptyCard link={'/'} />
-    }
-    {
-      logs.map((log, index) => {
-        return <Container key={log.id} buttonIcons={[Icons.More]} onClick={() => { setActiveEmotion(log.emotion?.id); setSelectedLog(log); setIsModalOpen(true) }}>
-          <div className={styles.logContainer}>
-            <img src={`${process.env.REACT_APP_API_URL}/${log.emotion.media[0].file_path}`} alt={log.emotion.name} />
-            <div className={styles.logDataContainer}>
-              <h3>{emotionTranslations[log.emotion.name]}</h3>
-              <small>{new Date(log.created_at).toLocaleDateString()}</small>
+      )}
+
+      {/* 2. Состояние "Пусто" (только после загрузки) */}
+      {!isLoading && logs.length === 0 && (
+        <EmptyCard link={'/'} />
+      )}
+
+      {/* 3. Список логов (только после загрузки) */}
+      {!isLoading && logs.length > 0 &&
+        logs.map((log) => (
+          <Container
+            key={log.id}
+            buttonIcons={[Icons.More]}
+            onClick={() => {
+              setActiveEmotion(log.emotion?.id);
+              setSelectedLog(log);
+              setIsModalOpen(true)
+            }}
+          >
+            <div className={styles.logContainer}>
+              <img
+                src={`${process.env.REACT_APP_API_URL}/${log.emotion.media[0]?.file_path}`}
+                alt={log.emotion.name}
+              />
+              <div className={styles.logDataContainer}>
+                <h3>{emotionTranslations[log.emotion.name] || log.emotion.name}</h3>
+                <small>{new Date(log.created_at).toLocaleDateString()}</small>
+              </div>
             </div>
-          </div>
-        </Container>
-      })
-    }
-    {
-      isModalOpen &&
-      <Modal
-        onClose={() => setIsModalOpen(false)}
-        childrenData={[
-          { 'name': 'Изменить запись', 'onClick': () => { setIsChangeModalOpen(selectedLog); setActiveDate(formatToInput(selectedLog.created_at)) } },
-          { 'name': 'Удалить запись', 'onClick': () => deleteLog(selectedLog.id) },
-        ]}>
-      </Modal>
-    }
-    {
-      isChangeModalOpen &&
-      <Modal
-        onClose={() => setIsChangeModalOpen(false)}>
-        <div className={styles.changeModalContent} onClick={(e) => e.stopPropagation()}>
-          <div className={styles.emotionContainer}>
+          </Container>
+        ))
+      }
+
+      {/* Модалки */}
+      {isModalOpen && (
+        <Modal
+          onClose={() => setIsModalOpen(false)}
+          childrenData={[
             {
-              emotions.map(emotion => {
-                return <div key={emotion.id} onClick={() => setActiveEmotion(emotion.id)}>
-                  <img src={`${process.env.REACT_APP_API_URL}/${emotion.media[0].file_path}`} alt={emotion.name} className={`${styles.emotionImg} ${emotion.id === activeEmotion ? styles.emotionActiveImg : ''}`} />
+              name: 'Изменить запись',
+              onClick: () => {
+                setIsChangeModalOpen(true);
+                setActiveDate(formatToInput(selectedLog.created_at))
+              }
+            },
+            { name: 'Удалить запись', onClick: () => deleteLog(selectedLog.id) },
+          ]}
+        />
+      )}
+
+      {isChangeModalOpen && (
+        <Modal onClose={() => setIsChangeModalOpen(false)}>
+          <div className={styles.changeModalContent} onClick={(e) => e.stopPropagation()}>
+            <div className={styles.emotionContainer}>
+              {emotions.map(emotion => (
+                <div key={emotion.id} onClick={() => setActiveEmotion(emotion.id)}>
+                  <img
+                    src={`${process.env.REACT_APP_API_URL}/${emotion.media[0]?.file_path}`}
+                    alt={emotion.name}
+                    className={`${styles.emotionImg} ${emotion.id === activeEmotion ? styles.emotionActiveImg : ''}`}
+                  />
                 </div>
-              })
-            }
+              ))}
+            </div>
+            <Input
+              className={styles.input}
+              type="datetime-local"
+              value={activeDate}
+              onChange={(e) => setActiveDate(e.target.value)}
+            />
+            <Button onClick={changeLog}>Сохранить</Button>
           </div>
-          <Input className={styles.input} type="datetime-local" value={activeDate || selectedLog.created_at} onChange={(e) => setActiveDate(e.target.value)} />
-          <Button onClick={() => changeLog()}>Сохранить</Button>
-        </div>
-      </Modal>
-    }
-  </div>);
+        </Modal>
+      )}
+    </div>
+  );
 };
 
 export default EmotionLogsPage;

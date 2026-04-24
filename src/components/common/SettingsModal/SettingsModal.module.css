@@ -1,0 +1,54 @@
+.themeSwitcher {
+  position: relative;
+  display: flex;
+  width: 100%;
+  height: 52px;
+  background-color: var(--shadow-color); /* Или чуть прозрачный черный */
+  border-radius: 40px;
+  padding: 4px;
+  margin: 20px 0;
+  cursor: pointer;
+  overflow: hidden;
+}
+
+/* Та самая белая сосиска-бегунок */
+.activeIndicator {
+  position: absolute;
+  top: 4px;
+  left: 4px;
+  width: calc(50% - 4px);
+  height: calc(100% - 8px);
+  background-color: var(--el-color); /* В светлой теме будет белым */
+  border-radius: 40px;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.08);
+  transition: transform 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+  z-index: 1;
+}
+
+.themeOption {
+  position: relative;
+  flex: 1;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 2; /* Чтобы быть поверх бегунка */
+  transition: color 0.3s ease;
+}
+
+.themeOption svg {
+  width: 22px;
+  height: 22px;
+  color: var(--unactive-color);
+  transition: color 0.3s ease, transform 0.2s ease;
+}
+
+/* Активная иконка чуть ярче или больше */
+.themeOption.active svg {
+  color: var(--title-color);
+  transform: scale(1.1);
+}
+
+/* Эффект при нажатии */
+.themeOption:active svg {
+  transform: scale(0.9);
+}

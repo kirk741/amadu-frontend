@@ -35,6 +35,7 @@ const Input = ({
         {...props}
       />
       {type === 'password' && <Button noBg shadowType={null} className={styles.inputIcon} onClick={changeVisibility}>{isVisible ? <Icons.Hide /> : <Icons.Open />}</Button>}
+      {type === 'search' && <Button noBg shadowType={null} className={styles.inputIcon}>{<Icons.Search />}</Button>}
       {error && <span data-testid={`${name}-error`} className={styles.errorText}>{error}</span>}
     </div>
   );

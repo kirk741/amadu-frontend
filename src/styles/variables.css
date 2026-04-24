@@ -18,6 +18,15 @@
   --sad-color: #86ADB2;
   --angry-color: #C8A4A4;
 
+  --do-color: #A8B5E0;   /* Пыльный голубой */
+  --re-color: #B2D8D8;   /* Мягкий шалфей */
+  --mi-color: #D1E5D1;   /* Бледная мята */
+  --fa-color: #F1F1C1;   /* Кремовый желтый */
+  --sol-color: #F8D7A8;  /* Нежный персик */
+  --la-color: #F4B9B9;   /* Пыльная роза */
+  --si-color: #E2B9D3;   /* Бледная сирень */
+  --do2-color: #D1BCE3;
+
   --emotion-logs-container: 270px;
 }
 
@@ -40,7 +49,7 @@ body.light-theme, :root {
 
 body.dark-theme {
   --bg-gradient: linear-gradient(145deg, #151415 0%, #111111 100%);
-  --el-color: #18181c;
+  --el-color: #1c1c21;
   --title-color: #FBFBFB;
   --text-color: #C6C6C6;
   --unactive-color: #A4A7AF;

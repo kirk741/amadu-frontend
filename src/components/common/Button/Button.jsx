@@ -6,8 +6,9 @@ const Button = ({ children, className, noBg = false, shadowType = 's', justifyBe
     className,
     styles.button,
     noBg ? styles.buttonNoBg : '',
-    shadowType === 's' ? styles.buttonHasSShadow : shadowType === 'm' ? styles.buttonHasMShadow : shadowType === 'xl' ? styles.buttonHasXLShadow : '',
-    justifyBetween ? styles.buttonJustifyBetween : '',
+    !noBg && shadowType === 's' ? styles.buttonHasSShadow :
+      !noBg && shadowType === 'm' ? styles.buttonHasMShadow :
+        !noBg && shadowType === 'xl' ? styles.buttonHasXLShadow : '', justifyBetween ? styles.buttonJustifyBetween : '',
     unactive ? styles.buttonUnactive : ''
   ].filter(Boolean).join(' ');
 

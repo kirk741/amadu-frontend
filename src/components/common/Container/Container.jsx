@@ -1,8 +1,8 @@
 import styles from './Container.module.css';
 import Button from '../Button/Button';
 
-const Container = ({ children, buttonIcons = [], onClick = null }) => {
-  return <div className={styles.container} onClick={onClick}>
+const Container = ({ children, buttonIcons = [], onClick = null, className='' }) => {
+  return <div className={`${styles.container} ${className}`} onClick={onClick}>
     <div className={styles.childrenContainer}>
       {children}
     </div>

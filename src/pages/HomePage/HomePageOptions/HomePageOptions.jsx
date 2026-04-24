@@ -7,9 +7,9 @@ const HomePageOptions = () => {
   const navigate = useNavigate();
   const buttons = [
     { name: 'Записаться на приём', Icon: null, link: '/psychologists' },
-    { name: 'Коробочное дыхание', Icon: Icons.Exsercises },
-    { name: 'Калимба (антистресс)', Icon: Icons.Music },
-    { name: 'Заземление (5\u20114\u20113\u20112\u20111)', Icon: Icons.Touch },
+    { name: 'Коробочное дыхание', Icon: Icons.Exsercises, link: '/breathing' },
+    { name: 'Калимба (антистресс)', Icon: Icons.Music, link: '/kalimba' },
+    { name: 'Заземление (5\u20114\u20113\u20112\u20111)', Icon: Icons.Touch, link: '/grounding' },
     { name: 'Номера поддержки', Icon: Icons.Phone }
   ]
   return <div className={styles.buttonContainer}>
