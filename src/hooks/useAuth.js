@@ -1,6 +1,7 @@
 import { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { authApi } from '../api/auth';
+import { useAuthContext } from '../context/AuthContext';
 
 export const useAuth = () => {
   const navigate = useNavigate();
@@ -13,13 +14,18 @@ export const useAuth = () => {
     setFormData(prev => ({ ...prev, [name]: value }));
   };
 
+  const { updateAuth } = useAuthContext();
+
   const login = async () => {
     setIsLoading(true);
     setErrors({});
     try {
       const res = await authApi.login(formData);
-      console.log(1);
-      if (res.success) return navigate('/');
+      if (res.success) {
+        updateAuth(res.data.user.role.name, res.data.user.settings.theme);
+        navigate('/');
+        return;
+      }
       throw res;
     } catch (error) {
       if (error.status === 422) {

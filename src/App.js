@@ -18,21 +18,10 @@ import KalimbaPage from './pages/ClientPages/KalimbaPage/KalimbaPage';
 import PhonesPage from './pages/ClientPages/PhonePages/PhonesPage/PhonesPage';
 import PhoneDetailsPage from './pages/ClientPages/PhonePages/PhoneDetailsPage/PhoneDetailsPage';
 import ProfilePage from './pages/ProfilePage/ProfilePage';
+import { useAuthContext } from './context/AuthContext';
 
 function App() {
-  const [role, setRole] = useState(localStorage.getItem('role'));
-
-  useEffect(() => {
-    const savedTheme = localStorage.getItem('theme') || 'light-theme';
-    document.body.className = savedTheme;
-
-    const handleStorageChange = () => {
-      setRole(localStorage.getItem('role'));
-    };
-
-    window.addEventListener('storage', handleStorageChange);
-    return () => window.removeEventListener('storage', handleStorageChange);
-  }, []);
+  const { role } = useAuthContext();
 
   return (
     <BrowserRouter>

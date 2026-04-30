@@ -4,11 +4,13 @@ import styles from './SettingsModal.module.css';
 import * as Icons from '../../../assets/icons';
 import client from "../../../api/client";
 import Modal from "../Modal/Modal";
+import { useTheme } from "../../../hooks/useTheme";
 
 const SettingsModal = ({ onClose }) => {
   const navigate = useNavigate();
+  const { changeTheme } = useTheme();
   const [settings, setSettings] = useState({
-    theme: localStorage.getItem('theme') || 'light-theme',
+    theme: 'light-theme',
     notifications: true
   });
 
@@ -25,18 +27,10 @@ const SettingsModal = ({ onClose }) => {
   }, []);
 
   const updateSettings = async (newData) => {
-    const updated = { ...settings, ...newData };
-    setSettings(updated);
+    setSettings(prev => ({ ...prev, ...newData }));
 
     if (newData.theme) {
-      const newTheme = newData.theme;
-      document.body.className = newTheme;
-      localStorage.setItem('theme', newTheme);
-
-      const meta = document.getElementById('color-scheme-meta');
-      if (meta) {
-        meta.content = newTheme === 'dark-theme' ? 'dark' : 'light';
-      }
+      changeTheme(newData.theme);
     }
 
     try {
