@@ -1,17 +1,11 @@
-import { useEffect, useState } from "react";
-import { useNavigate } from "react-router-dom";
-import styles from './SettingsModal.module.css';
-import * as Icons from '../../../assets/icons';
-import client from "../../../api/client";
-import Modal from "../Modal/Modal";
-import { useTheme } from "../../../hooks/useTheme";
-
 const SettingsModal = ({ onClose }) => {
   const navigate = useNavigate();
-  const { changeTheme } = useTheme();
+  // Достаем саму тему из хука
+  const { theme, changeTheme } = useTheme();
+
   const [settings, setSettings] = useState({
-    theme: 'light-theme',
     notifications: true
+    // Тему отсюда убираем!
   });
 
   useEffect(() => {
@@ -19,12 +13,17 @@ const SettingsModal = ({ onClose }) => {
       try {
         const response = await client('/user/settings');
         setSettings(response.data);
+
+        // Синхронизируем тему из API с нашим хуком при загрузке
+        if (response.data.theme) {
+          changeTheme(response.data.theme);
+        }
       } catch (error) {
         console.error(error);
       }
     };
     fetchSettings();
-  }, []);
+  }, []); // Пустой массив зависимостей оставляем
 
   const updateSettings = async (newData) => {
     setSettings(prev => ({ ...prev, ...newData }));
@@ -36,7 +35,8 @@ const SettingsModal = ({ onClose }) => {
     try {
       await client('/user/settings', {
         method: 'POST',
-        body: { ...newData, _method: 'PATCH' }
+        // Здесь склеиваем локальные уведомления и актуальную тему
+        body: { ...settings, ...newData, _method: 'PATCH' }
       });
     } catch (error) {
       console.error(error);
@@ -64,19 +64,20 @@ const SettingsModal = ({ onClose }) => {
             <div
               className={styles.activeIndicator}
               style={{
-                transform: `translateX(${settings.theme === 'light-theme' ? '0%' : '100%'})`
+                // Используем theme из хука вместо settings.theme
+                transform: `translateX(${theme === 'light-theme' ? '0%' : '100%'})`
               }}
             />
 
             <div
-              className={`${styles.themeOption} ${settings.theme === 'light-theme' ? styles.active : ''}`}
+              className={`${styles.themeOption} ${theme === 'light-theme' ? styles.active : ''}`}
               onClick={() => updateSettings({ theme: 'light-theme' })}
             >
               <Icons.Sun />
             </div>
 
             <div
-              className={`${styles.themeOption} ${settings.theme === 'dark-theme' ? styles.active : ''}`}
+              className={`${styles.themeOption} ${theme === 'dark-theme' ? styles.active : ''}`}
               onClick={() => updateSettings({ theme: 'dark-theme' })}
             >
               <Icons.Moon />
@@ -87,5 +88,3 @@ const SettingsModal = ({ onClose }) => {
     </Modal>
   );
 };
-
-export default SettingsModal;
