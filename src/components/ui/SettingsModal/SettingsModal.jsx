@@ -1,3 +1,11 @@
+import { useEffect, useState } from "react";
+import { useNavigate } from "react-router-dom";
+import styles from './SettingsModal.module.css';
+import * as Icons from '../../../assets/icons';
+import client from "../../../api/client";
+import Modal from "../Modal/Modal";
+import { useTheme } from "../../../hooks/useTheme";
+
 const SettingsModal = ({ onClose }) => {
   const navigate = useNavigate();
   // Достаем саму тему из хука
@@ -88,3 +96,5 @@ const SettingsModal = ({ onClose }) => {
     </Modal>
   );
 };
+
+export default SettingsModal;
