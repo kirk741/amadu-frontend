@@ -1,0 +1,50 @@
+.container {
+  padding: var(--m-gap);
+  width: 100%;
+  box-sizing: border-box;
+}
+
+.container > div:first-child {
+  flex: 1 !important;
+  min-width: 0 !important;
+  display: flex !important;
+  align-items: center !important;
+  width: auto !important;
+}
+
+.textData {
+  margin-left: var(--s-gap);
+  flex: 1;
+  min-width: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+}
+
+.textData h3,
+.textData p,
+.textData small {
+  width: 100%;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  margin: 0;
+  display: block;
+}
+
+.textData h3 {
+  font-size: 1.1rem;
+  color: var(--text-color);
+}
+
+.textData p {
+  font-size: 0.9rem;
+  opacity: 0.7;
+  color: var(--text-color);
+}
+
+.textData small {
+  font-size: 0.8rem;
+  opacity: 0.5;
+  color: var(--text-color);
+}

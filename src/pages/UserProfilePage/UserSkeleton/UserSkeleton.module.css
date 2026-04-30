@@ -1,0 +1,97 @@
+.skeletonAvatar {
+  width: 128px;
+  height: 128px;
+  border-radius: var(--round-radius);
+  background-color: var(--unactive-color);
+  animation: flickering 1.5s infinite;
+  flex-shrink: 0;
+}
+
+.skeletonTitle {
+  height: 24px;
+  width: 120px;
+  border-radius: var(--round-radius);
+  background-color: var(--unactive-color);
+  animation: flickering 1.5s infinite;
+  margin-bottom: 8px;
+}
+
+.skeletonSmall {
+  height: 14px;
+  width: 60px;
+  border-radius: var(--round-radius);
+  background-color: var(--unactive-color);
+  animation: flickering 1.5s infinite;
+}
+
+.skeletonCircleBtn {
+  width: 48px;
+  height: 48px;
+  border-radius: var(--round-radius);
+  background-color: var(--unactive-color);
+  animation: flickering 1.5s infinite;
+}
+
+.skeletonBio {
+  margin-top: var(--s-gap);
+  height: 80px;
+  width: 100%;
+  border-radius: 32px;
+  background-color: var(--unactive-color);
+  animation: flickering 1.5s infinite;
+}
+
+@keyframes flickering {
+  0% {
+    opacity: 0.5;
+  }
+
+  50% {
+    opacity: 0.2;
+  }
+
+  100% {
+    opacity: 0.5;
+  }
+}
+
+.profile_image {
+  height: 128px;
+  width: 128px;
+  border-radius: var(--round-radius);
+  object-fit: cover;
+}
+
+.userContainer {
+  display: flex;
+  gap: var(--s-gap);
+}
+
+.userInfoContainer {
+  margin-top: var(--m-gap);
+  flex: 1;
+}
+
+.bio {
+  margin-top: var(--s-gap);
+  padding-bottom: var(--xl-gap);
+}
+
+.buttonContainer {
+  display: flex;
+  gap: var(--xs-gap);
+  margin-top: var(--m-gap);
+}
+
+.buttonContainer button {
+  height: 48px;
+  width: 48px;
+  padding: 0;
+}
+
+.image_container {
+  height: 128px;
+  width: 128px;
+  padding: 0 !important;
+  margin: 0 !important;
+}

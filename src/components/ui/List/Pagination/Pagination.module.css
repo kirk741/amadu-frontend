@@ -1,0 +1,27 @@
+.pagination {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  margin-top: auto;
+  padding: var(--m-gap) 0;
+}
+
+.pagination button {
+  width: 48px;
+  padding: 0;
+  margin-left: var(--m-gap);
+}
+
+.pagination span {
+  width: 36px;
+  height: 36px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  padding: 0;
+}
+
+.activePage {
+  font-weight: 900;
+  color: var(--title-color);
+}

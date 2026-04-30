@@ -1,0 +1,6 @@
+.content {
+  padding: var(--xl-gap) var(--xs-gap);
+  display: flex;
+  flex-direction: column;
+  gap: var(--xs-gap);
+}

@@ -1,0 +1,14 @@
+.floatContainer {
+  position: fixed;
+  bottom: 80px;
+  right: var(--m-gap);
+  display: flex;
+  gap: var(--xs-gap);
+  z-index: 9;
+}
+
+.floatButton {
+  height: 48px;
+  width: 48px;
+  padding: 0;
+}

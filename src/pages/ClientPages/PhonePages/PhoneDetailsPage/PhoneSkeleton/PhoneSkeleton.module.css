@@ -1,0 +1,75 @@
+.skeletonTitle {
+  width: 180px;
+  height: 24px;
+  margin-bottom: 8px;
+}
+
+.skeletonSmall {
+  width: 120px;
+  height: 16px;
+  margin-bottom: 24px;
+}
+
+.skeletonText {
+  width: 100%;
+  height: 20px;
+  margin-bottom: 8px;
+}
+
+.skeletonButton {
+  width: 100%;
+  height: 56px;
+  margin-top: var(--m-gap);
+}
+
+.skeletonTitle,
+.skeletonSmall,
+.skeletonText,
+.skeletonButton {
+  background: var(--unactive-color);
+  border-radius: var(--round-radius);
+  animation: flickering 1.5s infinite;
+}
+
+@keyframes flickering {
+  0% {
+    opacity: 0.5;
+  }
+
+  50% {
+    opacity: 0.2;
+  }
+
+  100% {
+    opacity: 0.5;
+  }
+}
+
+.phoneContainer {
+  display: flex;
+  gap: var(--s-gap);
+}
+
+.infoContainer {
+  margin-top: var(--m-gap);
+  flex: 1;
+}
+
+.description {
+  margin-top: var(--s-gap);
+  padding-bottom: var(--xl-gap);
+  line-height: 1.5;
+  color: var(--text-color);
+}
+
+.buttonContainer {
+  display: flex;
+  gap: var(--xs-gap);
+  margin-top: var(--m-gap);
+}
+
+.buttonContainer button {
+  height: 48px;
+  width: 48px;
+  padding: 0;
+}

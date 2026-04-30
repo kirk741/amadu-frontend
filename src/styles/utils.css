@@ -76,7 +76,7 @@ img {
 h1,h2,h3 {
   font-weight: inherit;
   color: var(--title-color);
-  font-size: 15px;
+  font-size: 16px;
 }
 
 small {

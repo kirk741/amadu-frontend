@@ -1,0 +1,21 @@
+.phoneContainer {
+  padding-top: var(--xl-gap);
+}
+
+.title {
+  margin-bottom: var(--xs-gap);
+}
+
+.phoneNum {
+  font-size: 0.9rem;
+  opacity: 0.7;
+  display: block;
+  margin-bottom: var(--m-gap);
+}
+
+.description {
+  margin-top: var(--m-gap);
+  margin-bottom: var(--xl-gap);
+  line-height: 1.5;
+  color: var(--text-color);
+}

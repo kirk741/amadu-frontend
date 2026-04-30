@@ -30,13 +30,14 @@
   --emotion-logs-container: 270px;
 }
 
-body.light-theme, :root {
+body.light-theme {
   --bg-gradient: linear-gradient(145deg, #F0F0F0 0%, #F0F0F0 100%);
   --el-color: #FBFBFB;
   --title-color: #151E30;
   --text-color: #414959;
   --unactive-color: #7E8188;
   --shadow-color: #DFDFDF;
+  --modal-overlay-color: #7e81881f;
 
   --invalid-color: #ff7474;
 
@@ -54,6 +55,7 @@ body.dark-theme {
   --text-color: #C6C6C6;
   --unactive-color: #A4A7AF;
   --shadow-color: #101010;
+  --modal-overlay-color: #0706089b;
 
   --invalid-color: #a63737;
 

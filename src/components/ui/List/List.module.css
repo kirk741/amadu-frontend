@@ -1,0 +1,11 @@
+.search {
+  margin-bottom: var(--xs-gap);
+}
+
+.list {
+  display: flex;
+  flex-direction: column;
+  gap: var(--s-gap);
+  padding-bottom: 48px;
+  min-height: calc(100vh - 96px);
+}
