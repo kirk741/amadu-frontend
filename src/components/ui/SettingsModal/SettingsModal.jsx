@@ -5,13 +5,11 @@ import * as Icons from '../../../assets/icons';
 import client from "../../../api/client";
 import Modal from "../Modal/Modal";
 
-// 1. Вместо useTheme импортируем useAuthContext
 import { useAuthContext } from "../../../context/AuthContext"; 
 
 const SettingsModal = ({ onClose }) => {
   const navigate = useNavigate();
   
-  // 2. Достаем тему и функцию её изменения из глобального контекста
   const { theme, changeTheme } = useAuthContext();
 
   const [settings, setSettings] = useState({
@@ -38,7 +36,7 @@ const SettingsModal = ({ onClose }) => {
     setSettings(prev => ({ ...prev, ...newData }));
 
     if (newData.theme) {
-      changeTheme(newData.theme); // 3. Это теперь триггерит глобальный стейт!
+      changeTheme(newData.theme);
     }
 
     try {
