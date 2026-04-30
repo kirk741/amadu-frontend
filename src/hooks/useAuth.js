@@ -22,7 +22,7 @@ export const useAuth = () => {
     try {
       const res = await authApi.login(formData);
       if (res.success) {
-        updateAuth(res.data.user.role.name, res.data.user.settings.theme);
+        updateAuth(res.data.user.role.name, res.data.user.settings?.theme || 'light-theme');
         navigate('/');
         return;
       }

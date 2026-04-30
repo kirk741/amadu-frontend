@@ -53,6 +53,7 @@ const client = async (endpoint, { customHeaders, method, body, ...customConfig }
     if (error && !error.status) {
       error.status = 0;
     }
+    console.log(error)
     return Promise.reject(error);
   }
 };

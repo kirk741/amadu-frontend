@@ -8,7 +8,7 @@ export const authApi = {
       localStorage.setItem('token', response.data.token);
       localStorage.setItem('role', response.data.user.role.name);
 
-      const theme = response.data.user.settings.theme;
+      const theme = response.data.user.settings?.theme || 'light-theme';
       localStorage.setItem('theme', theme || '');
       document.documentElement.className = theme; 
     }
