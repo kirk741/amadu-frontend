@@ -4,16 +4,18 @@ import styles from './SettingsModal.module.css';
 import * as Icons from '../../../assets/icons';
 import client from "../../../api/client";
 import Modal from "../Modal/Modal";
-import { useTheme } from "../../../hooks/useTheme";
+
+// 1. Вместо useTheme импортируем useAuthContext
+import { useAuthContext } from "../../../context/AuthContext"; 
 
 const SettingsModal = ({ onClose }) => {
   const navigate = useNavigate();
-  // Достаем саму тему из хука
-  const { theme, changeTheme } = useTheme();
+  
+  // 2. Достаем тему и функцию её изменения из глобального контекста
+  const { theme, changeTheme } = useAuthContext();
 
   const [settings, setSettings] = useState({
     notifications: true
-    // Тему отсюда убираем!
   });
 
   useEffect(() => {
@@ -22,7 +24,6 @@ const SettingsModal = ({ onClose }) => {
         const response = await client('/user/settings');
         setSettings(response.data);
 
-        // Синхронизируем тему из API с нашим хуком при загрузке
         if (response.data.theme) {
           changeTheme(response.data.theme);
         }
@@ -31,19 +32,18 @@ const SettingsModal = ({ onClose }) => {
       }
     };
     fetchSettings();
-  }, []); // Пустой массив зависимостей оставляем
+  }, []); 
 
   const updateSettings = async (newData) => {
     setSettings(prev => ({ ...prev, ...newData }));
 
     if (newData.theme) {
-      changeTheme(newData.theme);
+      changeTheme(newData.theme); // 3. Это теперь триггерит глобальный стейт!
     }
 
     try {
       await client('/user/settings', {
         method: 'POST',
-        // Здесь склеиваем локальные уведомления и актуальную тему
         body: { ...settings, ...newData, _method: 'PATCH' }
       });
     } catch (error) {
@@ -72,7 +72,6 @@ const SettingsModal = ({ onClose }) => {
             <div
               className={styles.activeIndicator}
               style={{
-                // Используем theme из хука вместо settings.theme
                 transform: `translateX(${theme === 'light-theme' ? '0%' : '100%'})`
               }}
             />

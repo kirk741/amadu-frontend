@@ -7,11 +7,21 @@ export const AuthProvider = ({ children }) => {
   const [theme, setTheme] = useState(localStorage.getItem('theme') || 'light-theme');
 
   useEffect(() => {
-    document.body.className = theme;
+    document.documentElement.className = theme;
+
+    const meta = document.getElementById('color-scheme-meta');
+    if (meta) {
+      meta.content = theme === 'dark-theme' ? 'dark' : 'light';
+    }
   }, [theme]);
 
   const updateAuth = (newRole, newTheme) => {
     setRole(newRole);
+    setTheme(newTheme);
+  };
+
+  const changeTheme = (newTheme) => {
+    localStorage.setItem('theme', newTheme);
     setTheme(newTheme);
   };
 
@@ -22,7 +32,7 @@ export const AuthProvider = ({ children }) => {
   };
 
   return (
-    <AuthContext.Provider value={{ role, theme, updateAuth, logout }}>
+    <AuthContext.Provider value={{ role, theme, updateAuth, logout, changeTheme }}>
       {children}
     </AuthContext.Provider>
   );
