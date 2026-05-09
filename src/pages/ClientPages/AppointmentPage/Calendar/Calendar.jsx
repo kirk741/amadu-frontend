@@ -130,6 +130,7 @@ const Calendar = () => {
                             loadData();
                           } catch (e) {
                             setStatus(false);
+                            loadData();
                           }
                         }
                       },
