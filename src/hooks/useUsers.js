@@ -17,7 +17,7 @@ export const useUsers = () => {
         last: result.last_page
       });
     } catch (e) {
-      console.error("Ошибка загрузки:", e);
+      console.error(e);
       setUsers([]);
     } finally {
       setIsLoading(false);

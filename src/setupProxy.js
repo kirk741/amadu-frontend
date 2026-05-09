@@ -4,8 +4,8 @@ module.exports = function (app) {
   app.use(
     [
       '/auth',
-      '/appointments',
       '/books',
+      '/bookings',
       '/emotion-logs',
       '/emotions',
       '/events',

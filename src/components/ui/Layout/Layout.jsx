@@ -23,6 +23,7 @@ const Layout = ({ children }) => {
     '/kalimba',
     '/phones',
     '/phone/:id',
+    '/appointment/:id',
   ];
 
   const withoutTopNav = [

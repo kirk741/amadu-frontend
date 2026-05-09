@@ -58,7 +58,7 @@ const EmotionChart = () => {
               e.stopPropagation();
               addLog(item.id);
             }}>
-              <img src={`${process.env.REACT_APP_API_URL}/${item.media[0].file_path}`} alt="" />
+              <img src={`${process.env.REACT_APP_API_URL}/${item.media[0].file_path}`} alt="" height='48' width='48' />
             </button>
           ))
         )}
