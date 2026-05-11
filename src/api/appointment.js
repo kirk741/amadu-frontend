@@ -10,5 +10,21 @@ export const appointmentApi = {
   createAppointment: async (scheduleId) => {
     const res = await client('/bookings', { body: { schedule_id: scheduleId } });
     return res.data;
+  },
+
+  getAppointments: async (page = 1, searchQuery = '') => {
+    const searchParam = searchQuery ? `&search=${searchQuery}` : '';
+    const res = await client(`/bookings?page=${page}${searchParam}`);
+    return res.data;
+  },
+
+  getUpcomingAppointment: async () => {
+    const res = await client('/bookings');
+
+    const now = new Date();
+    const upcoming = res.data.data
+      .filter(app => new Date(app.schedule.start_time) > now && app.status === 'confirmed')
+      .sort((a, b) => new Date(a.schedule.start_time) - new Date(b.schedule.start_time))[0];
+    return upcoming;
   }
 }

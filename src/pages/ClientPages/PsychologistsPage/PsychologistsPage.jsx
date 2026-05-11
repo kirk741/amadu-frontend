@@ -42,7 +42,7 @@ const PsychologistsPage = () => {
           childrenData={[
             {
               name: 'Записаться на приём',
-              onClick: () => navigate(`/appointment/${selectedUser.id}`)
+              onClick: () => navigate(`/booking/${selectedUser.id}`)
             },
             {
               name: 'Открыть чат',

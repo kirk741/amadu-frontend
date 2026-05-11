@@ -1,0 +1,14 @@
+.timeGrid {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 8px;
+  margin-top: var(--m-gap);
+  max-height: 400px;
+  overflow-y: auto;
+}
+
+.timeSlot {
+  padding: 16px 16px;
+  border: 1px solid var(--text-color);
+  border-radius: var(--round-radius);
+}

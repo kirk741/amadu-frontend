@@ -24,6 +24,7 @@ const Layout = ({ children }) => {
     '/phones',
     '/phone/:id',
     '/appointment/:id',
+    '/appointments',
   ];
 
   const withoutTopNav = [

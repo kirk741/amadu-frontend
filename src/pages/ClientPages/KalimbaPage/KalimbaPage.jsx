@@ -14,9 +14,10 @@ const NOTES = [
 
 const KalimbaPage = () => {
   const [activeNotes, setActiveNotes] = useState({});
-  const lastPlayedId = useRef(null);
   const audioCtx = useRef(null);
   const audioBuffers = useRef({});
+  // Храним, какой палец (id тача) на какой ноте сейчас находится
+  const activeTouches = useRef({});
 
   useEffect(() => {
     document.body.style.overflow = 'hidden';
@@ -30,11 +31,13 @@ const KalimbaPage = () => {
           const decodedData = await audioCtx.current.decodeAudioData(arrayBuffer);
           audioBuffers.current[note.id] = decodedData;
         } catch (e) {
-          console.error(`Ошибка загрузки: ${note.freq}`, e);
+          console.error(`Ошибка загрузки звука: ${note.freq}`, e);
         }
       }
     };
+
     loadSounds();
+
     return () => {
       document.body.style.overflow = 'unset';
       if (audioCtx.current) audioCtx.current.close();
@@ -47,39 +50,60 @@ const KalimbaPage = () => {
 
     const source = audioCtx.current.createBufferSource();
     const gainNode = audioCtx.current.createGain();
+
     source.buffer = audioBuffers.current[note.id];
     gainNode.gain.value = 0.6;
+
     source.connect(gainNode);
     gainNode.connect(audioCtx.current.destination);
     source.start(0);
 
+    // Подсветка язычка
     setActiveNotes(prev => ({ ...prev, [note.id]: true }));
     setTimeout(() => setActiveNotes(prev => ({ ...prev, [note.id]: false })), 150);
-    if (window.navigator.vibrate) window.navigator.vibrate(10);
+
+    if (window.navigator.vibrate) window.navigator.vibrate(15);
   };
 
   const handleTouch = (e) => {
     if (e.cancelable) e.preventDefault();
 
-    const touch = e.touches[0];
-    if (!touch) return;
+    // Обрабатываем каждое касание (палец) отдельно
+    Array.from(e.touches).forEach(touch => {
+      const element = document.elementFromPoint(touch.clientX, touch.clientY);
+      const wrapper = element?.closest(`.${styles.tineWrapper}`);
 
-    const element = document.elementFromPoint(touch.clientX, touch.clientY);
-    const wrapper = element?.closest(`.${styles.tineWrapper}`);
+      if (wrapper) {
+        const noteId = parseInt(wrapper.getAttribute('data-id'));
+        const touchId = touch.identifier;
 
-    if (wrapper) {
-      const noteId = parseInt(wrapper.getAttribute('data-id'));
-      if (lastPlayedId.current !== noteId) {
-        const note = NOTES.find(n => n.id === noteId);
-        if (note) playNote(note);
-        lastPlayedId.current = noteId;
+        // Если этот палец переместился на новую ноту или только коснулся её
+        if (activeTouches.current[touchId] !== noteId) {
+          const note = NOTES.find(n => n.id === noteId);
+          if (note) playNote(note);
+          activeTouches.current[touchId] = noteId;
+        }
+      } else {
+        // Палец на экране, но не на язычке
+        activeTouches.current[touch.identifier] = null;
       }
-    } else {
-      lastPlayedId.current = null;
-    }
+    });
+  };
+
+  const handleTouchEnd = (e) => {
+    // Получаем ID всех пальцев, которые ВСЁ ЕЩЁ на экране
+    const currentIdentifiers = Array.from(e.touches).map(t => t.identifier);
+
+    // Удаляем из нашего словаря те пальцы, которые подняли
+    Object.keys(activeTouches.current).forEach(id => {
+      if (!currentIdentifiers.includes(parseInt(id))) {
+        delete activeTouches.current[id];
+      }
+    });
   };
 
   const handleMouseDown = (note) => {
+    // Отключаем клик мышкой, если есть тач (чтобы не было двойного звука на мобилках)
     if ('ontouchstart' in window) return;
     playNote(note);
   };
@@ -88,9 +112,10 @@ const KalimbaPage = () => {
     <div className={styles.wrapper}>
       <div
         className={styles.tinesContainer}
-        onTouchMove={handleTouch}
         onTouchStart={handleTouch}
-        onTouchEnd={() => { lastPlayedId.current = null; }}
+        onTouchMove={handleTouch}
+        onTouchEnd={handleTouchEnd}
+        onTouchCancel={handleTouchEnd}
       >
         {NOTES.map((note) => (
           <div
@@ -106,6 +131,7 @@ const KalimbaPage = () => {
                 '--active-color': note.color
               }}
             >
+              <div className={styles.tineTip} />
               <span className={styles.noteLabel}>{note.key}</span>
             </div>
           </div>

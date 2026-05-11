@@ -11,9 +11,7 @@ const Card = ({ title, description, date, type, imageUrl, btnOnClick, onClick })
       btnOnClick={btnOnClick}
       onClick={onClick}
     >
-      <div className={styles.avatarWrapper}>
-        <CardAvatar type={type} imageUrl={imageUrl} />
-      </div>
+      <CardAvatar type={type} imageUrl={imageUrl} />
 
       <div className={styles.textData}>
         <h3>{title || 'Без названия'}</h3>

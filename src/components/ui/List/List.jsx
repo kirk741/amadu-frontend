@@ -8,21 +8,22 @@ import { useEffect } from 'react';
 
 const List = ({
   items = [],
+  isLoading,
   mapItem,
   onItemBtnClick,
   onItemClick,
   children,
   searchQuery,
   setSearchQuery,
-  isLoading,
   isEmpty,
   emptyComponent,
   pagination,
   onPageChange,
-  actions = []
+  actions = [],
+  filters
 }) => {
   const showSearch = setSearchQuery && (isLoading || items.length > 0 || searchQuery);
-  
+
   const handlePageChange = (page) => {
     window.scrollTo(0, 0);
     onPageChange(page);
@@ -30,6 +31,12 @@ const List = ({
 
   return (
     <div className={styles.list}>
+      {filters && (
+        <div className={styles.filtersWrapper}>
+          {filters}
+        </div>
+      )}
+
       {showSearch && (
         <Input
           className={styles.search}

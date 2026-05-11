@@ -1,4 +1,4 @@
-import { useParams } from "react-router-dom";
+import { useNavigate, useParams } from "react-router-dom";
 import { useUser } from "../../hooks/useUser";
 import UserSkeleton from "./UserSkeleton/UserSkeleton";
 import Container from "../../components/ui/Container/Container";
@@ -9,6 +9,7 @@ import styles from './UserProfilePage.module.css';
 const UserProfilePage = () => {
   const { id } = useParams();
   const { user, isLoading } = useUser(id);
+  const navigate = useNavigate();
 
   if (isLoading) return <Container><UserSkeleton /></Container>;
   if (!user) return <Container>Пользователь не найден</Container>;
@@ -27,7 +28,7 @@ const UserProfilePage = () => {
           <h3>{user.name}</h3>
           <small>{user.last_seen_at || 'В сети недавно'}</small>
           <div className={styles.buttonContainer}>
-            <Button><Icons.Appointment /></Button>
+            <Button onClick={() => navigate(`/booking/${user.id}`)}><Icons.Appointment /></Button>
             <Button><Icons.Chats /></Button>
           </div>
         </div>

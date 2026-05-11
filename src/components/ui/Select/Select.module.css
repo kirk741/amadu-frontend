@@ -4,7 +4,7 @@
 }
 
 .select {
-  padding: var(--m-gap) var(--l-gap);
+  padding: var(--s-gap) var(--l-gap);
   background-color: var(--el-color);
   box-shadow: var(--s-shadow);
   border-radius: var(--round-radius);

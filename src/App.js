@@ -19,6 +19,8 @@ import PhonesPage from './pages/ClientPages/PhonePages/PhonesPage/PhonesPage';
 import PhoneDetailsPage from './pages/ClientPages/PhonePages/PhoneDetailsPage/PhoneDetailsPage';
 import ProfilePage from './pages/ProfilePage/ProfilePage';
 import { useAuthContext } from './context/AuthContext';
+import BookingPage from './pages/ClientPages/BookingPage/BookingPage';
+import AppointmentsPage from './pages/ClientPages/AppointmentsPage/AppointmentsPage';
 import AppointmentPage from './pages/ClientPages/AppointmentPage/AppointmentPage';
 
 function App() {
@@ -47,6 +49,8 @@ function App() {
               <Route path='/breathing' element={<BreathingPage />} />
               <Route path='/grounding' element={<GroundingPage />} />
               <Route path='/kalimba' element={<KalimbaPage />} />
+              <Route path='/booking/:id' element={<BookingPage />} />
+              <Route path='/appointments' element={<AppointmentsPage />} />
               <Route path='/appointment/:id' element={<AppointmentPage />} />
             </>
           )}

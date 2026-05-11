@@ -1,0 +1,82 @@
+.wrapper {
+  width: 100%;
+}
+
+.psychologistImage {
+  width: 48px;
+  height: 48px;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.userContainer {
+  display: flex;
+  gap: var(--m-gap);
+  align-items: center;
+  width: fit-content;
+  margin-bottom: var(--m-gap);
+}
+
+.userData {
+  display: flex;
+  flex-direction: column;
+  justify-content: start;
+}
+
+.userAvatar {
+  border: 1px solid var(--shadow-color);
+}
+
+.userContainer,
+.logContainer {
+  display: flex;
+  align-items: center;
+  gap: var(--s-gap);
+  margin-bottom: 20px;
+}
+
+.logDataContainer {
+  display: flex;
+  flex-direction: column;
+  gap: var(--xs-gap);
+}
+
+.skeletonCircle {
+  width: 48px;
+  height: 48px;
+  border-radius: 50%;
+  background-color: var(--unactive-color);
+  animation: flickering 1s infinite linear;
+}
+
+.skeletonLine {
+  width: 120px;
+  height: 18px;
+  border-radius: var(--round-radius);
+  background-color: var(--unactive-color);
+  animation: flickering 1s infinite linear;
+}
+
+.skeletonLineSmall {
+  width: 80px;
+  height: 12px;
+  border-radius: var(--round-radius);
+  background-color: var(--unactive-color);
+  animation: flickering 1s infinite linear;
+}
+
+@keyframes flickering {
+  0% {
+    opacity: 0.5;
+  }
+
+  50% {
+    opacity: 0.2;
+  }
+
+  100% {
+    opacity: 0.5;
+  }
+}

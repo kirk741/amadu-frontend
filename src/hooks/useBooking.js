@@ -32,7 +32,6 @@ export const useBooking = (psychologistId, slotId = '') => {
     }
   };
 
-
   useEffect(() => {
     loadData();
   }, [psychologistId]);
