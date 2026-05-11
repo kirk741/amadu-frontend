@@ -8,7 +8,7 @@ import Select from '../../../components/ui/Select/Select';
 
 const AppointmentsPage = () => {
   const navigate = useNavigate();
-  const { getAppointments, pagination, isLoading } = useMyBookings();
+  const { getAppointments, pagination, isLoading, cancelAppointment } = useMyBookings();
   const [data, setData] = useState([]);
   const [searchQuery, setSearchQuery] = useState('');
   const [modal, setModal] = useState({ open: false, type: 'options' });
@@ -93,7 +93,7 @@ const AppointmentsPage = () => {
               { name: 'Открыть запись', onClick: () => navigate(`/appointment/${activeItem.id}`) },
               { name: 'Отменить запись', preventClose: true, onClick: () => setModal({ ...modal, type: 'delete' }) },
             ] : [
-              { name: 'Подтвердить отмену', onClick: () => { /* логика удаления */ } },
+              { name: 'Подтвердить отмену', onClick: async () => { await cancelAppointment(activeItem.id); await loadPage(pagination?.current || 1, searchQuery, status); } },
               { name: 'Назад', preventClose: true, onClick: () => setModal({ ...modal, type: 'options' }) }
             ]
           }

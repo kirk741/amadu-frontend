@@ -12,6 +12,11 @@ export const appointmentApi = {
     return res.data;
   },
 
+  cancelAppointment: async (appointmentId) => {
+    const res = await client(`/bookings/${appointmentId}`, { method: 'DELETE' });
+    return res.data;
+  },
+
   getAppointments: async (page = 1, searchQuery = '') => {
     const searchParam = searchQuery ? `&search=${searchQuery}` : '';
     const res = await client(`/bookings?page=${page}${searchParam}`);

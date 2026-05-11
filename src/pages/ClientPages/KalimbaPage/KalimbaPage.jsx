@@ -16,7 +16,6 @@ const KalimbaPage = () => {
   const [activeNotes, setActiveNotes] = useState({});
   const audioCtx = useRef(null);
   const audioBuffers = useRef({});
-  // Храним, какой палец (id тача) на какой ноте сейчас находится
   const activeTouches = useRef({});
 
   useEffect(() => {
@@ -58,7 +57,6 @@ const KalimbaPage = () => {
     gainNode.connect(audioCtx.current.destination);
     source.start(0);
 
-    // Подсветка язычка
     setActiveNotes(prev => ({ ...prev, [note.id]: true }));
     setTimeout(() => setActiveNotes(prev => ({ ...prev, [note.id]: false })), 150);
 
@@ -68,7 +66,6 @@ const KalimbaPage = () => {
   const handleTouch = (e) => {
     if (e.cancelable) e.preventDefault();
 
-    // Обрабатываем каждое касание (палец) отдельно
     Array.from(e.touches).forEach(touch => {
       const element = document.elementFromPoint(touch.clientX, touch.clientY);
       const wrapper = element?.closest(`.${styles.tineWrapper}`);
@@ -77,24 +74,20 @@ const KalimbaPage = () => {
         const noteId = parseInt(wrapper.getAttribute('data-id'));
         const touchId = touch.identifier;
 
-        // Если этот палец переместился на новую ноту или только коснулся её
         if (activeTouches.current[touchId] !== noteId) {
           const note = NOTES.find(n => n.id === noteId);
           if (note) playNote(note);
           activeTouches.current[touchId] = noteId;
         }
       } else {
-        // Палец на экране, но не на язычке
         activeTouches.current[touch.identifier] = null;
       }
     });
   };
 
   const handleTouchEnd = (e) => {
-    // Получаем ID всех пальцев, которые ВСЁ ЕЩЁ на экране
     const currentIdentifiers = Array.from(e.touches).map(t => t.identifier);
 
-    // Удаляем из нашего словаря те пальцы, которые подняли
     Object.keys(activeTouches.current).forEach(id => {
       if (!currentIdentifiers.includes(parseInt(id))) {
         delete activeTouches.current[id];
@@ -103,7 +96,6 @@ const KalimbaPage = () => {
   };
 
   const handleMouseDown = (note) => {
-    // Отключаем клик мышкой, если есть тач (чтобы не было двойного звука на мобилках)
     if ('ontouchstart' in window) return;
     playNote(note);
   };

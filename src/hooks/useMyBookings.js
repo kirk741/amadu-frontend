@@ -39,7 +39,17 @@ export const useMyBookings = () => {
     }
   }
 
+  const cancelAppointment = async (appointmentId) => {
+    try {
+      const data = await appointmentApi.cancelAppointment(appointmentId);
+      return data;
+    } catch (e) {
+      console.error(e);
+      throw e;
+    }
+  }
+
   useEffect(() => { fetchUpcoming(); }, []);
 
-  return { upcoming, isLoading, pagination, getAppointments, refresh: fetchUpcoming };
+  return { upcoming, isLoading, pagination, getAppointments, refresh: fetchUpcoming, cancelAppointment };
 }
