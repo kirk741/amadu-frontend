@@ -1,10 +1,10 @@
 import { useEffect, useState } from 'react';
-import { useMyBookings } from '../../../hooks/useMyBookings';
+import { useMyBookings } from '../../../../hooks/useMyBookings';
 import { useNavigate } from "react-router-dom";
-import EmptyCard from '../../../components/ui/EmptyCard/EmptyCard';
-import Modal from '../../../components/ui/Modal/Modal';
-import List from '../../../components/ui/List/List';
-import Select from '../../../components/ui/Select/Select';
+import EmptyCard from '../../../../components/ui/EmptyCard/EmptyCard';
+import Modal from '../../../../components/ui/Modal/Modal';
+import List from '../../../../components/ui/List/List';
+import Select from '../../../../components/ui/Select/Select';
 
 const AppointmentsPage = () => {
   const navigate = useNavigate();
@@ -14,6 +14,7 @@ const AppointmentsPage = () => {
   const [modal, setModal] = useState({ open: false, type: 'options' });
   const [activeItem, setActiveItem] = useState(null);
   const [status, setStatus] = useState('');
+  const [actionStatus, setActionStatus] = useState('');
 
   const statusOptions = [
     { label: 'Все статусы', value: '' },
@@ -87,18 +88,45 @@ const AppointmentsPage = () => {
     >
       {modal.open && (
         <Modal
-          onClose={() => setModal({ ...modal, open: false })}
+          onClose={() => {
+            setModal({ ...modal, open: false });
+            setActionStatus('');
+          }}
           childrenData={
-            modal.type === 'options' ? [
-              { name: 'Открыть запись', onClick: () => navigate(`/appointment/${activeItem.id}`) },
-              { name: 'Отменить запись', preventClose: true, onClick: () => setModal({ ...modal, type: 'delete' }) },
-            ] : [
-              { name: 'Подтвердить отмену', onClick: async () => { await cancelAppointment(activeItem.id); await loadPage(pagination?.current || 1, searchQuery, status); } },
-              { name: 'Назад', preventClose: true, onClick: () => setModal({ ...modal, type: 'options' }) }
-            ]
+            actionStatus === 'success'
+              ? [{ name: 'Отлично', onClick: () => { setModal({ ...modal, open: false }); setActionStatus(''); } }]
+              : actionStatus === 'error'
+                ? [{ name: 'Назад', onClick: () => setActionStatus('') }]
+                : modal.type === 'options'
+                  ? [
+                    { name: 'Открыть запись', onClick: () => navigate(`/appointment/${activeItem.id}`) },
+                    { name: 'Отменить запись', preventClose: true, onClick: () => setModal({ ...modal, type: 'delete' }) },
+                  ]
+                  : [
+                    {
+                      name: 'Подтвердить отмену',
+                      preventClose: true,
+                      onClick: async () => {
+                        try {
+                          await cancelAppointment(activeItem.id);
+                          setActionStatus('success');
+                          await loadPage(pagination?.current || 1, searchQuery, status);
+                        } catch (e) {
+                          setActionStatus('error');
+                        }
+                      }
+                    },
+                    { name: 'Назад', preventClose: true, onClick: () => setModal({ ...modal, type: 'options' }) }
+                  ]
           }
         >
-          {modal.type === 'options' ? "" : "Вы действительно хотите отменить запись?"}
+          {actionStatus === 'success' && <span>Запись успешно отменена</span>}
+
+          {actionStatus === 'error' && <span style={{ color: 'var(--error-color)' }}>Ошибка при отмене. Возможно, запись уже отменена.</span>}
+
+          {actionStatus === '' && (
+            modal.type === 'options' ? activeItem?.psychologist?.name : "Вы действительно хотите отменить запись?"
+          )}
         </Modal>
       )}
     </List>

@@ -40,8 +40,8 @@
   --modal-overlay-color: #7e81881f;
 
   --invalid-color: #ff7474;
-  --valid-color: #58af40;
-  --waiting-color: #e1be20;
+  --valid-color: #8DC17F;
+  --waiting-color: #ECCF54;
 
   --s-shadow: var(--shadow-color) 0px 0px 16px;
   --m-shadow: var(--shadow-color) 0px 4px 24px;
@@ -60,7 +60,7 @@
   --modal-overlay-color: #0706089b;
 
   --invalid-color: #a63737;
-  --valid-color: #58af40;
+  --valid-color: #8DC17F;
   --waiting-color: #ECCF54;
 
   --s-shadow: var(--shadow-color) 0px 0px 16px;

@@ -1,0 +1,15 @@
+.container {
+  padding-top: var(--xl-gap);
+}
+
+.cancelBtn {
+  margin-top: var(--l-gap);
+}
+
+
+.dataContainer {
+  display: flex;
+  flex-direction: column;
+  gap: var(--xs-gap);
+  margin-top: var(--s-gap);
+}

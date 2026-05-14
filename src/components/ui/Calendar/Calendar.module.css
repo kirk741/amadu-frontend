@@ -6,32 +6,14 @@
   flex-direction: column;
 }
 
-.emptyMarker {
-  color: var(--invalid-color);
-  font-weight: bold;
-  font-size: 16px;
-}
-
-.notEmptyMarker {
-  color: var(--valid-color);
-  font-weight: bold;
-  font-size: 16px;
-}
-
-.waitingMarker {
-  color: var(--waiting-color);
-  font-weight: bold;
-  font-size: 16px;
-}
-
 .calendar {
   width: 100%
 }
 
 .calendar__header {
-  max-width: 330px;
   display: flex;
   align-items: center;
+  justify-content: space-between;
   gap: var(--xl-gap);
 }
 

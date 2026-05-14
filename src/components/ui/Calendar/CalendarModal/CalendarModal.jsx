@@ -1,4 +1,4 @@
-import Modal from "../../../../../components/ui/Modal/Modal";
+import Modal from "../../Modal/Modal";
 import styles from './CalendarModal.module.css';
 
 const CalendarModal = ({

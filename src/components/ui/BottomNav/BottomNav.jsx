@@ -1,20 +1,12 @@
 import styles from './BottomNav.module.css';
 import * as Icons from '../../../assets/icons';
-import { NavLink, useNavigate } from "react-router-dom";
+import { NavLink, useLocation } from "react-router-dom";
 import { useEffect, useRef } from 'react';
 
-const BottomNav = () => {
-  const navItems = [
-    { path: '/events', Icon: Icons.Events },
-    { path: '/psychologists', Icon: Icons.Psychologist },
-    { path: '/', Icon: Icons.Home },
-    { path: '/chats', Icon: Icons.Chats },
-    { path: '/diary', Icon: Icons.Diary }
-  ];
-
+const BottomNav = ({ items = [] }) => {
   const navRef = useRef(null);
   const indicatorRef = useRef(null);
-  const location = useNavigate();
+  const location = useLocation();
 
   useEffect(() => {
     const activeElement = navRef.current?.querySelector(`.${styles.active}`);
@@ -28,10 +20,11 @@ const BottomNav = () => {
     if (activeElement) {
       handleTransition(activeElement);
     }
-  }, [location]);
+  }, [location.pathname]);
 
   const handleTransition = (targetElement, duration = 600) => {
     const indicator = indicatorRef.current;
+    if (!indicator || !navRef.current) return;
     const targetRect = targetElement.getBoundingClientRect();
     const parentRect = navRef.current.getBoundingClientRect();
 
@@ -53,7 +46,7 @@ const BottomNav = () => {
     <nav className={styles.bottomNav}>
       <div ref={indicatorRef} className={styles.indicator}></div>
       <ul ref={navRef} className={styles.navList}>
-        {navItems.map(({ path, Icon }, index) =>
+        {items.map(({ path, Icon }, index) =>
           <li key={index} className={styles.navItem}>
             <NavLink to={path} onClick={(e) => handleTransition(e.currentTarget)} className={({ isActive }) => isActive ? styles.active : ''}>
               <Icon />

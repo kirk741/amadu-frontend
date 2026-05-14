@@ -12,6 +12,7 @@ const CardAvatar = ({ type, imageUrl }) => {
           {type === 'personal' && <Icons.Diary />}
           {type === 'user' && <Icons.Profile />}
           {type === 'phone' && <Icons.Phone />}
+          {type === 'food' && <Icons.Food />}
         </div>
       )}
     </div>

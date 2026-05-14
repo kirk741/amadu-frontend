@@ -1,0 +1,54 @@
+.container {
+  padding-top: var(--xl-gap);
+}
+
+.skeletonHeader,
+.skeletonSubHeader,
+.skeletonText,
+.skeletonButton {
+  background-color: var(--unactive-color);
+  border-radius: var(--round-radius);
+  animation: flickering 1.5s infinite;
+}
+
+.skeletonHeader {
+  height: 18px;
+  width: 80%;
+  margin-bottom: 4px;
+}
+
+.skeletonSubHeader {
+  height: 20px;
+  width: 50%;
+}
+
+.dataContainer {
+  margin-top: var(--s-gap);
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.skeletonText {
+  height: 16px;
+}
+
+.skeletonButton {
+  margin-top: var(--m-gap);
+  height: 48px;
+  width: 100%;
+}
+
+@keyframes flickering {
+  0% {
+    opacity: 0.5;
+  }
+
+  50% {
+    opacity: 0.2;
+  }
+
+  100% {
+    opacity: 0.5;
+  }
+}

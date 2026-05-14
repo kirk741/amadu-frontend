@@ -90,7 +90,7 @@ const EmotionLogsPage = () => {
                   <img
                     src={`${process.env.REACT_APP_API_URL}/${emotion.media[0]?.file_path}`}
                     className={`${styles.emotionImg} ${emotion.id === activeEmotion ? styles.emotionActiveImg : ''}`}
-                    alt=""
+                    alt={emotion.name}
                   />
                 </div>
               ))}

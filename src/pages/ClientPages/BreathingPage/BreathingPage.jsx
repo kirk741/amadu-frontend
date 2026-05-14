@@ -25,7 +25,9 @@ const BreathingPage = () => {
     const animate = (timestamp) => {
       if (!startTime) startTime = timestamp;
       const elapsed = timestamp - startTime;
-      const progress = Math.min(elapsed / duration, 1);
+      const linearProgress = Math.min(elapsed / duration, 1);
+
+      const progress = 1 - (1 - linearProgress) * (1 - linearProgress);
 
       const canvas = canvasRef.current;
       if (!canvas) return;
@@ -60,13 +62,13 @@ const BreathingPage = () => {
       }
 
       const colorValue = getComputedStyle(document.body).getPropertyValue('--title-color').trim();
-      
+
       ctx.beginPath();
       ctx.strokeStyle = colorValue || (document.body.classList.contains('dark') ? '#ffffff' : '#000000');
       ctx.lineWidth = 4;
       ctx.lineCap = 'round';
       ctx.lineJoin = 'round';
-      
+
       ctx.moveTo(0, midY);
       ctx.quadraticCurveTo(width / 2, midY + currentBending, width, midY);
       ctx.stroke();
@@ -104,9 +106,9 @@ const BreathingPage = () => {
         {!isActive ? (
           <div className={styles.idleLine} />
         ) : (
-          <canvas 
-            ref={canvasRef} 
-            className={styles.canvas} 
+          <canvas
+            ref={canvasRef}
+            className={styles.canvas}
             style={{ width: '100%', height: '100%', display: 'block' }}
           />
         )}

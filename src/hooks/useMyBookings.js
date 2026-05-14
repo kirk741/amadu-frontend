@@ -39,6 +39,18 @@ export const useMyBookings = () => {
     }
   }
 
+  const getAppointment = async (appointmentId) => {
+    setIsLoading(true);
+    try {
+      const res = await appointmentApi.getAppointment(appointmentId);
+      return res;
+    } catch (e) {
+      console.error(e);
+    } finally {
+      setIsLoading(false);
+    }
+  }
+
   const cancelAppointment = async (appointmentId) => {
     try {
       const data = await appointmentApi.cancelAppointment(appointmentId);
@@ -51,5 +63,5 @@ export const useMyBookings = () => {
 
   useEffect(() => { fetchUpcoming(); }, []);
 
-  return { upcoming, isLoading, pagination, getAppointments, refresh: fetchUpcoming, cancelAppointment };
+  return { upcoming, isLoading, pagination, getAppointments, refresh: fetchUpcoming, cancelAppointment, getAppointment };
 }

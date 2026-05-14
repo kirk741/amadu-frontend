@@ -5,9 +5,11 @@ import {ReactComponent as ArrowBack} from './arrow-back.svg';
 import {ReactComponent as ArrowForward} from './arrow-forward.svg';
 import {ReactComponent as Bad} from './bad.svg';
 import {ReactComponent as Chats} from './chats.svg';
+import {ReactComponent as Clock} from './clock.svg';
 import {ReactComponent as Diary} from './diary.svg';
 import {ReactComponent as Events} from './events.svg';
 import {ReactComponent as Fine} from './fine.svg';
+import {ReactComponent as Food} from './food.svg';
 import {ReactComponent as Happy} from './happy.svg';
 import {ReactComponent as Heart} from './heart.svg';
 import {ReactComponent as Home} from './home.svg';
@@ -34,4 +36,4 @@ import {ReactComponent as Ear} from './ear.svg';
 import {ReactComponent as Smell} from './smell.svg';
 import {ReactComponent as Taste} from './taste.svg';
 
-export {AmaduStar, Angry, Appointment, ArrowBack, ArrowForward, Bad, Chats, Diary, Events, Exsercises, Fine, Happy, Heart, Home, Moon, More, Ok, Phone, Plus, Profile, Psychologist, Search, Settings, Sun, Tick, Trash, X, Music, Touch, Expand, Hide, Open, Ear, Smell, Taste}
+export {AmaduStar, Angry, Appointment, ArrowBack, ArrowForward, Bad, Chats, Clock, Diary, Events, Exsercises, Fine, Food, Happy, Heart, Home, Moon, More, Ok, Phone, Plus, Profile, Psychologist, Search, Settings, Sun, Tick, Trash, X, Music, Touch, Expand, Hide, Open, Ear, Smell, Taste}

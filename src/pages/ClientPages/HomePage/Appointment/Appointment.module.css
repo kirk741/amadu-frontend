@@ -44,5 +44,10 @@
 }
 
 .upcomingInfo {
+  display: block;
   margin-left: var(--s-gap);
+}
+
+.headerData {
+  white-space: nowrap;
 }

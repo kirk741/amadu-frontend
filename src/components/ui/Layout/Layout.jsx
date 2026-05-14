@@ -3,13 +3,18 @@ import TopNav from '../TopNav/TopNav';
 import BottomNav from '../BottomNav/BottomNav';
 import { matchPath, useLocation } from "react-router-dom";
 import { useEffect } from 'react';
+import { CLIENT_NAV, PSY_NAV } from '../../../config/navigation';
+import { useAuthContext } from '../../../context/AuthContext';
 
 const Layout = ({ children }) => {
   const location = useLocation();
+  const { role } = useAuthContext();
 
   useEffect(() => {
     window.scrollTo(0, 0);
   }, [location.pathname]);
+
+  const currentNav = role === 'psychologist' ? PSY_NAV : CLIENT_NAV;
 
   const withoutBottomNav = [
     '/profile',
@@ -44,7 +49,7 @@ const Layout = ({ children }) => {
     <div className={styles.layout}>
       {!isTopNavHidden && <TopNav />}
       <div className={styles.wrapper}>{children}</div>
-      {!isBottomNavHidden && <BottomNav />}
+      {!isBottomNavHidden && <BottomNav items={currentNav} />}
     </div>
   )
 }

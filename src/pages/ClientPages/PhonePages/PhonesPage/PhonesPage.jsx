@@ -32,7 +32,7 @@ const PhonesPage = () => {
         content: item.description
       })}
       onItemClick={(item) => {
-        window.location.href = `tel:${item.phone.replace(/[^0-9+]/g, '')}`;
+        navigate(`/phone/${item.id}`);
       }}
       onItemBtnClick={openMenu}
     >
@@ -46,7 +46,7 @@ const PhonesPage = () => {
             },
             {
               name: 'Позвонить',
-              onClick: () => window.location.href = `tel:${selectedPhone.phone.replace(/[^0-9+]/g, '')}`
+              onClick: () => window.location.href = `tel: ${selectedPhone.phone.replace(/[^0-9+]/g, '')}`
             }
           ]}
         >

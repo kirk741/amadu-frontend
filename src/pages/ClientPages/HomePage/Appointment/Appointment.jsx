@@ -22,7 +22,7 @@ const Appointment = () => {
       {
         upcoming ? (<div className={styles.upcomingInfo}>
           <div className={styles.header}>
-            <span>Ближайшая сессия: {new Date(upcoming.schedule.start_time).toLocaleDateString('ru', { day: 'numeric', month: 'long' })} в {new Date(upcoming.schedule.start_time).toLocaleTimeString('ru', { hour: '2-digit', minute: '2-digit' })}</span>
+            <span>Ближайшая сессия: <span className={styles.headerData}>{new Date(upcoming.schedule.start_time).toLocaleDateString('ru', { day: 'numeric', month: 'long' })} в {new Date(upcoming.schedule.start_time).toLocaleTimeString('ru', { hour: '2-digit', minute: '2-digit' })}</span></span>
           </div>
           <div className={styles.psychologist}>
             Психолог: <Link to={`/user/${upcoming.psychologist.id}`} onClick={(e) => e.stopPropagation()}>{upcoming.psychologist.name}</Link>

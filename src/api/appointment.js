@@ -23,6 +23,11 @@ export const appointmentApi = {
     return res.data;
   },
 
+  getAppointment: async (appointmentId) => {
+    const res = await client(`/bookings/${appointmentId}`);
+    return res.data;
+  },
+
   getUpcomingAppointment: async () => {
     const res = await client('/bookings');
 

@@ -20,8 +20,10 @@ import PhoneDetailsPage from './pages/ClientPages/PhonePages/PhoneDetailsPage/Ph
 import ProfilePage from './pages/ProfilePage/ProfilePage';
 import { useAuthContext } from './context/AuthContext';
 import BookingPage from './pages/ClientPages/BookingPage/BookingPage';
-import AppointmentsPage from './pages/ClientPages/AppointmentsPage/AppointmentsPage';
-import AppointmentPage from './pages/ClientPages/AppointmentPage/AppointmentPage';
+import AppointmentPage from './pages/ClientPages/AppointmentPages/AppointmentPage';
+import AppointmentsPage from './pages/ClientPages/AppointmentPages/AppointmentsPage/AppointmentsPage';
+
+import PsyHomePage from './pages/PsychologistPages/HomePage/HomePage';
 
 function App() {
   const { role } = useAuthContext();
@@ -57,7 +59,7 @@ function App() {
 
           {role === 'psychologist' && (
             <>
-              <Route path='/' element={<div>Страница списка клиентов</div>} />
+              <Route path='/' element={<PsyHomePage />} />
             </>
           )}
 
