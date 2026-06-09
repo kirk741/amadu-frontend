@@ -73,3 +73,22 @@
   margin-top: 30px;
   font-size: 0.9rem;
 }
+
+.skeletonTine {
+  background-color: var(--unactive-color);
+  animation: flickering infinite 1s;
+}
+
+@keyframes flickering {
+  0% {
+    opacity: 50%;
+  }
+
+  50% {
+    opacity: 20%;
+  }
+
+  100% {
+    opacity: 50%;
+  }
+}

@@ -1,5 +1,6 @@
 import { useEffect, useState, useRef } from "react";
 import styles from './KalimbaPage.module.css';
+import Modal from "../../../components/ui/Modal/Modal";
 
 const NOTES = [
   { id: 1, key: 'C', freq: 'do', color: 'var(--do-color)' },
@@ -14,6 +15,8 @@ const NOTES = [
 
 const KalimbaPage = () => {
   const [activeNotes, setActiveNotes] = useState({});
+  const [isLoading, setIsLoading] = useState(true);
+  const [isModalOpen, setIsModalOpen] = useState(false);
   const audioCtx = useRef(null);
   const audioBuffers = useRef({});
   const activeTouches = useRef({});
@@ -23,6 +26,7 @@ const KalimbaPage = () => {
     audioCtx.current = new (window.AudioContext || window.webkitAudioContext)();
 
     const loadSounds = async () => {
+      setIsLoading(true);
       for (const note of NOTES) {
         try {
           const response = await fetch(`/sounds/${note.freq}.wav`);
@@ -31,6 +35,9 @@ const KalimbaPage = () => {
           audioBuffers.current[note.id] = decodedData;
         } catch (e) {
           console.error(`Ошибка загрузки звука: ${note.freq}`, e);
+          setIsModalOpen(true);
+        } finally {
+          setIsLoading(false);
         }
       }
     };
@@ -101,7 +108,7 @@ const KalimbaPage = () => {
   };
 
   return (
-    <div className={styles.wrapper}>
+    <><div className={styles.wrapper}>
       <div
         className={styles.tinesContainer}
         onTouchStart={handleTouch}
@@ -109,7 +116,7 @@ const KalimbaPage = () => {
         onTouchEnd={handleTouchEnd}
         onTouchCancel={handleTouchEnd}
       >
-        {NOTES.map((note) => (
+        {!isLoading && NOTES.map((note) => (
           <div
             key={note.id}
             className={styles.tineWrapper}
@@ -128,8 +135,27 @@ const KalimbaPage = () => {
             </div>
           </div>
         ))}
+        {isLoading && NOTES.map((note) => (
+          <div
+            key={`${note.id}--unactive`}
+            className={styles.tineWrapper}
+          >
+            <div className={`${styles.skeletonTine} ${styles.tine}`} style={{
+              height: `${45 + (note.id * 3.5)}%`
+            }}>
+              <div className={styles.tineTip} />
+              <span className={styles.noteLabel}>{note.key}</span>
+            </div>
+          </div>
+        ))
+        }
       </div>
     </div>
+
+      {isModalOpen && (
+        <Modal onClose={() => setIsModalOpen(false)}>Не удалось загрузить ноты</Modal>
+      )}
+    </>
   );
 };
 
