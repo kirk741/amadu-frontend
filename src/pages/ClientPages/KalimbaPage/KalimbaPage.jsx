@@ -23,38 +23,51 @@ const KalimbaPage = () => {
 
   useEffect(() => {
     document.body.style.overflow = 'hidden';
-    audioCtx.current = new (window.AudioContext || window.webkitAudioContext)();
 
     const loadSounds = async () => {
       setIsLoading(true);
       try {
+        if (!audioCtx.current) {
+          audioCtx.current = new (window.AudioContext || window.webkitAudioContext)();
+        }
+
         await Promise.all(
           NOTES.map(async (note) => {
             const response = await fetch(`/sounds/${note.freq}.wav`);
-            if (!response.ok) throw new Error(`Ошибка сети для ${note.freq}`);
+            if (!response.ok) throw new Error(`Ошибка загрузки файла для ноты ${note.freq}`);
             const arrayBuffer = await response.arrayBuffer();
             const decodedData = await audioCtx.current.decodeAudioData(arrayBuffer);
             audioBuffers.current[note.id] = decodedData;
-          }))
+          })
+        );
       } catch (e) {
-        console.error(`Ошибка загрузки звука: ${note.freq}`, e);
+        console.error("Ошибка при инициализации или загрузке звуков:", e);
         setIsModalOpen(true);
       } finally {
         setIsLoading(false);
       }
-    }
+    };
 
     loadSounds();
 
     return () => {
       document.body.style.overflow = 'unset';
-      if (audioCtx.current) audioCtx.current.close();
+      if (audioCtx.current && audioCtx.current.state !== 'closed') {
+        audioCtx.current.close();
+      }
     };
   }, []);
 
-  const playNote = (note) => {
-    if (!audioBuffers.current[note.id] || !audioCtx.current) return;
-    if (audioCtx.current.state === 'suspended') audioCtx.current.resume();
+  const playNote = async (note) => {
+    if (!audioBuffers.current[note.id]) return;
+
+    if (!audioCtx.current) {
+      audioCtx.current = new (window.AudioContext || window.webkitAudioContext)();
+    }
+
+    if (audioCtx.current.state === 'suspended') {
+      await audioCtx.current.resume();
+    }
 
     const source = audioCtx.current.createBufferSource();
     const gainNode = audioCtx.current.createGain();
@@ -110,49 +123,50 @@ const KalimbaPage = () => {
   };
 
   return (
-    <><div className={styles.wrapper}>
-      <div
-        className={styles.tinesContainer}
-        onTouchStart={handleTouch}
-        onTouchMove={handleTouch}
-        onTouchEnd={handleTouchEnd}
-        onTouchCancel={handleTouchEnd}
-      >
-        {!isLoading && NOTES.map((note) => (
-          <div
-            key={note.id}
-            className={styles.tineWrapper}
-            data-id={note.id}
-            onMouseDown={() => handleMouseDown(note)}
-          >
+    <>
+      <div className={styles.wrapper}>
+        <div
+          className={styles.tinesContainer}
+          onTouchStart={handleTouch}
+          onTouchMove={handleTouch}
+          onTouchEnd={handleTouchEnd}
+          onTouchCancel={handleTouchEnd}
+        >
+          {!isLoading && NOTES.map((note) => (
             <div
-              className={`${styles.tine} ${activeNotes[note.id] ? styles.active : ''}`}
-              style={{
-                height: `${45 + (note.id * 3.5)}%`,
-                '--active-color': note.color
-              }}
+              key={note.id}
+              className={styles.tineWrapper}
+              data-id={note.id}
+              onMouseDown={() => handleMouseDown(note)}
             >
-              <div className={styles.tineTip} />
-              <span className={styles.noteLabel}>{note.key}</span>
+              <div
+                className={`${styles.tine} ${activeNotes[note.id] ? styles.active : ''}`}
+                style={{
+                  height: `${45 + (note.id * 3.5)}%`,
+                  '--active-color': note.color
+                }}
+              >
+                <div className={styles.tineTip} />
+                <span className={styles.noteLabel}>{note.key}</span>
+              </div>
             </div>
-          </div>
-        ))}
-        {isLoading && NOTES.map((note) => (
-          <div
-            key={`${note.id}--unactive`}
-            className={styles.tineWrapper}
-          >
-            <div className={`${styles.skeletonTine} ${styles.tine}`} style={{
-              height: `${45 + (note.id * 3.5)}%`
-            }}>
-              <div className={styles.tineTip} />
-              <span className={styles.noteLabel}>{note.key}</span>
+          ))}
+
+          {isLoading && NOTES.map((note) => (
+            <div
+              key={`${note.id}--unactive`}
+              className={styles.tineWrapper}
+            >
+              <div className={`${styles.skeletonTine} ${styles.tine}`} style={{
+                height: `${45 + (note.id * 3.5)}%`
+              }}>
+                <div className={styles.tineTip} />
+                <span className={styles.noteLabel}>{note.key}</span>
+              </div>
             </div>
-          </div>
-        ))
-        }
+          ))}
+        </div>
       </div>
-    </div>
 
       {isModalOpen && (
         <Modal onClose={() => setIsModalOpen(false)}>Не удалось загрузить ноты</Modal>
