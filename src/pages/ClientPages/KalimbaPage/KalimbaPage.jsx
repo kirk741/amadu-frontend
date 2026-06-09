@@ -27,20 +27,22 @@ const KalimbaPage = () => {
 
     const loadSounds = async () => {
       setIsLoading(true);
-      for (const note of NOTES) {
-        try {
-          const response = await fetch(`/sounds/${note.freq}.wav`);
-          const arrayBuffer = await response.arrayBuffer();
-          const decodedData = await audioCtx.current.decodeAudioData(arrayBuffer);
-          audioBuffers.current[note.id] = decodedData;
-        } catch (e) {
-          console.error(`Ошибка загрузки звука: ${note.freq}`, e);
-          setIsModalOpen(true);
-        } finally {
-          setIsLoading(false);
-        }
+      try {
+        await Promise.all(
+          NOTES.map(async (note) => {
+            const response = await fetch(`/sounds/${note.freq}.wav`);
+            if (!response.ok) throw new Error(`Ошибка сети для ${note.freq}`);
+            const arrayBuffer = await response.arrayBuffer();
+            const decodedData = await audioCtx.current.decodeAudioData(arrayBuffer);
+            audioBuffers.current[note.id] = decodedData;
+          }))
+      } catch (e) {
+        console.error(`Ошибка загрузки звука: ${note.freq}`, e);
+        setIsModalOpen(true);
+      } finally {
+        setIsLoading(false);
       }
-    };
+    }
 
     loadSounds();
 
