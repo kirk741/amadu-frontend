@@ -15,7 +15,7 @@
 
 .description {
   margin-top: var(--m-gap);
-  margin-bottom: var(--xl-gap);
+  margin-bottom: var(--m-gap);
   line-height: 1.5;
   color: var(--text-color);
 }

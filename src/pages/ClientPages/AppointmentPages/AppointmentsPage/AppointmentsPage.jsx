@@ -24,21 +24,23 @@ const AppointmentsPage = () => {
   ];
 
   const loadPage = async (page, searchQuery, status) => {
-    const result = await getAppointments(page, searchQuery, status);
+    const cleanPage = typeof page === 'string'
+      ? page.replace(/\D/g, '')
+      : page;
+
+    const pageNumber = Number(cleanPage) || 1;
+
+    const result = await getAppointments(pageNumber, searchQuery, status);
     setData(result);
   };
 
   useEffect(() => {
-    loadPage(1, searchQuery, status);
-  }, [status]);
-
-  useEffect(() => {
     const timeoutId = setTimeout(() => {
-      loadPage(1, searchQuery);
-    }, 500);
+      loadPage(1, searchQuery, status);
+    }, 300);
 
     return () => clearTimeout(timeoutId);
-  }, [searchQuery]);
+  }, [searchQuery, status]);
 
   const openOptions = (item) => {
     setActiveItem(item);
@@ -77,7 +79,7 @@ const AppointmentsPage = () => {
         />
       }
       pagination={pagination}
-      onPageChange={(page) => loadPage(page)}
+      onPageChange={(page) => loadPage(page, searchQuery, status)}
       filters={
         <Select
           options={statusOptions}

@@ -1,6 +1,7 @@
 import { useState, useEffect } from 'react';
 import styles from './FileInput.module.css';
 import * as Icons from '../../../assets/icons';
+import imageCompression from 'browser-image-compression';
 
 const FileInput = ({ name = '', label = null, onChange, initialPreview = null, error }) => {
   const [preview, setPreview] = useState(initialPreview);
@@ -11,17 +12,37 @@ const FileInput = ({ name = '', label = null, onChange, initialPreview = null, e
     }
   }, [initialPreview]);
 
-  const handleFileChange = (e) => {
+  const handleFileChange = async (e) => {
     const file = e.target.files[0];
     if (!file) return;
 
-    const reader = new FileReader();
-    reader.onloadend = () => {
-      const base64String = reader.result;
-      setPreview(base64String);
-      if (onChange) onChange(file);
-    };
-    reader.readAsDataURL(file);
+    try {
+      const options = {
+        maxSizeMB: 0.1,
+        maxWidthOrHeight: 200,
+        useWebWorker: true
+      };
+
+      const compressedFile = await imageCompression(file, options);
+
+      const reader = new FileReader();
+      reader.onloadend = () => {
+        setPreview(reader.result);
+
+        if (onChange) onChange(compressedFile);
+      };
+      reader.readAsDataURL(compressedFile);
+
+    } catch (error) {
+      console.error('Ошибка при сжатии изображенияF');
+
+      const reader = new FileReader();
+      reader.onloadend = () => {
+        setPreview(reader.result);
+        if (onChange) onChange(file);
+      };
+      reader.readAsDataURL(file);
+    }
   };
 
   return <>

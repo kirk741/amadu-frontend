@@ -17,9 +17,9 @@ export const appointmentApi = {
     return res.data;
   },
 
-  getAppointments: async (page = 1, searchQuery = '') => {
-    const searchParam = searchQuery ? `&search=${searchQuery}` : '';
-    const res = await client(`/bookings?page=${page}${searchParam}`);
+  getAppointments: async (queryString = '') => {
+    const url = queryString ? `/bookings?${queryString}` : '/bookings';
+    const res = await client(url);
     return res.data;
   },
 

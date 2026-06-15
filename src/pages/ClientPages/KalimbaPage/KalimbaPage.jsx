@@ -36,6 +36,7 @@ const KalimbaPage = () => {
             const response = await fetch(`/sounds/${note.freq}.wav`);
             if (!response.ok) throw new Error(`Ошибка загрузки файла для ноты ${note.freq}`);
             const arrayBuffer = await response.arrayBuffer();
+            // Декодируем аудио в буфер
             const decodedData = await audioCtx.current.decodeAudioData(arrayBuffer);
             audioBuffers.current[note.id] = decodedData;
           })
@@ -58,15 +59,16 @@ const KalimbaPage = () => {
     };
   }, []);
 
-  const playNote = async (note) => {
+  const playNote = (note) => {
     if (!audioBuffers.current[note.id]) return;
 
     if (!audioCtx.current) {
       audioCtx.current = new (window.AudioContext || window.webkitAudioContext)();
     }
 
+    // РЕШЕНИЕ 2: Пробуждаем контекст синхронно без await, чтобы не выпадать из контекста тача/клика
     if (audioCtx.current.state === 'suspended') {
-      await audioCtx.current.resume();
+      audioCtx.current.resume();
     }
 
     const source = audioCtx.current.createBufferSource();
@@ -78,6 +80,12 @@ const KalimbaPage = () => {
     source.connect(gainNode);
     gainNode.connect(audioCtx.current.destination);
     source.start(0);
+
+    // РЕШЕНИЕ 1: Очищаем ноды после того, как звук доиграл. Освобождаем память!
+    source.onended = () => {
+      source.disconnect();
+      gainNode.disconnect();
+    };
 
     setActiveNotes(prev => ({ ...prev, [note.id]: true }));
     setTimeout(() => setActiveNotes(prev => ({ ...prev, [note.id]: false })), 150);

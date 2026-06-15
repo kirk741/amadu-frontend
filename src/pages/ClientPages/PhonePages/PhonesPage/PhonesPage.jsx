@@ -1,12 +1,12 @@
 import { useSupport } from "../../../../hooks/useSupport";
 import List from "../../../../components/ui/List/List";
-import { useNavigate } from "react-router-dom";
 import { useState } from "react";
 import Modal from "../../../../components/ui/Modal/Modal";
+import PhoneDetailsPage from "../PhoneDetailsPage/PhoneDetailsPage";
 
 const PhonesPage = () => {
-  const navigate = useNavigate();
   const { phones, pagination, isLoading, searchQuery, setSearchQuery, refresh } = useSupport();
+
   const [selectedPhone, setSelectedPhone] = useState(null);
   const [isModalOpen, setIsModalOpen] = useState(false);
 
@@ -31,26 +31,26 @@ const PhonesPage = () => {
         description: item.phone,
         content: item.description
       })}
-      onItemClick={(item) => {
-        navigate(`/phone/${item.id}`);
-      }}
+      onItemClick={openMenu}
       onItemBtnClick={openMenu}
     >
-      {isModalOpen && (
+      {isModalOpen && selectedPhone && (
         <Modal
-          onClose={() => setIsModalOpen(false)}
+          onClose={() => {
+            setIsModalOpen(false);
+            setSelectedPhone(null);
+          }}
           childrenData={[
             {
-              name: 'Подробнее',
-              onClick: () => navigate(`/phone/${selectedPhone.id}`)
-            },
-            {
               name: 'Позвонить',
-              onClick: () => window.location.href = `tel: ${selectedPhone.phone.replace(/[^0-9+]/g, '')}`
+              onClick: () => {
+                const cleanPhone = selectedPhone.phone.replace(/[^0-9+]/g, '');
+                window.location.href = `tel:${cleanPhone}`;
+              }
             }
           ]}
         >
-          {selectedPhone?.title}
+          <PhoneDetailsPage phoneId={selectedPhone.id} />
         </Modal>
       )}
     </List>

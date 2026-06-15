@@ -2,31 +2,25 @@ import { useParams } from "react-router-dom";
 import { usePhone } from "../../../../hooks/usePhone";
 import PhoneSkeleton from "./PhoneSkeleton/PhoneSkeleton";
 import Container from "../../../../components/ui/Container/Container";
-import Button from "../../../../components/ui/Button/Button";
 import styles from "./PhoneDetailsPage.module.css";
 
-const PhoneDetailsPage = () => {
-  const { id } = useParams();
-  const { phone, isLoading } = usePhone(id);
+const PhoneDetailsPage = ({ phoneId }) => {
+  const { id: urlId } = useParams();
 
-  if (isLoading) return <Container><PhoneSkeleton /></Container>;
+  const targetId = phoneId || urlId;
+
+  const { phone, isLoading } = usePhone(targetId);
+
+  if (isLoading) return <PhoneSkeleton />;
   if (!phone) return <Container>Номер не найден</Container>;
 
-  return (
-    <Container>
-      <div className={styles.phoneContainer}>
-        <h3 className={styles.title}>{phone.title}</h3>
-        <small className={styles.phoneNum}>{phone.phone}</small>
-        <p className={styles.description}>{phone.description}</p>
-      </div>
-
-      <Button
-        className={styles.callBtn}
-        onClick={() => window.location.href = `tel:${phone.phone.replace(/[^0-9+]/g, '')}`}
-      >
-        Позвонить
-      </Button>
-    </Container>
+  return (<>
+    <div className={styles.phoneContainer}>
+      <h3 className={styles.title}>{phone.title}</h3>
+      <small className={styles.phoneNum}>{phone.phone}</small>
+      <p className={styles.description}>{phone.description}</p>
+    </div>
+  </>
   );
 };
 
