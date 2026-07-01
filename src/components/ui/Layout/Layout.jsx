@@ -6,6 +6,7 @@ import { useEffect } from 'react';
 import { CLIENT_NAV, PSY_NAV } from '../../../config/navigation';
 import { useAuthContext } from '../../../context/AuthContext';
 import { useGlobalSchedule } from '../../../context/ScheduleContext';
+import OfflineNotification from '../OfflineNotification/OfflineNotification'
 
 const Layout = ({ children }) => {
   const location = useLocation();
@@ -45,6 +46,7 @@ const Layout = ({ children }) => {
 
   return (
     <div className={`${styles.layout} ${isChatPage ? styles.chatLayout : ''}`}>
+      <OfflineNotification />
       {!isTopNavHidden && <TopNav />}
 
       <div className={styles.wrapper}>

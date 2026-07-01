@@ -12,3 +12,16 @@ root.render(
     </React.StrictMode>
   </AuthProvider>
 );
+
+if ('serviceWorker' in navigator) {
+  window.addEventListener('load', () => {
+    navigator.serviceWorker.register('/sw.js')
+      .then((reg) => {
+        console.log('Кастомный Service Worker успешно зарегистрирован в CRA!', reg.scope);
+      })
+      .catch((err) => {
+        console.error('Ошибка регистрации Service Worker:', err);
+      });
+  });
+}
+
