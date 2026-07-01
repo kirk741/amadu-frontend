@@ -5,11 +5,11 @@ import * as Icons from '../../../assets/icons';
 import client from "../../../api/client";
 import Modal from "../Modal/Modal";
 
-import { useAuthContext } from "../../../context/AuthContext"; 
+import { useAuthContext } from "../../../context/AuthContext";
 
 const SettingsModal = ({ onClose }) => {
   const navigate = useNavigate();
-  
+
   const { theme, changeTheme } = useAuthContext();
 
   const [settings, setSettings] = useState({
@@ -30,7 +30,7 @@ const SettingsModal = ({ onClose }) => {
       }
     };
     fetchSettings();
-  }, []); 
+  }, []);
 
   const updateSettings = async (newData) => {
     setSettings(prev => ({ ...prev, ...newData }));
@@ -53,10 +53,6 @@ const SettingsModal = ({ onClose }) => {
     <Modal
       onClose={onClose}
       childrenData={[
-        {
-          name: settings.notifications ? 'Отключить уведомления' : 'Включить уведомления',
-          onClick: () => updateSettings({ notifications: !settings.notifications })
-        },
         {
           name: 'Редактировать профиль',
           onClick: () => navigate('/profile')
