@@ -1,14 +1,24 @@
 // Вспомогательная функция для конвертации VAPID ключа
 function urlBase64ToUint8Array(base64String) {
   if (!base64String) return new Uint8Array(0);
-  const padding = '='.repeat((4 - base64String.length % 4) % 4);
-  const base64 = (base64String + padding).replace(/\-/g, '+').replace(/_/g, '/');
-  const rawData = window.atob(base64);
-  const outputArray = new Uint8Array(rawData.length);
-  for (let i = 0; i < rawData.length; ++i) {
-    outputArray[i] = rawData.charCodeAt(i);
+
+  // ЖЕСТКАЯ ОЧИСТКА КЛЮЧА: вычищаем кавычки, пробелы и переносы строк, которые ломают atob()
+  let cleanString = base64String.replace(/["']/g, '').trim();
+
+  const padding = '='.repeat((4 - cleanString.length % 4) % 4);
+  const base64 = (cleanString + padding).replace(/\-/g, '+').replace(/_/g, '/');
+
+  try {
+    const rawData = window.atob(base64);
+    const outputArray = new Uint8Array(rawData.length);
+    for (let i = 0; i < rawData.length; ++i) {
+      outputArray[i] = rawData.charCodeAt(i);
+    }
+    return outputArray;
+  } catch (e) {
+    console.error('[PWA Push] Не удалось раскодировать ключ через atob. Проверь сам ключ в коде!', e);
+    return new ArrayBuffer(0);
   }
-  return outputArray;
 }
 
 // ГЛАВНАЯ ФУНКЦИЯ ПОДПИСКИ НА ПУШИ
