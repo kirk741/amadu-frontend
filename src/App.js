@@ -33,18 +33,7 @@ import LibraryPage from './pages/PsychologistPages/LibraryPage/LibraryPage';
 import ChatsPage from './pages/ChatPages/ChatsPage/ChatsPage';
 import ChatPage from './pages/ChatPages/ChatPage/ChatPage';
 
-import { subscribeUserToPush } from './pushService';
-
 function App() {
-  useEffect(() => {
-    const hasToken = localStorage.getItem('token');
-
-    if (hasToken) {
-      console.log('[PWA] Инициализация пуш-уведомлений...');
-      subscribeUserToPush();
-    }
-  }, []);
-
   const { role } = useAuthContext();
 
   return (
