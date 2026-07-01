@@ -197,7 +197,7 @@ const EventsPage = () => {
           {actionStatus === 'error' && <span style={{ color: 'var(--invalid-color)' }}>Ошибка выполнения операции.</span>}
           {actionStatus === '' && (
             modal.type === 'options' ? (
-              <span>Выберите action для мероприятия <strong>{activeItem?.title}</strong></span>
+              <span>Выберите действие для мероприятия <strong>{activeItem?.title}</strong></span>
             ) : modal.type === 'delete' ? (
               <span>Вы действительно хотите удалить мероприятие <strong>{activeItem?.title}</strong>?</span>
             ) : (
