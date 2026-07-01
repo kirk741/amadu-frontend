@@ -5,6 +5,7 @@ const ASSETS_TO_CACHE = [
   '/index.html',
   '/manifest.json',
   '/favicon.svg',
+  '/favicon.ico', 
   '/static/js/bundle.js',
   '/sounds/do.wav',
   '/sounds/do2.wav',
@@ -32,7 +33,9 @@ self.addEventListener('activate', (event) => {
 
 self.addEventListener('fetch', (event) => {
   if (event.request.method !== 'GET') return;
-  if (event.request.url.startsWith('ws://') || event.request.url.startsWith('wss://')) return;
+
+  const url = event.request.url;
+  if (url.startsWith('ws://') || url.startsWith('wss://') || url.includes('/ws')) return;
 
   event.respondWith(
     caches.match(event.request).then((cachedResponse) => {
