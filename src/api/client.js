@@ -1,4 +1,4 @@
-const BASE_URL = process.env.REACT_APP_API_URL || 'https://ababkova.xn--80ahdri7a.site';
+const BASE_URL = process.env.REACT_APP_API_URL;
 
 const client = async (endpoint, { customHeaders, method, body, ...customConfig } = {}) => {
   const token = localStorage.getItem('token');

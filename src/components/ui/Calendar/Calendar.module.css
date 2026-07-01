@@ -48,6 +48,26 @@
   color: var(--unactive-color);
   opacity: 70%;
   border: 1px solid var(--unactive-color);
+  cursor: pointer;
+  position: relative;
+}
+
+.statusDot {
+  position: absolute;
+  top: 2px;
+  right: 2px;
+  width: 6px;
+  height: 6px;
+  border-radius: 50%;
+  z-index: 2;
+}
+
+.statusDot_pending {
+  background-color: var(--invalid-color, #ff7474);
+}
+
+.statusDot_confirmed {
+  background-color: var(--title-color, #151E30);
 }
 
 .calendar__day_empty {
@@ -72,6 +92,11 @@
   background-color: var(--el-color);
   color: var(--text-color);
   opacity: 100%;
+}
+
+.calendar__day_past {
+  cursor: default;
+  border: 1px solid transparent;
 }
 
 .calendar__grid {

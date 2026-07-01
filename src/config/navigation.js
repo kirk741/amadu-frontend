@@ -9,9 +9,9 @@ export const CLIENT_NAV = [
 ];
 
 export const PSY_NAV = [
-  { path: '/appointments', Icon: Icons.Appointment },
-  { path: '/applications', Icon: Icons.Psychologist },
+  { path: '/events', Icon: Icons.Events },
+  { path: '/library', Icon: Icons.Diary },
   { path: '/', Icon: Icons.Home },
   { path: '/chats', Icon: Icons.Chats },
-  { path: '/schedules', Icon: Icons.Clock }
+  { path: '/applications', Icon: Icons.Psychologist },
 ];

@@ -11,6 +11,7 @@ const Input = ({
   onChange,
   name,
   error,
+  label,
   ...props
 }) => {
   const [isVisible, setIsVisible] = useState(false);
@@ -25,6 +26,7 @@ const Input = ({
 
   return (
     <div className={styles.inputContainer}>
+      {label && <label className={styles.label}>{label}</label>}
       <input
         className={`${styles.input} ${error ? styles.inputInvalid : ''} ${className || ''}`}
         type={type === 'password' ? (isVisible ? 'text' : 'password') : type}

@@ -1,0 +1,53 @@
+.text {
+  margin-left: var(--s-gap);
+}
+
+.skeletonTitle {
+  width: 200px;
+  height: 18px;
+  border-radius: var(--round-radius);
+  background-color: var(--unactive-color);
+  animation: flickering 1s infinite linear;
+}
+
+.skeletonDescription {
+  width: 120px;
+  height: 18px;
+  border-radius: var(--round-radius);
+  background-color: var(--unactive-color);
+  animation: flickering 1s infinite linear;
+}
+
+.skeletonContainer {
+  height: 80px;
+}
+
+.skeletonContainer div {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  gap: var(--xs-gap);
+}
+
+@keyframes flickering {
+  0% {
+    opacity: 0.5;
+  }
+
+  50% {
+    opacity: 0.2;
+  }
+
+  100% {
+    opacity: 0.5;
+  }
+}
+
+.upcomingInfo {
+  display: block;
+  margin-left: var(--s-gap);
+}
+
+.headerData {
+  white-space: nowrap;
+}

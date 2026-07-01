@@ -9,3 +9,12 @@
   padding: var(--xxxl-gap) 0;
   flex-grow: 1;
 }
+
+.layout.chatLayout {
+  padding-top: 0 !important;
+}
+
+.layout.chatLayout .wrapper {
+  padding-top: 0 !important;
+  height: 100vh !important;
+}

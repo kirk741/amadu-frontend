@@ -36,5 +36,13 @@ export const appointmentApi = {
       .filter(app => new Date(app.schedule.start_time) > now && app.status === 'confirmed')
       .sort((a, b) => new Date(a.schedule.start_time) - new Date(b.schedule.start_time))[0];
     return upcoming;
+  },
+
+  confirmAppointment: (id) => {
+    const data = new FormData();
+    data.append('status', 'confirmed');
+    data.append('_method', 'PATCH');
+
+    return client(`/bookings/${id}`, { body: data });
   }
 }

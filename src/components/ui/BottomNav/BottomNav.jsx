@@ -3,7 +3,7 @@ import * as Icons from '../../../assets/icons';
 import { NavLink, useLocation } from "react-router-dom";
 import { useEffect, useRef } from 'react';
 
-const BottomNav = ({ items = [] }) => {
+const BottomNav = ({ items = [], showBadge = false }) => {
   const navRef = useRef(null);
   const indicatorRef = useRef(null);
   const location = useLocation();
@@ -27,9 +27,7 @@ const BottomNav = ({ items = [] }) => {
     if (!indicator || !navRef.current) return;
     const targetRect = targetElement.getBoundingClientRect();
     const parentRect = navRef.current.getBoundingClientRect();
-
     const targetLeft = targetRect.left - parentRect.left + (targetRect.width / 2) - 27;
-
     indicator.animate([
       { transform: 'translateY(0px)' },
       { transform: 'translateY(12px)', offset: 0.3 },
@@ -46,16 +44,26 @@ const BottomNav = ({ items = [] }) => {
     <nav className={styles.bottomNav}>
       <div ref={indicatorRef} className={styles.indicator}></div>
       <ul ref={navRef} className={styles.navList}>
-        {items.map(({ path, Icon }, index) =>
-          <li key={index} className={styles.navItem}>
-            <NavLink to={path} onClick={(e) => handleTransition(e.currentTarget)} className={({ isActive }) => isActive ? styles.active : ''}>
-              <Icon />
-            </NavLink>
-          </li>
-        )}
+        {items.map(({ path, Icon }, index) => {
+          const isApplicationsWithBadge = path === '/applications' && showBadge;
+
+          return (
+            <li key={index} className={styles.navItem}>
+              <NavLink
+                to={path}
+                onClick={(e) => handleTransition(e.currentTarget)}
+                className={({ isActive }) =>
+                  `${isActive ? styles.active : ''} ${isApplicationsWithBadge ? styles.hasBadge : ''}`
+                }
+              >
+                <Icon />
+              </NavLink>
+            </li>
+          );
+        })}
       </ul>
-    </nav >
+    </nav>
   );
-}
+};
 
 export default BottomNav;

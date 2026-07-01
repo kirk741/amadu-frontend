@@ -29,6 +29,7 @@ export const useProfile = () => {
   const saveProfile = async () => {
     setLoading(prev => ({ ...prev, save: true }));
     setErrors({});
+
     try {
       const res = await userApi.updateMe(formData);
       if (!res.success) throw res;

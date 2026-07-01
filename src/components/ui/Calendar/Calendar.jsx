@@ -6,9 +6,11 @@ import { useState } from 'react';
 
 const Calendar = ({
   slots = [],
+  bookings = [],
   isLoading,
   onDayClick,
-  renderStatus
+  renderStatus,
+  isPsychologist = false
 }) => {
   const [currentYear, setCurrentYear] = useState(new Date().getFullYear());
   const [currentMonth, setCurrentMonth] = useState(new Date().getMonth());
@@ -39,7 +41,9 @@ const Calendar = ({
               <span
                 className={`${styles.calendar__arrow} ${isCurrentMonth ? styles.calendar__arrow_unactive : ''}`}
                 onClick={() => changeMonth(-1)}
-              > <Icons.ArrowBack /> </span>
+              >
+                <Icons.ArrowBack />
+              </span>
               <span className={styles.calendar__arrow} onClick={() => changeMonth(1)}>
                 <Icons.ArrowForward />
               </span>
@@ -56,15 +60,51 @@ const Calendar = ({
             ))}
             {days.map((day) => {
               const dateStr = `${currentYear}-${String(currentMonth + 1).padStart(2, '0')}-${String(day).padStart(2, '0')}`;
-              const hasAvailable = slots.some(s => s.start_time.startsWith(dateStr) && !s.is_booked);
+
+              const today = new Date();
+              const currentCellDate = new Date(currentYear, currentMonth, day);
+              const isPast = currentCellDate < new Date().setHours(0, 0, 0, 0);
+
+              const allDaySlots = slots.filter(s => s.start_time.startsWith(dateStr));
+
+              const daySlots = allDaySlots.filter(s => {
+                const slotStartTime = new Date(s.start_time);
+                return slotStartTime >= today;
+              });
+
+              const hasSlots = isPsychologist ? daySlots.length > 0 : daySlots.some(s => !s.is_booked);
+
+              const hasBooked = allDaySlots.some(s => s.is_booked);
+
+              const dayBookings = bookings.filter(b => daySlots.some(s => s.id === b.schedule_id));
+
+              const hasPending = isPsychologist && dayBookings.some(b => b.status === 'scheduled');
+              const hasConfirmed = isPsychologist && dayBookings.some(b => b.status === 'confirmed');
+
+              const isDayEmpty = daySlots.length === 0;
+
+              const dayClass = `${styles.calendar__day} ` +
+                `${isPast || (currentCellDate.toDateString() === today.toDateString() && isDayEmpty) ? styles.calendar__day_past : ''} ` +
+                `${hasSlots && !isPast ? styles.calendar__day_available : ''} ` +
+                `${isPsychologist && hasBooked ? styles.calendar__day_hasBooked : ''}`;
 
               return (
                 <span
                   key={day}
-                  className={`${styles.calendar__day} ${hasAvailable ? styles.calendar__day_available : ''}`}
-                  onClick={() => hasAvailable && onDayClick(dateStr)}
+                  className={dayClass}
+                  onClick={() => {
+                    if (isPast) return;
+                    if (isPsychologist || hasSlots) {
+                      onDayClick(dateStr);
+                    }
+                  }}
                 >
                   {day}
+                  {hasPending ? (
+                    <span className={`${styles.statusDot} ${styles.statusDot_pending}`} />
+                  ) : hasConfirmed ? (
+                    <span className={`${styles.statusDot} ${styles.statusDot_confirmed}`} />
+                  ) : null}
                 </span>
               );
             })}

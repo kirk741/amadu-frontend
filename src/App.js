@@ -22,50 +22,67 @@ import { useAuthContext } from './context/AuthContext';
 import BookingPage from './pages/ClientPages/BookingPage/BookingPage';
 import AppointmentPage from './pages/ClientPages/AppointmentPages/AppointmentPage';
 import AppointmentsPage from './pages/ClientPages/AppointmentPages/AppointmentsPage/AppointmentsPage';
+import EventsPage from './pages/ClientPages/EventsPage/EventsPage';
 
 import PsyHomePage from './pages/PsychologistPages/HomePage/HomePage';
+import PsyAppointmentsPage from './pages/PsychologistPages/AppointmentsPage/AppointmentsPage';
+import { ScheduleProvider } from './context/ScheduleContext';
+import PsyEventsPage from './pages/PsychologistPages/EventsPage/EventsPage';
+import LibraryPage from './pages/PsychologistPages/LibraryPage/LibraryPage';
+
+import ChatsPage from './pages/ChatPages/ChatsPage/ChatsPage';
+import ChatPage from './pages/ChatPages/ChatPage/ChatPage';
 
 function App() {
   const { role } = useAuthContext();
 
   return (
     <BrowserRouter>
-      <Layout>
-        <Routes>
-          <Route path='/register' element={<RegisterPage />} />
-          <Route path='/login' element={<LoginPage />} />
-          <Route path='/profile' element={<ProfilePage />} />
-          <Route path='/user/:id' element={<UserProfilePage />} />
+      <ScheduleProvider>
+        <Layout>
+          <Routes>
+            <Route path='/register' element={<RegisterPage />} />
+            <Route path='/login' element={<LoginPage />} />
+            <Route path='/profile' element={<ProfilePage />} />
+            <Route path='/user/:id' element={<UserProfilePage />} />
 
-          {role === 'client' && (
-            <>
-              <Route path='/' element={<HomePage />} />
-              <Route path='/emotion-logs' element={<EmotionLogsPage />} />
-              <Route path='/psychologists' element={<PsychologistsPage />} />
-              <Route path='/phones' element={<PhonesPage />} />
-              <Route path="/phone/:id" element={<PhoneDetailsPage />} />
-              <Route path='/diary' element={<DiariesPage />} />
-              <Route path='/diary/create' element={<CreateDiaryPage />} />
-              <Route path='/diary/trash' element={<TrashDiaryPage />} />
-              <Route path="/diary/:type/edit/:id" element={<EditDiaryPage />} />
-              <Route path='/breathing' element={<BreathingPage />} />
-              <Route path='/grounding' element={<GroundingPage />} />
-              <Route path='/kalimba' element={<KalimbaPage />} />
-              <Route path='/booking/:id' element={<BookingPage />} />
-              <Route path='/appointments' element={<AppointmentsPage />} />
-              <Route path='/appointment/:id' element={<AppointmentPage />} />
-            </>
-          )}
+            <Route path='/chats' element={<ChatsPage />} />
+            <Route path='/chat/:id' element={<ChatPage />} />
 
-          {role === 'psychologist' && (
-            <>
-              <Route path='/' element={<PsyHomePage />} />
-            </>
-          )}
+            {role === 'client' && (
+              <>
+                <Route path='/' element={<HomePage />} />
+                <Route path='/emotion-logs' element={<EmotionLogsPage />} />
+                <Route path='/psychologists' element={<PsychologistsPage />} />
+                <Route path='/phones' element={<PhonesPage />} />
+                <Route path="/phone/:id" element={<PhoneDetailsPage />} />
+                <Route path='/diary' element={<DiariesPage />} />
+                <Route path='/diary/create' element={<CreateDiaryPage />} />
+                <Route path='/diary/trash' element={<TrashDiaryPage />} />
+                <Route path="/diary/:type/edit/:id" element={<EditDiaryPage />} />
+                <Route path='/breathing' element={<BreathingPage />} />
+                <Route path='/grounding' element={<GroundingPage />} />
+                <Route path='/kalimba' element={<KalimbaPage />} />
+                <Route path='/booking/:id' element={<BookingPage />} />
+                <Route path='/appointments' element={<AppointmentsPage />} />
+                <Route path='/appointment/:id' element={<AppointmentPage />} />
+                <Route path='/events' element={<EventsPage />} />
+              </>
+            )}
 
-          <Route path='*' element={<Navigate to={role ? "/" : "/login"} />} />
-        </Routes>
-      </Layout>
+            {role === 'psychologist' && (
+              <>
+                <Route path='/' element={<PsyHomePage />} />
+                <Route path="/applications" element={<PsyAppointmentsPage />} />
+                <Route path="/events" element={<PsyEventsPage />} />
+                <Route path="/library" element={<LibraryPage />} />
+              </>
+            )}
+
+            <Route path='*' element={<Navigate to={role ? "/" : "/login"} />} />
+          </Routes>
+        </Layout>
+      </ScheduleProvider>
     </BrowserRouter>
   );
 }

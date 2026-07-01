@@ -23,7 +23,12 @@ const FileInput = ({ name = '', label = null, onChange, initialPreview = null, e
         useWebWorker: true
       };
 
-      const compressedFile = await imageCompression(file, options);
+      const compressedBlob = await imageCompression(file, options);
+
+      const compressedFile = new File([compressedBlob], file.name, {
+        type: file.type,
+        lastModified: Date.now()
+      });
 
       const reader = new FileReader();
       reader.onloadend = () => {

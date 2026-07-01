@@ -61,7 +61,26 @@ export const useMyBookings = () => {
     }
   }
 
+  const confirmAppointment = async (appointmentId) => {
+    try {
+      const data = await appointmentApi.confirmAppointment(appointmentId);
+      return data;
+    } catch (e) {
+      console.error(e);
+      throw e;
+    }
+  }
+
   useEffect(() => { fetchUpcoming(); }, []);
 
-  return { upcoming, isLoading, pagination, getAppointments, refresh: fetchUpcoming, cancelAppointment, getAppointment };
+  return {
+    upcoming,
+    isLoading,
+    pagination,
+    getAppointments,
+    refresh: fetchUpcoming,
+    cancelAppointment,
+    getAppointment,
+    confirmAppointment
+  };
 }

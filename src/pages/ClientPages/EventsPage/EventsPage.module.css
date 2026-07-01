@@ -1,0 +1,32 @@
+.modalWrapper {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+}
+
+.posterContainer {
+  width: 100%;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  border-radius: var(--round-radius);
+  overflow: hidden;
+}
+
+.posterImage {
+  max-width: 100%;
+  height: auto;
+  display: block;
+  border-radius: var(--round-radius);
+}
+
+.infoBlock {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.descriptionBlock {
+  padding-top: 14px;
+  margin-top: 4px;
+}

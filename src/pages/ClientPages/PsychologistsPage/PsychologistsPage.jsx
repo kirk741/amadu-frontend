@@ -46,7 +46,7 @@ const PsychologistsPage = () => {
             },
             {
               name: 'Открыть чат',
-              onClick: () => navigate(`/chats/${selectedUser.id}`)
+              onClick: () => navigate(`/chat/${selectedUser.id}`)
             },
             {
               name: 'Профиль психолога',

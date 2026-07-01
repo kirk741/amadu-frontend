@@ -1,8 +1,12 @@
-import client from "./client"
+import client from "./client";
 
 export const scheduleApi = {
-  getSlots: async () => {
-    const res = await client('/schedules')
-    return res.data;
-  }
-}
+  getSlots: () =>
+    client('/schedules'),
+
+  deleteSlot: (id) =>
+    client(`/schedules/${id}`, { method: 'DELETE' }),
+
+  generateSlots: (payload) =>
+    client('/schedules/generate', { body: payload })
+};

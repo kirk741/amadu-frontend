@@ -1,0 +1,174 @@
+.chatContainer {
+  display: flex;
+  flex-direction: column;
+  width: 100%;
+  height: calc(100vh - 56px);
+  max-height: calc(100vh - 56px);
+  background: transparent;
+  background-color: transparent;
+  overflow: hidden;
+  position: relative;
+}
+
+.loadingWrapper {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  height: 100%;
+  color: #999;
+  font-size: 15px;
+}
+
+.messagesWindow {
+  flex: 1;
+  overflow-y: auto;
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  padding: 80px 0px 0 0px;
+  width: 100%;
+  box-sizing: border-box;
+  -webkit-overflow-scrolling: touch;
+}
+
+.messageBubble {
+  max-width: 75%;
+  padding: 10px 14px;
+  border-radius: 18px;
+  display: flex;
+  flex-direction: column;
+  box-shadow: var(--m-shadow);
+  cursor: pointer;
+}
+
+.theirMessage {
+  align-self: flex-start;
+  background-color: var(--el-color);
+  color: var(--title-color);
+  border-bottom-left-radius: 4px;
+}
+
+.myMessage {
+  align-self: flex-end;
+  background-color: var(--title-color);
+  color: var(--el-color);
+  border-bottom-right-radius: 4px;
+}
+
+.deletedMessage {
+  font-style: italic;
+  opacity: 0.5;
+  color: var(--title-color);
+  background-color: var(--unactive-color);
+  border: 1px dashed var(--el-color);
+  box-shadow: none;
+}
+
+.metaRow {
+  display: flex;
+  align-items: center;
+  justify-content: flex-end;
+  gap: 4px;
+  margin-top: 4px;
+}
+
+.messageTime {
+  font-size: 11px;
+  opacity: 0.6;
+}
+
+.myMessage .messageTime {
+  color: var(--el-color);
+}
+
+.readStatus {
+  font-size: 11px;
+  color: #34b7f1;
+  font-weight: bold;
+}
+
+.unreadStatus {
+  font-size: 11px;
+  color: var(--el-color);
+  opacity: 50%;
+}
+
+.inputPanel {
+  position: fixed;
+  bottom: var(--m-gap);
+  left: var(--m-gap);
+  right: var(--m-gap);
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  z-index: 8;
+}
+
+.inputWrapper {
+  flex: 1;
+}
+
+.sendBtn {
+  width: 48px;
+  height: 48px;
+  min-width: 48px;
+  padding: 0;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.sendIcon {
+  width: 20px;
+  height: 20px;
+}
+
+.modalInputWrapper {
+  width: 100%;
+}
+
+@media (min-width: 768px) {
+  .inputPanel {
+    max-width: calc(600px - (var(--xs-gap, 8px) * 2));
+    margin: 0 auto;
+  }
+}
+
+.skeletonBubble {
+  height: 44px;
+  border-radius: 18px;
+  background-color: var(--unactive-color, #e4e6eb);
+  animation: pulse 1.5s ease-in-out infinite;
+  pointer-events: none;
+}
+
+.skeletonTheir {
+  align-self: flex-start;
+  width: 60%;
+  border-bottom-left-radius: 4px;
+}
+
+.skeletonMy {
+  align-self: flex-end;
+  width: 50%;
+  border-bottom-right-radius: 4px;
+}
+
+.skeletonShort {
+  width: 35%;
+}
+
+@keyframes pulse {
+  0% {
+    opacity: 0.6;
+  }
+
+  50% {
+    opacity: 1;
+  }
+
+  100% {
+    opacity: 0.6;
+  }
+}

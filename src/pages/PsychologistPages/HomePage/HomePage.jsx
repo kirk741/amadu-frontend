@@ -1,18 +1,42 @@
 import { useEffect } from "react";
-import Calendar from "../../../components/ui/Calendar/Calendar";
-import { useBooking } from "../../../hooks/useBooking";
 import { useSchedule } from "../../../hooks/useSchedule";
+import Appointment from "./Appointment/Appointment";
+import PsychologistSchedule from "./Calendar/PsychologistSchedule/PsychologistSchedule";
+import Statistics from "./Statistics/Statistics";
 
 const HomePage = () => {
-  const { loadSlots, slots, isLoading } = useSchedule();
+  const {
+    loadSlots,
+    slots,
+    bookings,
+    isLoading,
+    generateSlots,
+    deleteSlot,
+    updateSlotTime,
+    updateAppointmentStatus,
+    cancelAppointment
+  } = useSchedule();
 
   useEffect(() => {
     loadSlots();
   }, []);
 
   return (
-    <Calendar slots={slots} isLoading={isLoading} />
-  )
-}
+    <>
+      <Appointment />
+      <Statistics />
+      <PsychologistSchedule
+        slots={slots}
+        bookings={bookings}
+        isLoading={isLoading}
+        onGenerateSlots={generateSlots}
+        onDeleteSlot={deleteSlot}
+        onUpdateSlotTime={updateSlotTime}
+        onUpdateSlotStatus={updateAppointmentStatus}
+        onCancelAppointment={cancelAppointment}
+      />
+    </>
+  );
+};
 
 export default HomePage;

@@ -35,12 +35,26 @@ const EmotionChart = () => {
       const height = maxCount > 0 ? (count / maxCount) * 100 : 5;
       const isMax = count === maxCount && count > 0;
 
+      const targetEmotion = emotions.find(e => e.name === name);
+
       return (
-        <span key={index} className={styles.pill} style={{
-          backgroundColor: isMax ? emotionColors[name] : 'transparent',
-          border: `2px solid ${emotionColors[name]}`,
-          height: `${height}%`
-        }} />
+        <span
+          key={index}
+          className={styles.pill}
+          style={{
+            backgroundColor: isMax ? emotionColors[name] : 'transparent',
+            border: `2px solid ${emotionColors[name]}`,
+            height: `${height}%`,
+            cursor: targetEmotion ? 'pointer' : 'default' 
+          }}
+          onClick={(e) => {
+            e.stopPropagation();
+
+            if (targetEmotion?.id) {
+              addLog(targetEmotion.id);
+            }
+          }}
+        />
       );
     });
   };
@@ -64,7 +78,7 @@ const EmotionChart = () => {
         )}
       </div>
 
-      <Button className={styles.button} noBg shadowType={null} onClick={() => setIsModalOpen(true)}>
+      <Button className={styles.button} noBg shadowType={null} onClick={(e) => { e.stopPropagation(); setIsModalOpen(true); }}>
         <Icons.More />
       </Button>
 
