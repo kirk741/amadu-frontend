@@ -56,11 +56,6 @@ export const subscribeUserToPush = async () => {
 
     let publicVapidKey = process.env.REACT_APP_VAPID_PUBLIC_KEY;
 
-    if (!publicVapidKey || publicVapidKey === "undefined" || publicVapidKey === "") {
-      // НА ВСЯКИЙ СЛУЧАЙ: Проверь, чтобы тут стоял твой точный ключ из консоли бэка
-      publicVapidKey = "BEiIN0GXkcc50iEWa7PrYCRxLIBpySV9hedHF5KW6hoPCM7_YPYVCzftQy3UOhgGUQMt4BJFGy6K5aicxMbddKs";
-    }
-
     const subscription = await registration.pushManager.subscribe({
       userVisibleOnly: true,
       applicationServerKey: urlBase64ToUint8Array(publicVapidKey)
@@ -68,7 +63,7 @@ export const subscribeUserToPush = async () => {
 
     const token = localStorage.getItem('token');
 
-    const response = await fetch('https://xn--80ahdri7a.site', {
+    const response = await fetch('https://ababkova.xn--80ahdri7a.site/push-subscriptions', {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json',
