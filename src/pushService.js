@@ -25,7 +25,7 @@ function urlBase64ToUint8Array(base64String) {
 export const subscribeUserToPush = async () => {
   if (!('serviceWorker' in navigator) || !('PushManager' in window)) {
     console.warn('Пуш-уведомления не поддерживаются этим браузером.');
-    return;
+    return;  //awdawdawd
   }
 
   try {
