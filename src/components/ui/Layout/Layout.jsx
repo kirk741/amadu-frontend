@@ -13,6 +13,10 @@ const Layout = ({ children }) => {
   const { bookings, loadSlots } = useGlobalSchedule();
 
   useEffect(() => {
+    window.scrollTo(0, 0);
+  }, [location.pathname]);
+
+  useEffect(() => {
     if (role === 'psychologist') {
       loadSlots();
     }
